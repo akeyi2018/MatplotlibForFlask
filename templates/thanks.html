@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Thanks</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='narrow-jumbotron.css') }}" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills float-right">
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('index') }}">ホーム </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="jumbotron">
+        <h2 class="display-5">データの送信が完了しました。</h2>
+      </div>
+
+      <footer class="footer">
+        <p>akeyi &copy;copy right. since 2024-2030</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body>
+</html>

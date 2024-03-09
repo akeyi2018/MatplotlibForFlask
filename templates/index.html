@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+   <title>test_flask</title>
+</head>
+<body>
+    <h3>血圧体重管理</h3>
+    <hr>
+    
+    <form method="post" action="/regist_data">
+        <label>拡張期血圧:</label>
+        <input name='high_bld'>
+        <br>
+        <label>収縮期血圧:</label>
+        <input name='low_bld'>
+        <br>
+        <label>脈拍数:</label>
+        <input name='pulse'>
+        <br>
+        <label>体重:</label>
+        <input name='weight'>
+        <br>
+        <button type="submit">送信</button>
+    </form>
+    <hr>
+    {% if image_data %}
+    <img src="data:image/png;base64,{{ image_data }}" alt="Generated Graph">
+    {% endif %}
+    <h5>akeyi &copy;copy right. since 2024-2030</h5>
+</body>
+</html>

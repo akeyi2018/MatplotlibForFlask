@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang=“ja”>
+  <head>
+    <meta charset=“UTF-8“ />
+    <title>confirm</title>
+  </head>
+  <body>
+    <h3>確認内容</h3>
+    <ul>
+      <form action="/confirm" method="post">
+        <label id="bld_high">拡張期血圧:</label>
+        <input id="bld_high" type="text", name="high" value={{high}}><br>
+        <label id="bld_low">収縮期血圧:</label>
+        <input id="bld_low" type="text", name="low" value={{low}}><br>
+        <label id="pulse">脈拍数:</label>
+        <input id="pulse" type="text", name="pulse" value={{pulse}}><br>
+        <label id="weight">体重:</label>
+        <input id="weight" type="text", name="weight" value={{weight}}><br>
+        <br> 
+        <input type="hidden" id="userInput" name="userInput"> 
+        <button type="submit" name="free_button" value="free_button" onClick="confirmBooking()">登録</button> 
+      </form>
+      <script>
+        function confirmBooking() {
+            if(confirm('データを送信しますか？') == true) {
+                alert("送信完了しました。"); 
+                document.getElementById("userInput").value = "True";
+            }
+            else { 
+                 document.getElementById("userInput").value = "False";
+                 return 0;
+            }          
+        }
+    </script>
+    </ul>
+  </body>
+</html>
