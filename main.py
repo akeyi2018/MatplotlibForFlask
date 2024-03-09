@@ -14,8 +14,11 @@ import datetime
 app = Flask(__name__)
 app.config['SECRET_KEY'] ='secret_key_012347'
 
+def get_health_data():
+    pass
+
+
 def create_graph():
-    
     image = io.BytesIO()
     ins = MatGrapics()
     fig = ins.create_blood()
@@ -26,8 +29,15 @@ def create_graph():
 @app.route('/')
 def index():
     # グラフを作成
-    image_base64 = create_graph()
-    return render_template('index.html', image_data=image_base64)
+    # image_base64 = create_graph()
+    ins = MatGrapics()
+    data = ins.get_json_data()
+    weight_data = data['weight']
+    low_data = data['low']
+    high_data = data['high']
+    pulse_data = data['pulse']
+    label_data = data['date']
+    return render_template('index.html', weight=weight_data, lb = label_data, low= low_data, high= high_data, pulse= pulse_data)
     
 @app.route('/regist_data', methods=['GET','POST'])
 def regist_data():
