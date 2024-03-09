@@ -54,8 +54,8 @@ def confirm_data():
     # get data
     data = {
         "dt": datetime.date.today().strftime("%Y-%m-%d"),
-        "high": int(request.form.get('high')),
-        "low": int(request.form.get('low')),
+        "high": int(request.form.get('high_bld')),
+        "low": int(request.form.get('low_bld')),
         "pulse": int(request.form.get('pulse')),
         "weight": float(request.form.get('weight'))
     }

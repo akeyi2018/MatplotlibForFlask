@@ -3,42 +3,72 @@
 <head>
     <meta charset="UTF-8">
    <title>test_flask</title>
+   <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
-   
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>   
 </head>
 <body>
-    <h3>血圧体重管理</h3>
-    <hr>
-    
-    <form method="post" action="/regist_data">
-        <label>拡張期血圧:</label>
-        <input name='high_bld'>
-        <br>
-        <label>収縮期血圧:</label>
-        <input name='low_bld'>
-        <br>
-        <label>脈拍数:</label>
-        <input name='pulse'>
-        <br>
-        <label>体重:</label>
-        <input name='weight'>
-        <br>
-        <button type="submit">送信</button>
-    </form>
-    <hr>
-    <!-- {% if image_data %}
-    <img src="data:image/png;base64,{{ image_data }}" alt="Generated Graph">
-    {% endif %} -->
-    <div style="width: 800px;">
-        <canvas id="myChart"></canvas>
-      </div>
-      
-      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-      
-      <script>
+    <div class="container" style="margin-top:50px;">
+        <h1 class="display-6">血圧体重管理</h1>
+        <p class="lead">日々の血圧を測定し、健康管理などに役に立たせる</p>
+
+    <canvas id="myChart" 
+        style="max-width: 1000px;margin-left: 20px;"
+        chart-data="data" 
+        chart-labels="labels" 
+        chart-options="mainDonut" 
+        class="chart chart-doughnut">
+    </canvas>
+    <div class="container" style="margin-top:30px;">
+    <div class="card text-center" style="width: 30rem;">
+        <div class="card-header">
+            本日の測定結果入力
+        </div>
+        <div class="card-body">
+            <form method="post" action="/regist_data">
+            <div class="row g-3 align-items-center" style="margin-top: 1px;">
+                <div class="col-auto">
+                <label for="highbld" class="col-form-label">拡張期血圧:</label>
+                </div>
+                <div class="col-auto">
+                <input type="text" id="highbld" name="high_bld" class="form-control">
+                </div>
+            </div>
+            <div class="row g-3 align-items-center" style="margin-top: 1px;">  
+                <div class="col-auto">
+                    <label for="lowbld" class="col-form-label">収縮期血圧:</label>
+                </div>
+                <div class="col-auto">
+                    <input type="text" id="lowbld" name="low_bld" class="form-control">
+                </div>
+            </div>
+            <div class="row g-3 align-items-center" style="margin-left: 25px;margin-top: 1px;">  
+                <div class="col-auto">
+                    <label for="pulse" class="col-form-label">脈拍数:</label>
+                </div>
+                <div class="col-auto">
+                    <input type="text" id="pulse" name="pulse" class="form-control">
+                </div>
+            </div> 
+            <div class="row g-3 align-items-center" style="margin-left: 40px;margin-top: 1px;">  
+                <div class="col-auto">
+                    <label for="weight" class="col-form-label">体重:</label>
+                </div>
+                <div class="col-auto">
+                    <input type="text" id="weight" name="weight" class="form-control">
+                </div>
+            </div> 
+            
+            <!-- <button type="submit" class="btn btn-primary" style="margin-left: 5px;margin-top: 20px; width: 300px;height: 50px;font-size: 25px;">送信</button> -->
+            <button type="submit" class="btn btn-primary" style="margin-top: 20px; width: 300px;height: 50px;font-size: 25px;">送信</button>
+            
+            </form>
+        </div>
+    </div>
+    </div> 
+    <script>
         const ctx = document.getElementById('myChart');
-      
         new Chart(ctx, {
           type: 'line',
           data: {
@@ -77,6 +107,7 @@
           },
           options: {
             responsive: true,
+            maintainAspectRatio: true, 
             interaction: {
                 mode: 'index',
                 intersect: false,
@@ -115,8 +146,11 @@
             }
           }
         });
-      </script>
-
-    <h5>akeyi &copy;copy right. since 2024-2030</h5>
+    </script>
+    
+    <footer class="footer" style="margin-top: 20px;">
+        <p>akeyi &copy;copy right. since 2024-2030</p>
+      </footer>
+    </div>  
 </body>
 </html>

@@ -3,23 +3,49 @@
   <head>
     <meta charset=“UTF-8“ />
     <title>confirm</title>
-  </head>
+    <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+    </head>
   <body>
-    <h3>確認内容</h3>
-    <ul>
+    <div class="container" style="margin-top:50px;">
+    <h1 class="display-6">測定結果のご確認</h1>
       <form action="/confirm" method="post">
-        <label id="bld_high">拡張期血圧:</label>
-        <input id="bld_high" type="text", name="high" value={{high}}><br>
-        <label id="bld_low">収縮期血圧:</label>
-        <input id="bld_low" type="text", name="low" value={{low}}><br>
-        <label id="pulse">脈拍数:</label>
-        <input id="pulse" type="text", name="pulse" value={{pulse}}><br>
-        <label id="weight">体重:</label>
-        <input id="weight" type="text", name="weight" value={{weight}}><br>
-        <br> 
-        <input type="hidden" id="userInput" name="userInput"> 
-        <button type="submit" name="free_button" value="free_button" onClick="confirmBooking()">登録</button> 
+        <div class="row g-3 align-items-center" style="margin-top: 10px;">
+          <div class="col-auto">
+            <label for="highbld" class="col-form-label">拡張期血圧:</label>
+          </div>
+          <div class="col-auto">
+            <input type="text" id="highbld" name="high_bld" class="form-control" value={{high}}>
+          </div>
+        </div>
+        <div class="row g-3 align-items-center" style="margin-top: 1px;">  
+          <div class="col-auto">
+              <label for="lowbld" class="col-form-label">収縮期血圧:</label>
+            </div>
+            <div class="col-auto">
+              <input type="text" id="lowbld" name="low_bld" value={{low}} class="form-control">
+          </div>
+        </div>
+        <div class="row g-3 align-items-center" style="margin-left: 25px;margin-top: 1px;">  
+            <div class="col-auto">
+                <label for="pulse" class="col-form-label">脈拍数:</label>
+              </div>
+              <div class="col-auto">
+                <input type="text" id="pulse" name="pulse" value={{pulse}} class="form-control">
+            </div>
+        </div> 
+        <div class="row g-3 align-items-center" style="margin-left: 40px;margin-top: 1px;">  
+            <div class="col-auto">
+                <label for="weight" class="col-form-label">体重:</label>
+              </div>
+              <div class="col-auto">
+                <input type="text" id="weight" name="weight"  value={{weight}} class="form-control">
+            </div>
+        </div> 
+        
+        <input type="hidden" id="userInput" name="userInput">
+        <button type="submit" class="btn btn-primary" onClick="confirmBooking()" style="margin-left: 40px;margin-top: 20px; width: 300px;height: 50px;font-size: 25px;">送信</button> 
       </form>
+    </div>
       <script>
         function confirmBooking() {
             if(confirm('データを送信しますか？') == true) {
