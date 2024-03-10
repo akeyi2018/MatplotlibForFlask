@@ -1,0 +1,31 @@
+.weatherForecast {
+    width: 200px;
+    height: 120px;
+    display: flex;
+    text-align: center;
+    border: 1px solid #000;
+  }
+  
+  .weather {
+    width: calc(100% / 2);
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid #666;
+  }
+  
+  .weather > div {
+    height: 20%;
+    font-size: 14px;
+  }
+  
+  .weatherImg {
+    height: 40%;
+  }
+  
+  .tempMin {
+    color: blue;
+  }
+  
+  .tempMax {
+    color: red;
+  }
