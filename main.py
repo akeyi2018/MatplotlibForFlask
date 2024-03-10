@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
-import io
-import numpy as np
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-from flask import Flask, send_file, render_template,request,flash
+from flask import Flask, render_template,request
 import json
 import base64
 from data_config import Config_data
@@ -14,30 +9,11 @@ import datetime
 app = Flask(__name__)
 app.config['SECRET_KEY'] ='secret_key_012347'
 
-def get_health_data():
-    pass
-
-
-def create_graph():
-    image = io.BytesIO()
-    ins = MatGrapics()
-    fig = ins.create_blood()
-    fig.savefig(image, format='png')
-    image.seek(0)
-    return base64.b64encode(image.getvalue()).decode('utf-8')
-
 @app.route('/')
 def index():
-    # グラフを作成
-    # image_base64 = create_graph()
     ins = MatGrapics()
     data = ins.get_json_data()
-    weight_data = data['weight']
-    low_data = data['low']
-    high_data = data['high']
-    pulse_data = data['pulse']
-    label_data = data['date']
-    return render_template('index.html', weight=weight_data, lb = label_data, low= low_data, high= high_data, pulse= pulse_data)
+    return render_template('index.html', health_data=data)
     
 @app.route('/regist_data', methods=['GET','POST'])
 def regist_data():
@@ -65,10 +41,17 @@ def confirm_data():
     userInput = request.form.get('userInput')
     
     if userInput == "True":
-        print('registed this name')
+        # print('registed this name')
+        return render_template('thanks.html')
     else:
-        print('cancel this regist name')
-    return render_template('thanks.html')
+        # print('cancel this regist name')
+        high = request.form.get('high_bld')
+        low = request.form.get('low_bld')
+        pulse = request.form.get('pulse')
+        weight = request.form.get('weight')
+        return render_template('confirm.html', high=high, low=low,
+            pulse=pulse,weight=weight)
+    
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port='8000', debug=True)
