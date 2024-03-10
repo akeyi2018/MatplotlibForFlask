@@ -6,7 +6,7 @@ from data_config import Config_data
 from matplotgraphics import MatGrapics
 import datetime
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='./static')
 app.config['SECRET_KEY'] ='secret_key_012347'
 
 @app.route('/')
