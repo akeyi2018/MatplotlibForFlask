@@ -1,7 +1,12 @@
 <div class="container" style="margin-top:1px;">
     <h1 class="display-6">血圧体重管理</h1>
     <p class="lead">日々の血圧を測定し、健康管理などに役に立たせる</p>
-    
+    <p>
+        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            体重血圧グラフ確認
+        </a>
+      </p>
+      <div class="collapse" id="collapseExample">
         <div class="card card-body" style="width: 1000px;">
             <canvas id="myChart" 
                     style="width:200%;margin-left: 10px;"
@@ -11,10 +16,10 @@
                     class="chart chart-doughnut">
                 </canvas>
             </div>
-   
+      </div>
     <p style="margin-top: 10px;">
         <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample2" aria-expanded="false" aria-controls="collapseWidthExample2">
-            本日のデータを入力する
+            体重血圧データ入力
         </button>
     </p>
     <div class="collapse" id="collapseWidthExample2">
@@ -117,7 +122,7 @@
             stacked: false,
             plugins: {
             title: {
-                display: true,
+                display: false,
                 text: '血圧と体重管理'
             }
             },
