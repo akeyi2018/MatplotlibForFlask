@@ -11,7 +11,7 @@
                     class="chart chart-doughnut">
                 </canvas>
             </div>
-   
+    {% if flag %}
     <p style="margin-top: 10px;">
         <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample2" aria-expanded="false" aria-controls="collapseWidthExample2">
             本日のデータを入力する
@@ -67,6 +67,7 @@
             </div> 
     </div>
     </div>
+    {% endif %}
     {% include 'footer.html' %}
     
     <script>

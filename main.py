@@ -18,7 +18,10 @@ def index():
     ins = DB_Connector()
     data = ins.sharpe_data_to_graph(1)
 
-    return render_template('index.html', health_data=data)
+    # データ入力フラグ
+    flag = ins.check_date(datetime.date.today().strftime("%Y-%m-%d"))
+
+    return render_template('index.html', health_data=data, flag=flag)
     
 @app.route('/regist_user', methods=['GET','POST'])
 def regist_public_user():
@@ -42,18 +45,13 @@ def regist_data():
 
 @app.post('/confirm')
 def confirm_data():
-    # get data
-    data = {
-        "dt": datetime.date.today().strftime("%Y-%m-%d"),
-        "high": int(request.form.get('high_bld')),
-        "low": int(request.form.get('low_bld')),
-        "pulse": int(request.form.get('pulse')),
-        "weight": float(request.form.get('weight'))
-    }
 
-    # ins = Config_data(data)
-    # ins.add_new_data()
-
+    # データを取得する
+    high = request.form.get('high_bld')
+    low = request.form.get('low_bld')
+    pulse = request.form.get('pulse')
+    weight = request.form.get('weight')
+    
     userInput = request.form.get('userInput')
     
     if userInput == "True":
@@ -61,19 +59,14 @@ def confirm_data():
         ins = DB_Connector()
         data_list = [
             datetime.date.today().strftime("%Y-%m-%d"),
-            int(request.form.get('high_bld')),
-            int(request.form.get('low_bld')),
-            int(request.form.get('pulse')),
-            float(request.form.get('weight'))
+            int(high),
+            int(low),
+            int(pulse),
+            float(weight)
         ]
         ins.insert_health_data(data_list)
         return render_template('thanks.html')
     else:
-        # print('cancel this regist name')
-        high = request.form.get('high_bld')
-        low = request.form.get('low_bld')
-        pulse = request.form.get('pulse')
-        weight = request.form.get('weight')
         return render_template('confirm.html', high=high, low=low,
             pulse=pulse,weight=weight)
     

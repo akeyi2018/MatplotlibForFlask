@@ -30,16 +30,17 @@ class DB_Connector:
         self.connector.commit()
 
     def insert_health_data(self, data):
-        sql = "INSERT INTO health_info \
-            (user_id, measure_date, \
-            systolic_blood_pressure, diastolic_blood_pressure, \
-            pulse, weight, create_time) VALUES \
-            (%s, %s, %s, %s, %s, %s, %s)"
-        value1 = [1]
-        value2 = [datetime.now(timezone('Asia/Tokyo'))]
-        values = value1 + data + value2
-        self.curs.execute(sql, values)
-        self.connector.commit()
+        if self.check_date(data=data[0]):
+            sql = "INSERT INTO health_info \
+                (user_id, measure_date, \
+                systolic_blood_pressure, diastolic_blood_pressure, \
+                pulse, weight, create_time) VALUES \
+                (%s, %s, %s, %s, %s, %s, %s) "
+            value1 = [1]
+            value2 = [datetime.now(timezone('Asia/Tokyo'))]
+            values = value1 + data + value2
+            self.curs.execute(sql, values)
+            self.connector.commit()
 
     def get_health_data(self, user_id):
         sql = 'SELECT measure_date, \
@@ -50,6 +51,19 @@ class DB_Connector:
         values = (user_id,)
         self.curs.execute(sql, values)
         return self.curs.fetchall()
+    
+    def check_date(self, data):
+        sql = 'SELECT measure_date, \
+                systolic_blood_pressure, diastolic_blood_pressure, \
+                pulse, weight \
+                FROM health_info \
+                WHERE user_id =%s AND measure_date=%s;'
+        values = (1,data)
+        self.curs.execute(sql, values)
+        if len(self.curs.fetchall()) == 0:
+            return True
+        else:
+            return False
     
     def sharpe_data_to_graph(self, user_id):
 
@@ -70,6 +84,9 @@ class DB_Connector:
 if __name__ == '__main__':
     
     cls = DB_Connector()
+    cls.check_date()
+
+
     # cls.insert_public_user()
     # data = ['2024-03-13', 140, 100, 70, 76.8]
 
