@@ -5,16 +5,33 @@ import base64
 from data_config import Config_data
 from matplotgraphics import MatGrapics
 import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
+from mysql_tool import DB_Connector
 
 app = Flask(__name__, static_folder='./static')
 app.config['SECRET_KEY'] ='secret_key_012347'
 
 @app.route('/')
 def index():
-    ins = MatGrapics()
-    data = ins.get_json_data()
+    # ins = MatGrapics()
+    # data = ins.get_json_data()
+    ins = DB_Connector()
+    data = ins.sharpe_data_to_graph(1)
+
     return render_template('index.html', health_data=data)
     
+@app.route('/regist_user', methods=['GET','POST'])
+def regist_public_user():
+    if request.method == 'POST':
+        user_name = request.form.get('user_name')
+        mail_address = request.form.get('email')
+        passwd = request.form.get('passwd')
+        hash_key = generate_password_hash(password=passwd, salt_length=8)
+        return 'success', 200
+
+
+
+
 @app.route('/regist_data', methods=['GET','POST'])
 def regist_data():
     if request.method =='POST':
