@@ -30,8 +30,6 @@ def regist_public_user():
         return 'success', 200
 
 
-
-
 @app.route('/regist_data', methods=['GET','POST'])
 def regist_data():
     if request.method =='POST':
@@ -52,13 +50,23 @@ def confirm_data():
         "pulse": int(request.form.get('pulse')),
         "weight": float(request.form.get('weight'))
     }
-    ins = Config_data(data)
-    ins.add_new_data()
+
+    # ins = Config_data(data)
+    # ins.add_new_data()
 
     userInput = request.form.get('userInput')
     
     if userInput == "True":
-        # print('registed this name')
+        # データ送信(DB登録)
+        ins = DB_Connector()
+        data_list = [
+            datetime.date.today().strftime("%Y-%m-%d"),
+            int(request.form.get('high_bld')),
+            int(request.form.get('low_bld')),
+            int(request.form.get('pulse')),
+            float(request.form.get('weight'))
+        ]
+        ins.insert_health_data(data_list)
         return render_template('thanks.html')
     else:
         # print('cancel this regist name')
