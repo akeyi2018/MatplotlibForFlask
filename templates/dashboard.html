@@ -1,18 +1,37 @@
-<link href="{{ url_for('static', filename='weather.css') }}" rel="stylesheet">
-<div id="location"><a href="https://www.jma.go.jp/bosai/forecast/" target="_blank"></a></div>
+<table class="table-info table-bordered border-info">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">イベント名</th>
+      <th scope="col">日時</th>
+      <th scope="col">補足説明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>{{event_data.event_name}}</td>
+      <td>{{event_data.event_date}}</td>
+      <td>{{event_data.discription}}</td>
+    </tr>
+  </tbody>
+</table>
 
+<div id="location"><a href="https://www.jma.go.jp/bosai/forecast/" target="_blank"></a></div>
 <div class="weatherForecast">
-    <div class="weather">
-      <div class="date">--/--(-)</div>
+  <div class="weather">
+    <div class="wdate">--/--(-)</div>
       <img class="weatherImg">
       <div class="weatherTelop">--</div>
       <div><span class="tempMin">-℃</span>/<span class="tempMax">-℃</span></div>
-    </div>
   </div>
+</div>
 
-  <script src="https://rss.tc/app/rssreader?url=https%3A%2F%2Fpc.watch.impress.co.jp%2Fdata%2Frss%2F1.0%2Fpcw%2Ffeed.rdf&displayRow=10&dispTitle=1&dispTime=1&id=1268908ee0c2&target=_top&skin=Pink"></script>
   {% include 'footer.html' %}
 <script>
+  
+ 
+
   for (let i = 0; i < 1; i++) {
     const el = document.querySelector('.weather').cloneNode(true);
     document.querySelector('.weatherForecast').appendChild(el);
@@ -183,7 +202,7 @@ fetch(url)
       tempsMaxList.push(weather[1].timeSeries[1].areas[0].tempsMax[i]);
     }
 
-    const date = document.getElementsByClassName("date");
+    const date = document.getElementsByClassName("wdate");
     const weatherImg = document.getElementsByClassName("weatherImg");
     const weatherTelop = document.getElementsByClassName("weatherTelop");
     const tempMin = document.getElementsByClassName("tempMin");

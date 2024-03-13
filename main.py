@@ -21,7 +21,10 @@ def index():
     # データ入力フラグ
     flag = ins.check_date(datetime.date.today().strftime("%Y-%m-%d"))
 
-    return render_template('index.html', health_data=data, flag=flag)
+    event_data = ins.get_event_data(1)
+    print(event_data)
+
+    return render_template('index.html', health_data=data, flag=flag, event_data= event_data[0])
     
 @app.route('/regist_user', methods=['GET','POST'])
 def regist_public_user():
@@ -70,6 +73,18 @@ def confirm_data():
         return render_template('confirm.html', high=high, low=low,
             pulse=pulse,weight=weight)
     
+@app.post('/set_event')
+def set_event():
+    # dt = datetime.datetime.strptime(request.form.get('event_date'),"%Y-%m-%d").date()
+    data = [
+        request.form.get('event_name'),
+        request.form.get('event_date'),
+        ''
+    ]
+    
+    ins = DB_Connector()
+    ins.insert_event_data(data)
+    return render_template('thanks.html')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port='8000', debug=True)

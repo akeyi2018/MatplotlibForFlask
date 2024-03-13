@@ -41,6 +41,18 @@ class DB_Connector:
             values = value1 + data + value2
             self.curs.execute(sql, values)
             self.connector.commit()
+    
+    def insert_event_data(self, data):
+        sql = "INSERT INTO event_info \
+                (user_id, event_name, event_date, \
+                discription, finish_flag, \
+                create_time) VALUES \
+                (%s, %s, %s, %s, %s, %s) "
+        value1= [1]
+        value2 = [True, datetime.now(timezone('Asia/Tokyo'))]
+        values = value1 + data + value2
+        self.curs.execute(sql, values)
+        self.connector.commit()
 
     def get_health_data(self, user_id):
         sql = 'SELECT measure_date, \
@@ -48,6 +60,15 @@ class DB_Connector:
                 pulse, weight \
                 FROM health_info \
                 WHERE user_id =%s;'
+        values = (user_id,)
+        self.curs.execute(sql, values)
+        return self.curs.fetchall()
+
+    def get_event_data(self, user_id):
+        sql = 'SELECT event_name, \
+                event_date, discription \
+                FROM event_info \
+                WHERE user_id =%s and finish_flag = True;'
         values = (user_id,)
         self.curs.execute(sql, values)
         return self.curs.fetchall()
@@ -84,7 +105,12 @@ class DB_Connector:
 if __name__ == '__main__':
     
     cls = DB_Connector()
-    cls.check_date()
+    # cls.check_date()
+    data = ['横浜現場訪問','2024-03-14','交通費請請求するのを忘れずに']
+    # cls.insert_event_data(data)
+    re = cls.get_event_data(1)
+    print(re)
+
 
 
     # cls.insert_public_user()
