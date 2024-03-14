@@ -1,0 +1,46 @@
+<div class="container" style="margin-top:1px;">
+    <div class="card card-body" style="width: 600px;">
+        <div class="container" style="margin-top:10px;">
+            <div class="card text-center" style="width: 30rem;">
+                <div class="card-header">
+                    イベント作成：
+                </div>
+                <div class="card-body">
+                    <form method="post" action="/set_event">
+
+                        <div class="row g-3 align-items-center" style="margin-top: 1px;">
+                            <div class="col-auto">
+                                <label for="event" class="col-form-label">イベント名:</label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="text" id="event" name="event_name" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row g-3 align-items-center" style="margin-top: 1px;">
+                            <div class="col-auto">
+                                <label for="datepicker" class="col-form-label">日付:</label>
+                            </div>  
+                            <input id="datepicker" name="event_date" width="250" class="form-control">    
+                        </div>
+
+                        <div class="row g-3 align-items-center" style="margin-top: 1px;">
+                            <div class="col-auto">
+                                <label for="disc" class="col-form-label">内容:</label>
+                            </div>
+                            <input type="text" id="disc" name="discription" class="form-control" style="width: 500px;">
+                            
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" 
+                            style="margin-top: 20px;margin-left: 30px; width: 300px;height: 50px;font-size: 25px;">
+                            イベント作成する
+                        </button>   
+                    </form>
+                </div>
+            </div>
+        </div> 
+    </div>
+    {% include 'footer.html' %}
+    
+</div>

@@ -54,6 +54,14 @@ class DB_Connector:
         self.curs.execute(sql, values)
         self.connector.commit()
 
+    def update_event_flag(self, event_id):
+        sql = 'UPDATE event_info \
+            SET finish_flag = False \
+            WHERE user_id =%s and id=%s;'
+        values = [1, event_id]
+        self.curs.execute(sql, values)
+        self.connector.commit()
+
     def get_health_data(self, user_id):
         sql = 'SELECT measure_date, \
                 systolic_blood_pressure, diastolic_blood_pressure, \
@@ -65,10 +73,11 @@ class DB_Connector:
         return self.curs.fetchall()
 
     def get_event_data(self, user_id):
-        sql = 'SELECT event_name, \
+        sql = 'SELECT id, event_name, \
                 event_date, discription \
                 FROM event_info \
-                WHERE user_id =%s and finish_flag = True;'
+                WHERE user_id =%s and finish_flag = True \
+                ORDER BY event_date asc;'
         values = (user_id,)
         self.curs.execute(sql, values)
         return self.curs.fetchall()
@@ -108,9 +117,9 @@ if __name__ == '__main__':
     # cls.check_date()
     data = ['横浜現場訪問','2024-03-14','交通費請請求するのを忘れずに']
     # cls.insert_event_data(data)
-    re = cls.get_event_data(1)
-    print(re)
-
+    # re = cls.get_event_data(1)
+    # print(re)
+    cls.update_event_flag(7)
 
 
     # cls.insert_public_user()

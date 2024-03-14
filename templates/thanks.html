@@ -28,9 +28,15 @@
         </nav>
       </div>
 
+      {% if message %}
+      <div class="jumbotron">
+        <h2 class="display-6">{{message}}</h2>
+      </div>
+      {% else %}
       <div class="jumbotron">
         <h2 class="display-6">データの送信が完了しました。</h2>
       </div>
+      {% endif %}
 
       <footer class="footer">
         <p>akeyi &copy;copy right. since 2024-2030</p>

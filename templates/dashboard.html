@@ -5,15 +5,23 @@
       <th scope="col">イベント名</th>
       <th scope="col">日時</th>
       <th scope="col">補足説明</th>
+      <th scope="col">ステータス</th>
     </tr>
   </thead>
   <tbody>
+    {% for index in range(event_data | length) %}
     <tr>
-      <th scope="row">1</th>
-      <td>{{event_data.event_name}}</td>
-      <td>{{event_data.event_date}}</td>
-      <td>{{event_data.discription}}</td>
+      <th scope="row">{{ index + 1 }}</th>
+      <td>{{event_data[index].event_name}}</td>
+      <td>{{event_data[index].event_date}}</td>
+      <td>{{event_data[index].discription}}</td>
+      <td>
+        <button class="btn btn-primary" onclick="finish_event(
+          {{ event_data[index].id }},
+          '{{ event_data[index].event_name }}')">完了にする</button>
+      </td>
     </tr>
+    {% endfor %}
   </tbody>
 </table>
 
@@ -26,13 +34,32 @@
       <div><span class="tempMin">-℃</span>/<span class="tempMax">-℃</span></div>
   </div>
 </div>
+<script>
+  function finish_event(id, name){
+    $.ajax({
+      method: 'post',
+      url: '/finish_event',
+      data: JSON.stringify({
+        "id": id,
+        "name": name
+      }),
+      contentType: 'application/json;charset=UTF-8',
+      // success: function(result) {
+      //   console.log(result);
+      // }
+      success: function(){
+          window.location.href = '/thanks/' + name;
+        }
+    });
+  }
+</script>
 
   {% include 'footer.html' %}
 <script>
   
  
 
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 6; i++) {
     const el = document.querySelector('.weather').cloneNode(true);
     document.querySelector('.weatherForecast').appendChild(el);
   }
@@ -177,7 +204,7 @@ fetch(url)
     document
       .getElementById("location")
       .prepend(
-        `${weather[1].timeSeries[0].areas[0].area.name}`
+        `天気情報：${weather[1].timeSeries[0].areas[0].area.name}`
       );
     const isTodaysData = weather[0].timeSeries[2].timeDefines.length === 4;
     const weatherCodes = weather[0].timeSeries[0].areas[0].weatherCodes;

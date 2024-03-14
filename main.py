@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template,request
-import json
-import base64
-from data_config import Config_data
-from matplotgraphics import MatGrapics
 import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 from mysql_tool import DB_Connector
+from settings import Message_list
 
 app = Flask(__name__, static_folder='./static')
 app.config['SECRET_KEY'] ='secret_key_012347'
@@ -22,9 +19,8 @@ def index():
     flag = ins.check_date(datetime.date.today().strftime("%Y-%m-%d"))
 
     event_data = ins.get_event_data(1)
-    print(event_data)
 
-    return render_template('index.html', health_data=data, flag=flag, event_data= event_data[0])
+    return render_template('index.html', health_data=data, flag=flag, event_data= event_data)
     
 @app.route('/regist_user', methods=['GET','POST'])
 def regist_public_user():
@@ -79,12 +75,31 @@ def set_event():
     data = [
         request.form.get('event_name'),
         request.form.get('event_date'),
-        ''
+        request.form.get('discription')
     ]
-    
+
+    # print(request.form.get('discription'))
     ins = DB_Connector()
     ins.insert_event_data(data)
     return render_template('thanks.html')
+
+@app.post('/finish_event')
+def finish_event():
+    # 受け取り側でjsonで受け取る
+    # res = 'RES:' + str(request.json['id'])
+    # print(res)
+    res_id = request.json['id']
+    res_name = Message_list.finish_event + request.json['name']
+    # print(res_name)
+    ins = DB_Connector()
+    ins.update_event_flag(res_id)
+    return '',200
+
+@app.get('/thanks/<content>')
+def show_thanks(content):
+    res_name = Message_list.finish_event + content
+    return render_template('thanks.html', message = res_name)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port='8000', debug=True)
