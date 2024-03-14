@@ -1,14 +1,14 @@
 <div class="container" style="margin-top:1px;">
     <div class="card card-body" style="width: 600px;">
         <div class="container" style="margin-top:10px;">
-            <div class="card text-center" style="width: 30rem;">
+            <div class="card text-center" style="width: 550px;">
                 <div class="card-header">
                     イベント作成：
                 </div>
-                <div class="card-body">
+                <div class="card-body" >
                     <form method="post" action="/set_event">
 
-                        <div class="row g-3 align-items-center" style="margin-top: 1px;">
+                        <div class="row g-3 align-items-center" style="margin-top: 1px; width: 599px;">
                             <div class="col-auto">
                                 <label for="event" class="col-form-label">イベント名:</label>
                             </div>
@@ -20,15 +20,24 @@
                         <div class="row g-3 align-items-center" style="margin-top: 1px;">
                             <div class="col-auto">
                                 <label for="datepicker" class="col-form-label">日付:</label>
-                            </div>  
-                            <input id="datepicker" name="event_date" width="250" class="form-control">    
+                            </div> 
+                             <div class="col-md-6">
+                                <div class="input-group">
+                                  <span class="input-group-text" id="basic-addon1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
+                                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"></path>
+                                    </svg>
+                                  </span>
+                                 <input id="datepicker" name="event_date" class="form-control">
+                                </div>
+                            </div>
                         </div>
 
                         <div class="row g-3 align-items-center" style="margin-top: 1px;">
                             <div class="col-auto">
                                 <label for="disc" class="col-form-label">内容:</label>
                             </div>
-                            <input type="text" id="disc" name="discription" class="form-control" style="width: 500px;">
+                            <input type="text" id="disc" name="discription" class="form-control" style="width: 470px;">
                             
                         </div>
 
@@ -41,6 +50,14 @@
             </div>
         </div> 
     </div>
+    <script>
+        $('#datepicker').datepicker({
+         language:'ja',
+         format: 'yyyy-mm-dd',
+         autoclose: true,
+         todayHighlight: true,
+     });
+     </script>
     {% include 'footer.html' %}
     
 </div>

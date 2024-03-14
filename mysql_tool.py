@@ -117,9 +117,9 @@ if __name__ == '__main__':
     # cls.check_date()
     data = ['横浜現場訪問','2024-03-14','交通費請請求するのを忘れずに']
     # cls.insert_event_data(data)
-    # re = cls.get_event_data(1)
-    # print(re)
-    cls.update_event_flag(7)
+    re = cls.get_event_data(1)
+    print(re)
+    # cls.update_event_flag(7)
 
 
     # cls.insert_public_user()
