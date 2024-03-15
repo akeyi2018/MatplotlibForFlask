@@ -100,6 +100,11 @@ def show_thanks(content):
     res_name = Message_list.finish_event + content
     return render_template('thanks.html', message = res_name)
 
+@app.get('/nav')
+def show_nav():
+    
+    return render_template('navbar.html')
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port='8000', debug=True)
