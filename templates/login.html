@@ -1,0 +1,25 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}
+ログイン
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='signin.css')}}">
+{% endblock %}
+<link rel="icon" href="data:;base64,=">
+
+{% block content %}
+    <form class='form-signin' method="POST" action="/login">
+        <h4 class="form-signin-heading">ログイン</h4>
+        {{ form.hidden_tag() }}
+        {{ wtf.form_field(form.username) }}
+        {{ wtf.form_field(form.password) }}
+        {{ wtf.form_field(form.remember) }}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">ログイン</button>
+        <small class="text-muted ml-2">
+            <a href="#">パスワード忘れた場合</a>
+        </small>
+    </form>
+{% endblock %}

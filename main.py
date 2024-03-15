@@ -1,27 +1,86 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, render_template,request
+from flask import (
+    Flask,  #Flask本体
+    render_template, #HTMLレンダリングエンジン
+    request,   #POSTの戻り値の受け取り用
+    send_from_directory, #Front側に参照フォルダを送信する
+    session, #ログイン用セッション
+    redirect, #リダイレクト
+    url_for
+)
+from flask_bootstrap import Bootstrap
 import datetime
 from werkzeug.security import generate_password_hash
-from mysql_tool import DB_Connector
-from settings import Message_list
+import os
+import flask_login
+from flask_navigation import Navigation
 
+# 自作クラス
+from mysql_tool import DB_Connector
+from settings import Message_list, Sql_Param
+from form_list import LoginForm
+from admin_user import AdminUser
+
+login_manager = flask_login.LoginManager()
 app = Flask(__name__, static_folder='./static')
-app.config['SECRET_KEY'] ='secret_key_012347'
+app.config['SECRET_KEY'] = Sql_Param.KEY
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+bootstrap = Bootstrap(app)
+
+nav = Navigation(app)
+
+nav.Bar('top', [
+    nav.Item('Home', 'main'),
+    nav.Item('nav', 'show_nav')
+   
+])
+
+# ユーザ情報ロード
+@login_manager.user_loader
+def load_user(user_id):
+    return AdminUser(user_id)
+
+# ログインフォーム
+@app.route('/login', methods=['GET','POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+
+        session['flag'] = True
+        user = AdminUser(form.username.data)
+        session['user_name'] = 'test_user'
+        # flask_login.login_user(user)
+        # if not current_user.is_authenticated:
+            # session['flag'] = False
+            # return redirect(url_for('login'))
+        # else:
+        return redirect(url_for('index'))
+    
+    return render_template('login.html', form=form)
 
 @app.route('/')
+def main():
+    return render_template('main.html')
+
+@app.route('/home')
+@flask_login.login_required
 def index():
-    # ins = MatGrapics()
-    # data = ins.get_json_data()
     ins = DB_Connector()
     data = ins.sharpe_data_to_graph(1)
 
     # データ入力フラグ
     flag = ins.check_date(datetime.date.today().strftime("%Y-%m-%d"))
-    flag = True
-
     event_data = ins.get_event_data(1)
+    user_name = session['user_name']
 
-    return render_template('index.html', health_data=data, flag=flag, event_data= event_data)
+    return render_template('index.html',
+                           health_data=data, 
+                           flag=flag, 
+                           event_data= event_data, 
+                           user=user_name)
+    # return render_template('index.html')
     
 @app.route('/regist_user', methods=['GET','POST'])
 def regist_public_user():
@@ -31,7 +90,6 @@ def regist_public_user():
         passwd = request.form.get('passwd')
         hash_key = generate_password_hash(password=passwd, salt_length=8)
         return 'success', 200
-
 
 @app.route('/regist_data', methods=['GET','POST'])
 def regist_data():
@@ -71,6 +129,7 @@ def confirm_data():
             pulse=pulse,weight=weight)
     
 @app.post('/set_event')
+@flask_login.login_required
 def set_event():
     # dt = datetime.datetime.strptime(request.form.get('event_date'),"%Y-%m-%d").date()
     data = [
@@ -85,6 +144,7 @@ def set_event():
     return render_template('thanks.html')
 
 @app.post('/finish_event')
+@flask_login.login_required
 def finish_event():
     # 受け取り側でjsonで受け取る
     # res = 'RES:' + str(request.json['id'])
@@ -103,8 +163,18 @@ def show_thanks(content):
 
 @app.get('/nav')
 def show_nav():
-    
     return render_template('navbar.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('flag',None)
+    return redirect(url_for('main'))
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 if __name__ == "__main__":
