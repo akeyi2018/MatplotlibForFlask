@@ -17,6 +17,7 @@ def index():
 
     # データ入力フラグ
     flag = ins.check_date(datetime.date.today().strftime("%Y-%m-%d"))
+    flag = True
 
     event_data = ins.get_event_data(1)
 
