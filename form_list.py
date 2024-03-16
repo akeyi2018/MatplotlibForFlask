@@ -10,7 +10,7 @@ class LoginForm(FlaskForm):
                             length(min=4, max=50)])
     password = PasswordField('パスワード：',
                             validators=[InputRequired(),
-                            length(min=8,max=80)])
+                            length(min=4,max=80)])
     remember = BooleanField('ログインしたままにする')
     def validate_password(self, password):
         # DBに接続して、user情報を取得
@@ -22,3 +22,20 @@ class LoginForm(FlaskForm):
                 raise ValidationError('パスワードが違います。')
         else:
             raise ValidationError('無効なユーザ名またはパスワードです。')
+        
+class RegistUserForm(FlaskForm):
+    username = StringField(
+        'ユーザ名:',
+        [InputRequired(), length(min=3, max=20)])
+    mail_address = StringField(
+        'Email:',
+        [InputRequired(), length(min=3, max=20)])
+    password = PasswordField(
+        'パスワード:',
+        [InputRequired(), length(min=4, max=20)])
+    
+    def validate_user(self, username):
+        ins = DB_Connector()
+        res = ins.get_user_id(self.mail_address.data)
+        if res:
+            raise ValidationError('すでにユーザ名が登録されています')

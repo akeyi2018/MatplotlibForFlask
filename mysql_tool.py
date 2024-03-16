@@ -17,15 +17,10 @@ class DB_Connector:
         except Exception as e:
             print(f'Error Occurred: {e}')
     
-    def insert_public_user(self):
+    def insert_public_user(self, data):
         sql = "INSERT INTO user_info (regist_time, name, mail_address, hash_key) VALUES \
             (%s, %s, %s, %s)"
-        values = [
-            datetime.now(timezone('Asia/Tokyo')),
-            'Akeyi',
-            'akeyi2016@gmail.com',
-            generate_password_hash('testtest', salt_length=8)
-        ]
+        values = [datetime.now(timezone('Asia/Tokyo'))] + data
         self.curs.execute(sql, values)
         self.connector.commit()
 

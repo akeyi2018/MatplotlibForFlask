@@ -1,0 +1,27 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}
+ユーザ登録
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='signin.css')}}">
+{% endblock %}
+
+<!-- エラーメッセージの表示 -->
+{% for field, errors in form.errors.items() %}
+  <p style="color:red">{{ form[field].label }}: {{ ', '.join(errors) }}
+{% endfor %}
+
+{% block content %}
+<!-- ログインフォーム -->
+<form class="form-signin" method="post" action="/regist_user">
+  <h4 class="form-signin-heading">管理者登録</h4>
+  {{ form.hidden_tag() }}
+  {{ wtf.form_field(form.username) }}
+  {{ wtf.form_field(form.mail_address) }}
+  {{ wtf.form_field(form.password) }}
+  <p><button class="btn btn-primary"  type="submit">管理者登録</button>
+</form>
+{% endblock %}

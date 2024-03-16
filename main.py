@@ -13,12 +13,11 @@ import datetime
 from werkzeug.security import generate_password_hash
 import os
 import flask_login
-from flask_navigation import Navigation
 
 # 自作クラス
 from mysql_tool import DB_Connector
 from settings import Message_list, Sql_Param
-from form_list import LoginForm
+from form_list import LoginForm, RegistUserForm
 from admin_user import AdminUser
 
 login_manager = flask_login.LoginManager()
@@ -28,14 +27,6 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 bootstrap = Bootstrap(app)
-
-nav = Navigation(app)
-
-nav.Bar('top', [
-    nav.Item('Home', 'main'),
-    nav.Item('nav', 'show_nav')
-   
-])
 
 # ユーザ情報ロード
 @login_manager.user_loader
@@ -50,12 +41,18 @@ def login():
         # 登録ユーザかどうかの認証
         username = form.username.data
         ins = DB_Connector()
-        user_id = ins.get_user_id(username)['id']
-        # print(username, user_id)
-        session['flag'] = True
-        user_id = AdminUser(user_id=user_id)
+        user_id = ins.get_user_id(username)
+
+        # sessionは自由に登録できる
         session['user_name'] = username
+        session['id'] = user_id['id']
+        session['flag'] = True
+
+        # AdminUserに登録しておく
+        user_id = AdminUser(user_id=user_id)
+        # flask_loinで認識できる形で登録する
         flask_login.login_user(user_id)
+       
         return redirect(url_for('index'))
     else:
         return render_template('login.html', form=form)
@@ -69,8 +66,10 @@ def main():
 def index():
     # session check
     if not session.get('flag') is None:
+        print('check:', str(session['id']))
         ins = DB_Connector()
-        data = ins.sharpe_data_to_graph(1)
+        session['id'] = 1 # 暫定的に1にする完成時は不要
+        data = ins.sharpe_data_to_graph(session['id'])
         # データ入力フラグ
         flag = ins.check_date(datetime.date.today().strftime("%Y-%m-%d"))
         event_data = ins.get_event_data(1)
@@ -81,16 +80,26 @@ def index():
                             flag=flag, 
                             event_data= event_data, 
                             user=user_name)
+    # ログインページへ誘導
     return redirect(url_for('main'))
     
 @app.route('/regist_user', methods=['GET','POST'])
 def regist_public_user():
-    if request.method == 'POST':
-        user_name = request.form.get('user_name')
-        mail_address = request.form.get('email')
-        passwd = request.form.get('passwd')
+    form = RegistUserForm()
+    if form.validate_on_submit():
+        user_name = form.username.data
+        mail_address = form.mail_address.data
+        passwd = form.password.data
+        print(mail_address,passwd)
         hash_key = generate_password_hash(password=passwd, salt_length=8)
-        return 'success', 200
+        data = [user_name, mail_address, hash_key]
+        # ユーザ登録
+        ins = DB_Connector()
+        ins.insert_public_user(data)
+        return redirect(url_for('show_thanks', content=Message_list.user_regist_event))
+
+    # ユーザ登録フォームの表示
+    return render_template('admin_regist.html', form=form) 
 
 @app.route('/regist_data', methods=['GET','POST'])
 def regist_data():
