@@ -28,7 +28,7 @@
                                     <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"></path>
                                     </svg>
                                   </span>
-                                 <input id="datepicker" name="event_date" class="form-control">
+                                 <input id="datepicker1" name="event_date" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -51,12 +51,18 @@
         </div> 
     </div>
     <script>
-        $('#datepicker').datepicker({
+        $('#datepicker1').datepicker({
          language:'ja',
          format: 'yyyy-mm-dd',
          autoclose: true,
          todayHighlight: true,
-     });
+        });
+        $('#datepicker2').datepicker({
+         language:'ja',
+         format: 'yyyy-mm-dd',
+         autoclose: true,
+         todayHighlight: true,
+        });
      </script>
     {% include 'footer.html' %}
     

@@ -20,7 +20,7 @@ class Html_Param:
             "id": "v-pills-dashboard",
             "label": "v-pills-dashboard-tab",
             "url": "dashboard.html",
-            "active": False
+            "active": True
         },
         {
             "text": "血圧体重管理",
@@ -34,7 +34,7 @@ class Html_Param:
             "id": "v-pills-task",
             "label": "v-pills-task-tab",
             "url": "regist_task.html",
-            "active": True
+            "active": False
         },
         {
             "text": "イベント登録",

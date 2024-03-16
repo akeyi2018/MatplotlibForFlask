@@ -97,10 +97,19 @@ class DB_Connector:
 
     def get_event_data(self, user_id):
         sql = 'SELECT id, event_name, \
-                event_date, discription \
+                event_date, discription, finish_flag \
                 FROM event_info \
                 WHERE user_id =%s and finish_flag = True \
                 ORDER BY event_date asc;'
+        values = (user_id,)
+        self.curs.execute(sql, values)
+        return self.curs.fetchall()
+    
+    def get_task_data(self, user_id):
+        sql = 'SELECT * \
+                FROM task_info \
+                WHERE user_id =%s and status = 1 \
+                ORDER BY limit_date asc;'
         values = (user_id,)
         self.curs.execute(sql, values)
         return self.curs.fetchall()

@@ -73,13 +73,15 @@ def index():
         # データ入力フラグ
         flag = ins.check_date(datetime.date.today().strftime("%Y-%m-%d"))
         event_data = ins.get_event_data(1)
+        task_data = ins.get_task_data(1)
         user_name = session['user_name']
 
         return render_template('index.html',
                             health_data=data, 
-                            flag=flag, 
-                            event_data= event_data, 
-                            user=user_name, 
+                            flag =flag, 
+                            event_data = event_data,
+                            task_data = task_data, 
+                            user = user_name, 
                             nav=Html_Param.nav_home,
                             task=Html_Param.task_home)
     # ログインページへ誘導
@@ -175,7 +177,7 @@ def set_task():
 
     ins = DB_Connector()
     ins.insert_data('task_info', data)
-    
+
     return render_template('thanks.html')
 
 @app.post('/finish_event')
