@@ -7,9 +7,7 @@
     <link href="{{ url_for('static', filename='weather.css') }}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
     
-    
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-
     <script src="{{ url_for('static', filename='bootstrap.min.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
@@ -19,7 +17,7 @@
     <script src="{{ url_for('static', filename='bootstrap-datepicker.min.js')}}"></script>
     <script src="{{ url_for('static', filename='bootstrap-datepicker.ja.min.js')}}"></script>
     <script src="{{ url_for('static', filename='bootstrap.bundle.min.js')}}"></script>
-    </head>
+</head>
 <body>
   
   <div class="container">
@@ -44,7 +42,7 @@
           <div class="d-flex align-items-start" style="margin-top: 50px;">
             <div class="nav flex-column nav-pills me-5" id="v-pills-tab" role="tablist" aria-orientation="vertical">
               {% for index in range(nav | length) %}
-              {% if index == 0 %}
+              {% if nav[index].active %}
               <button class="nav-link active" 
                 id="{{nav[index].label}}" 
                 data-bs-toggle="pill" data-bs-target="#{{nav[index].id}}"
@@ -60,15 +58,10 @@
               </button>
               {% endif %}
               {% endfor %}
-
-              <a class="nav-link" id="logout" role="tab" href="{{url_for('logout')}}">
-                <span class="btn btn-dark">ログアウト</span>
-              </a>
-
             </div>
             <div class="tab-content navbar-nav-scroll" id="v-pills-tabContent" style="width: 1200px;">
               {% for index in range(nav | length) %}
-              {% if index == 0 %}
+              {% if nav[index].active %}
               <div class="tab-pane fade show active" id="{{ nav[index].id }}" role="tabpanel" aria-labelledby="{{nav[index].label}}">
                 {% include nav[index].url %}
               </div>

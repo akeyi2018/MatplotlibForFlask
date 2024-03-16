@@ -17,7 +17,7 @@ import flask_login
 
 # 自作クラス
 from mysql_tool import DB_Connector
-from settings import Message_list, Sql_Param
+from settings import Message_list, Sql_Param, Html_Param
 from form_list import LoginForm, RegistUserForm
 from admin_user import AdminUser
 
@@ -62,33 +62,6 @@ def login():
 def main():
     return render_template('main.html')
 
-def set_nav_info():
-    return [{
-            "text": "Dashboard",
-            "id": "v-pills-dashboard",
-            "label": "v-pills-dashboard-tab",
-            "url": "dashboard.html"
-        },
-        {
-            "text": "血圧体重管理",
-            "id": "v-pills-messages",
-            "label": "v-pills-messages-tab",
-            "url": "bodyweight_graph.html"
-        },
-        {
-            "text": "profile",
-            "id": "v-pills-profile",
-            "label": "v-pills-profile-tab",
-            "url": "profile.html"
-        },
-        {
-            "text": "スケジュール管理",
-            "id": "v-pills-schedule",
-            "label": "v-pills-schedule-tab",
-            "url": "regist_event.html"
-        }
-    ]
-
 @app.route('/home')
 @flask_login.login_required
 def index():
@@ -106,7 +79,9 @@ def index():
                             health_data=data, 
                             flag=flag, 
                             event_data= event_data, 
-                            user=user_name, nav=set_nav_info())
+                            user=user_name, 
+                            nav=Html_Param.nav_home,
+                            task=Html_Param.task_home)
     # ログインページへ誘導
     return redirect(url_for('main'))
     
@@ -173,6 +148,7 @@ def confirm_data():
 @app.post('/set_event')
 @flask_login.login_required
 def set_event():
+    
     data = [
         request.form.get('event_name'),
         request.form.get('event_date'),
@@ -181,6 +157,25 @@ def set_event():
 
     ins = DB_Connector()
     ins.insert_event_data(data)
+    return render_template('thanks.html')
+
+@app.post('/set_task')
+@flask_login.login_required
+def set_task():
+    # session['id']
+    data = {
+        "user_id": 1,
+        "task_name": request.form.get('task_name'),
+        "detail": request.form.get('discription'),
+        "limit_date": request.form.get('task_limit_date'),
+        "task_kind": request.form.get('task_category'),
+        "status": 1,
+        "regist_date": datetime.datetime.now(timezone('Asia/Tokyo')).strftime("%Y-%m-%d %H:%M:%S")
+    }
+
+    ins = DB_Connector()
+    ins.insert_data('task_info', data)
+    
     return render_template('thanks.html')
 
 @app.post('/finish_event')
