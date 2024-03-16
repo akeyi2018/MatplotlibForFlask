@@ -85,6 +85,14 @@ class DB_Connector:
         self.curs.execute(sql, values)
         self.connector.commit()
 
+    def update_task_flag(self, task_id):
+        sql = 'UPDATE task_info \
+            SET status = 0 \
+            WHERE user_id =%s and task_id=%s;'
+        values = [1, task_id]
+        self.curs.execute(sql, values)
+        self.connector.commit()
+
     def get_health_data(self, user_id):
         sql = 'SELECT measure_date, \
                 systolic_blood_pressure, diastolic_blood_pressure, \
@@ -163,7 +171,8 @@ if __name__ == '__main__':
             "status": 1,
             "regist_date": "2024-03-14 00:00:00"
         }
-    cls.insert_data('task_info', data)
+    # cls.insert_data('task_info', data)
+    cls.update_task_flag(1)
     # print(re)
     # cls.insert_public_user()
     # data = ['2024-03-13', 140, 100, 70, 76.8]

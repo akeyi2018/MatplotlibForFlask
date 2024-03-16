@@ -1,4 +1,3 @@
-
 <p class="lead" style="margin-bottom: 1px;">イベント一覧</p>
 <table class="table-info table-bordered border-info table-sm">
   <thead>
@@ -54,9 +53,9 @@
       <td>{{task_data[index].task_kind}}</td>
       <td>{{task_data[index].status}}</td>
       <td>
-        <button class="btn btn-primary" onclick="finish_event(
-          {{ task_data[index].id }},
-          '{{ task_data[index].event_name }}')">完了にする</button>
+        <button class="btn btn-primary" onclick="finish_task(
+          {{ task_data[index].task_id }},
+          '{{ task_data[index].task_name }}')">完了にする</button>
       </td>
     </tr>
     {% endfor %}
@@ -85,6 +84,22 @@
       // success: function(result) {
       //   console.log(result);
       // }
+      success: function(){
+          window.location.href = '/thanks/' + name;
+        }
+    });
+  }
+</script>
+<script>
+  function finish_task(id, name){
+    $.ajax({
+      method: 'post',
+      url: '/finish_task',
+      data: JSON.stringify({
+        "id": id,
+        "name": name
+      }),
+      contentType: 'application/json;charset=UTF-8',
       success: function(){
           window.location.href = '/thanks/' + name;
         }

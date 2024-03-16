@@ -165,12 +165,18 @@ def set_event():
 @flask_login.login_required
 def set_task():
     # session['id']
+    # 種類の大文字、間違いを対応
+    try:
+        kind = int(request.form.get('task_category'))
+    except:
+        kind = 1
+
     data = {
         "user_id": 1,
         "task_name": request.form.get('task_name'),
         "detail": request.form.get('discription'),
         "limit_date": request.form.get('task_limit_date'),
-        "task_kind": request.form.get('task_category'),
+        "task_kind": kind,
         "status": 1,
         "regist_date": datetime.datetime.now(timezone('Asia/Tokyo')).strftime("%Y-%m-%d %H:%M:%S")
     }
@@ -187,10 +193,24 @@ def finish_event():
     # res = 'RES:' + str(request.json['id'])
     # print(res)
     res_id = request.json['id']
-    res_name = Message_list.finish_event + request.json['name']
+    # res_name = Message_list.finish_event + request.json['name']
     # print(res_name)
     ins = DB_Connector()
     ins.update_event_flag(res_id)
+    return '',200
+
+@app.post('/finish_task')
+@flask_login.login_required
+def finish_task():
+    # 受け取り側でjsonで受け取る
+    # res = 'RES:' + str(request.json['id'])
+    # print(res)
+    res_id = request.json['id']
+    # res_name = Message_list.finish_event + request.json['name']
+    print(res_id)
+    ins = DB_Connector()
+    ins.update_task_flag(res_id)
+
     return '',200
 
 @app.get('/thanks/<content>')
