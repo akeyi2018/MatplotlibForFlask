@@ -29,6 +29,12 @@ class DB_Connector:
         self.curs.execute(sql, values)
         self.connector.commit()
 
+    def get_user_id(self, username):
+        sql = 'SELECT id, hash_key FROM user_info WHERE mail_address=%s LIMIT 1'
+        values = (username,)
+        self.curs.execute(sql, values)
+        return self.curs.fetchone()
+
     def insert_health_data(self, data):
         if self.check_date(data=data[0]):
             sql = "INSERT INTO health_info \
@@ -117,11 +123,12 @@ if __name__ == '__main__':
     # cls.check_date()
     data = ['横浜現場訪問','2024-03-14','交通費請請求するのを忘れずに']
     # cls.insert_event_data(data)
-    re = cls.get_event_data(1)
-    print(re)
+    # re = cls.get_event_data(1)
+    # print(re)
+    re = cls.get_user_id('akeyi2016@gmail.com')
     # cls.update_event_flag(7)
 
-
+    print(re)
     # cls.insert_public_user()
     # data = ['2024-03-13', 140, 100, 70, 76.8]
 

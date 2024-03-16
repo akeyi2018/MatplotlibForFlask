@@ -47,15 +47,15 @@ def load_user(user_id):
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-
+        # 登録ユーザかどうかの認証
+        username = form.username.data
+        ins = DB_Connector()
+        user_id = ins.get_user_id(username)['id']
+        # print(username, user_id)
         session['flag'] = True
-        user = AdminUser(form.username.data)
-        session['user_name'] = 'test_user'
-        flask_login.login_user(user)
-        # if not current_user.is_authenticated:
-            # session['flag'] = False
-            # return redirect(url_for('login'))
-        # else:
+        user_id = AdminUser(user_id=user_id)
+        session['user_name'] = username
+        flask_login.login_user(user_id)
         return redirect(url_for('index'))
     else:
         return render_template('login.html', form=form)
@@ -67,20 +67,21 @@ def main():
 @app.route('/home')
 @flask_login.login_required
 def index():
-    ins = DB_Connector()
-    data = ins.sharpe_data_to_graph(1)
+    # session check
+    if not session.get('flag') is None:
+        ins = DB_Connector()
+        data = ins.sharpe_data_to_graph(1)
+        # データ入力フラグ
+        flag = ins.check_date(datetime.date.today().strftime("%Y-%m-%d"))
+        event_data = ins.get_event_data(1)
+        user_name = session['user_name']
 
-    # データ入力フラグ
-    flag = ins.check_date(datetime.date.today().strftime("%Y-%m-%d"))
-    event_data = ins.get_event_data(1)
-    user_name = session['user_name']
-
-    return render_template('index.html',
-                           health_data=data, 
-                           flag=flag, 
-                           event_data= event_data, 
-                           user=user_name)
-    # return render_template('index.html')
+        return render_template('index.html',
+                            health_data=data, 
+                            flag=flag, 
+                            event_data= event_data, 
+                            user=user_name)
+    return redirect(url_for('main'))
     
 @app.route('/regist_user', methods=['GET','POST'])
 def regist_public_user():
@@ -168,6 +169,7 @@ def show_nav():
 @app.route('/logout')
 def logout():
     session.pop('flag',None)
+    session.pop('username',None)
     return redirect(url_for('main'))
 
 
