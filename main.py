@@ -12,6 +12,7 @@ from flask_bootstrap import Bootstrap
 import datetime
 from werkzeug.security import generate_password_hash
 import os
+from pytz import timezone
 import flask_login
 
 # 自作クラス
@@ -44,7 +45,7 @@ def login():
         user_id = ins.get_user_id(username)
 
         # sessionは自由に登録できる
-        session['user_name'] = username
+        session['user_name'] = user_id['name']
         session['id'] = user_id['id']
         session['flag'] = True
 
@@ -61,12 +62,38 @@ def login():
 def main():
     return render_template('main.html')
 
+def set_nav_info():
+    return [{
+            "text": "Dashboard",
+            "id": "v-pills-dashboard",
+            "label": "v-pills-dashboard-tab",
+            "url": "dashboard.html"
+        },
+        {
+            "text": "血圧体重管理",
+            "id": "v-pills-messages",
+            "label": "v-pills-messages-tab",
+            "url": "bodyweight_graph.html"
+        },
+        {
+            "text": "profile",
+            "id": "v-pills-profile",
+            "label": "v-pills-profile-tab",
+            "url": "profile.html"
+        },
+        {
+            "text": "スケジュール管理",
+            "id": "v-pills-schedule",
+            "label": "v-pills-schedule-tab",
+            "url": "regist_event.html"
+        }
+    ]
+
 @app.route('/home')
 @flask_login.login_required
 def index():
     # session check
     if not session.get('flag') is None:
-        print('check:', str(session['id']))
         ins = DB_Connector()
         session['id'] = 1 # 暫定的に1にする完成時は不要
         data = ins.sharpe_data_to_graph(session['id'])
@@ -79,7 +106,7 @@ def index():
                             health_data=data, 
                             flag=flag, 
                             event_data= event_data, 
-                            user=user_name)
+                            user=user_name, nav=set_nav_info())
     # ログインページへ誘導
     return redirect(url_for('main'))
     
@@ -87,19 +114,24 @@ def index():
 def regist_public_user():
     form = RegistUserForm()
     if form.validate_on_submit():
-        user_name = form.username.data
-        mail_address = form.mail_address.data
-        passwd = form.password.data
-        print(mail_address,passwd)
-        hash_key = generate_password_hash(password=passwd, salt_length=8)
-        data = [user_name, mail_address, hash_key]
+        data = {
+            "regist_time": datetime.datetime.now(timezone('Asia/Tokyo')).strftime("%Y-%m-%d %H:%M:%S"),
+            "name": form.username.data,
+            "mail_address": form.mail_address.data,
+            "hash_key": generate_password_hash(form.password.data, salt_length=8)
+        }
         # ユーザ登録
         ins = DB_Connector()
-        ins.insert_public_user(data)
+        ins.insert_data('user_info', data)
         return redirect(url_for('show_thanks', content=Message_list.user_regist_event))
 
     # ユーザ登録フォームの表示
     return render_template('admin_regist.html', form=form) 
+
+@app.get('/profile')
+@flask_login.login_required
+def show_profile():
+    return render_template('profile.html')
 
 @app.route('/regist_data', methods=['GET','POST'])
 def regist_data():
@@ -141,14 +173,12 @@ def confirm_data():
 @app.post('/set_event')
 @flask_login.login_required
 def set_event():
-    # dt = datetime.datetime.strptime(request.form.get('event_date'),"%Y-%m-%d").date()
     data = [
         request.form.get('event_name'),
         request.form.get('event_date'),
         request.form.get('discription')
     ]
 
-    # print(request.form.get('discription'))
     ins = DB_Connector()
     ins.insert_event_data(data)
     return render_template('thanks.html')

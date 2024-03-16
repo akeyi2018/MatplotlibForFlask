@@ -1,8 +1,8 @@
 from datetime import datetime
 import mysql.connector as myconnector
 from settings import Sql_Param
-from werkzeug.security import generate_password_hash
 from pytz import timezone
+import json
 
 class DB_Connector:
     def __init__(self) -> None:
@@ -25,7 +25,7 @@ class DB_Connector:
         self.connector.commit()
 
     def get_user_id(self, username):
-        sql = 'SELECT id, hash_key FROM user_info WHERE mail_address=%s LIMIT 1'
+        sql = 'SELECT id, name, hash_key FROM user_info WHERE mail_address=%s LIMIT 1'
         values = (username,)
         self.curs.execute(sql, values)
         return self.curs.fetchone()
@@ -52,6 +52,28 @@ class DB_Connector:
         value1= [1]
         value2 = [True, datetime.now(timezone('Asia/Tokyo'))]
         values = value1 + data + value2
+        self.curs.execute(sql, values)
+        self.connector.commit()
+
+    def insert_data(self, table_name, json_data):
+        # JSONデータをパースしてカラム名とデータを取得する
+        # print(json_data)
+        data_dict = json.loads(json.dumps(json_data))
+        
+        columns = list(data_dict.keys())
+        data = list(data_dict.values())
+
+        # カラム名をSQLクエリに挿入する部分を動的に生成する
+        columns_str = ", ".join(columns)
+        placeholders = ", ".join(["%s"] * len(data))
+        
+        # SQLクエリを構築する
+        sql = f"INSERT INTO {table_name} ({columns_str}) VALUES ({placeholders})"
+        
+        # イベントデータを挿入する値を作成する
+        values = data
+        
+        # クエリを実行してコミットする
         self.curs.execute(sql, values)
         self.connector.commit()
 
@@ -120,10 +142,20 @@ if __name__ == '__main__':
     # cls.insert_event_data(data)
     # re = cls.get_event_data(1)
     # print(re)
-    re = cls.get_user_id('akeyi2016@gmail.com')
+    # re = cls.get_user_id('akeyi2016@gmail.com')
     # cls.update_event_flag(7)
 
-    print(re)
+    data = {
+            "user_id": 1,
+            "task_name": "aaaa task",
+            "detail": "detail info of task",
+            "limit_date": "2024-04-01",
+            "task_kind": 1,
+            "status": 1,
+            "regist_date": "2024-03-14 00:00:00"
+        }
+    cls.insert_data('task_info', data)
+    # print(re)
     # cls.insert_public_user()
     # data = ['2024-03-13', 140, 100, 70, 76.8]
 
