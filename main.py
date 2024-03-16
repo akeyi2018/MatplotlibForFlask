@@ -51,14 +51,14 @@ def login():
         session['flag'] = True
         user = AdminUser(form.username.data)
         session['user_name'] = 'test_user'
-        # flask_login.login_user(user)
+        flask_login.login_user(user)
         # if not current_user.is_authenticated:
             # session['flag'] = False
             # return redirect(url_for('login'))
         # else:
         return redirect(url_for('index'))
-    
-    return render_template('login.html', form=form)
+    else:
+        return render_template('login.html', form=form)
 
 @app.route('/')
 def main():
