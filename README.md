@@ -1,2 +1,7 @@
 # MatplotlibForFlask
-view Matpoltlib using Flask
+* chatjs
+* dashboard
+* task management
+* event management
+* SQL
+
