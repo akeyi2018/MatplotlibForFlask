@@ -1,0 +1,53 @@
+<!-- タスク一覧 -->
+{% if task_data %}
+<p class="lead" style="margin-bottom: 1px;">タスク一覧</p>
+<table class="table-info table-bordered border-info table-sm">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">タスク名</th>
+      <th scope="col">詳細内容</th>
+      <th scope="col">期限日</th>
+      <th scope="col">残日数</th>
+      <th scope="col">ステータス</th>
+      <th scope="col">管理操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for index in range(task_data | length) %}
+    <tr>
+      <th scope="row">{{ index + 1 }}</th>
+      <td>{{task_data[index].task_name}}</td>
+      <td>{{task_data[index].detail}}</td>
+      <td>{{task_data[index].limit_date}}</td>
+      <td>{{task_data[index].left_days}}</td>
+      <td>{{task_data[index].status}}</td>
+      <td>
+        <button class="btn btn-primary" onclick="finish_task(
+          {{ task_data[index].id }},
+          '{{ task_data[index].task_name }}')">完了にする</button>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+<script>
+  function finish_task(id, name){
+    $.ajax({
+      method: 'post',
+      url: '/finish_task',
+      data: JSON.stringify({
+        "id": id,
+        "name": name
+      }),
+      contentType: 'application/json;charset=UTF-8',
+      success: function(){
+          window.location.href = '/thanks/1/' + name;
+        }
+    });
+  }
+</script>
+
+{% include 'footer.html' %}

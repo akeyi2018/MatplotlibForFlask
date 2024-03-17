@@ -31,6 +31,20 @@ class Html_Param:
             "active": False
         },
         {
+            "text": "イベント登録",
+            "id": "v-pills-schedule",
+            "label": "v-pills-schedule-tab",
+            "url": "regist_event.html",
+            "active": False
+        },
+        {
+            "text": "イベント一覧表示",
+            "id": "v-pills-schedule-view",
+            "label": "v-pills-schedule-view-tab",
+            "url": "event.html",
+            "active": False
+        },
+        {
             "text": "タスク登録",
             "id": "v-pills-task",
             "label": "v-pills-task-tab",
@@ -38,10 +52,10 @@ class Html_Param:
             "active": False
         },
         {
-            "text": "イベント登録",
-            "id": "v-pills-schedule",
-            "label": "v-pills-schedule-tab",
-            "url": "regist_event.html",
+            "text": "タスク一覧表示",
+            "id": "v-pills-task-view",
+            "label": "v-pills-task-view-tab",
+            "url": "task.html",
             "active": False
         }
     ]

@@ -137,6 +137,36 @@ class DB_Connector:
         values = (user_id,)
         self.curs.execute(sql, values)
         return self.curs.fetchall()
+    
+    def get_today_health(self, user_id):
+        sql = 'SELECT * FROM view_today_health WHERE user_id =%s;'
+        values = (user_id,)
+        self.curs.execute(sql, values)
+        return self.curs.fetchone()
+    
+    def get_goal_health(self, user_id):
+        sql = 'SELECT * FROM view_goal_health WHERE user_id =%s;'
+        values = (user_id,)
+        self.curs.execute(sql, values)
+        return self.curs.fetchone()
+    
+    def get_diff_health(self, user_id):
+        sql = 'SELECT * FROM view_diff_health WHERE user_id =%s;'
+        values = (user_id,)
+        self.curs.execute(sql, values)
+        return self.curs.fetchone()
+    
+    def get_today_event(self, user_id):
+        sql = 'SELECT * FROM view_today_event WHERE user_id =%s;'
+        values = (user_id,)
+        self.curs.execute(sql, values)
+        return self.curs.fetchall()
+    
+    def get_today_task(self, user_id):
+        sql = 'SELECT * FROM view_today_task WHERE user_id =%s;'
+        values = (user_id,)
+        self.curs.execute(sql, values)
+        return self.curs.fetchall()
 
     def check_date(self, data):
         sql = 'SELECT measure_date, \
@@ -188,7 +218,12 @@ if __name__ == '__main__':
             "regist_date": "2024-03-14 00:00:00"
         }
     # cls.insert_data('task_info', data)
-    cls.update_task_flag(1)
+    # cls.update_task_flag(1)
+
+    print(cls.get_today_task(1))
+    
+    print(cls.get_today_event(1))
+
     # print(re)
     # cls.insert_public_user()
     # data = ['2024-03-13', 140, 100, 70, 76.8]

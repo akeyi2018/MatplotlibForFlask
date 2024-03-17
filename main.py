@@ -10,6 +10,7 @@ from flask import (
 )
 from flask_bootstrap import Bootstrap
 import datetime
+import locale
 from werkzeug.security import generate_password_hash
 import os
 from pytz import timezone
@@ -67,18 +68,32 @@ def main():
 def index():
     # session check
     if not session.get('flag') is None:
+        # 日本語で曜日の表示
+        locale.setlocale(locale.LC_ALL, '')
+        dt = datetime.date.today()
         ins = DB_Connector()
         session['id'] = 1 # 暫定的に1にする完成時は不要
         data = ins.sharpe_data_to_graph(session['id'])
-        # データ入力フラグ
-        flag = ins.check_date(datetime.date.today().strftime("%Y-%m-%d"))
-        event_data = ins.get_event_view(1)
-        task_data = ins.get_task_view(1)
+        
+        view_today = dt.strftime("%Y年%m月%d日（%A）")
+        view_day = dt.strftime("%m月%d日(%a)")
+        # 健康データの取得
+        health_info = ins.get_today_health(session['id'])
+        health_info_goal = ins.get_goal_health(session['id'])
+        health_info_diff = ins.get_diff_health(session['id'])
+
+        event_data = ins.get_today_event(session['id'])
+        
+        task_data = ins.get_today_task(session['id'])
         user_name = session['user_name']
 
         return render_template('index.html',
                             health_data=data, 
-                            flag =flag, 
+                            dt = view_today,
+                            dt2 = view_day,
+                            health_info = health_info,
+                            health_info_goal = health_info_goal,
+                            health_info_diff = health_info_diff,
                             event_data = event_data,
                             task_data = task_data, 
                             user = user_name, 
@@ -109,6 +124,11 @@ def regist_public_user():
 @flask_login.login_required
 def show_profile():
     return render_template('profile.html')
+
+@app.get('/regist_health')
+@flask_login.login_required
+def regist_health_info():
+    return render_template('regist_health.html')
 
 @app.route('/regist_data', methods=['GET','POST'])
 def regist_data():

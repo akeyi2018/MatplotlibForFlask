@@ -36,15 +36,23 @@
 <button class="btn btn-danger" onclick="location.href='/regist_health'">測定結果入力</button>
 {% endif %}
 
-<!-- 本日の予定(イベント) -->
+<!-- 本日の予定 -->
+<p class="lead" style="margin-bottom: 1px;">本日の予定</p>
+{% if today_plan_info %}
+
+{% endif %}
+
 {% if event_data %}
-<p class="lead" style="margin-bottom: 1px;">本日の予定(イベント)</p>
+<p class="lead" style="margin-bottom: 1px;">イベント一覧</p>
 <table class="table-info table-bordered border-info table-sm">
   <thead>
     <tr>
-      <th scope="col">No.</th>
-      <th scope="col">名称</th>
-      <th scope="col">内容</th>
+      <th scope="col">#</th>
+      <th scope="col">イベント名</th>
+      <th scope="col">日時</th>
+      <th scope="col">補足説明</th>
+      <th scope="col">ステータス</th>
+      <th scope="col">残日数</th>
       <th scope="col">管理操作</th>
     </tr>
   </thead>
@@ -53,7 +61,10 @@
     <tr>
       <th scope="row">{{ index + 1 }}</th>
       <td>{{event_data[index].event_name}}</td>
+      <td>{{event_data[index].event_date}}</td>
       <td>{{event_data[index].discription}}</td>
+      <td>{{event_data[index].status}}</td>
+      <td>{{event_data[index].left_days}}</td>
       <td>
         <button class="btn btn-primary" onclick="finish_event(
           {{ event_data[index].id }},
@@ -63,17 +74,18 @@
     {% endfor %}
   </tbody>
 </table>
-{% else %}
-<p class="lead info" style="margin-bottom: 1px;">本日の予定(イベント)はありません</p>
 {% endif %}
 {% if task_data %}
-<p class="lead" style="margin-bottom: 1px;">本日の予定(タスク)</p>
+<p class="lead" style="margin-bottom: 1px;">タスク一覧</p>
 <table class="table-info table-bordered border-info table-sm">
   <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col">タスク名</th>
       <th scope="col">詳細内容</th>
+      <th scope="col">期限日</th>
+      <th scope="col">残日数</th>
+      <th scope="col">ステータス</th>
       <th scope="col">管理操作</th>
     </tr>
   </thead>
@@ -83,6 +95,9 @@
       <th scope="row">{{ index + 1 }}</th>
       <td>{{task_data[index].task_name}}</td>
       <td>{{task_data[index].detail}}</td>
+      <td>{{task_data[index].limit_date}}</td>
+      <td>{{task_data[index].left_days}}</td>
+      <td>{{task_data[index].status}}</td>
       <td>
         <button class="btn btn-primary" onclick="finish_task(
           {{ task_data[index].id }},

@@ -37,10 +37,11 @@
             </div>
             <p class="lead" style="margin-right: 500px;margin-top: 5px;">
             {{ user }} さん、こんにちは！
+            本日は 「{{dt}}」 です。
             </p> 
             
           <div class="d-flex align-items-start" style="margin-top: 50px;">
-            <div class="nav flex-column nav-pills me-5" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <div class="nav flex-column nav-pills me-5" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="width: 150px;">
               {% for index in range(nav | length) %}
               {% if nav[index].active %}
               <button class="nav-link active" 
