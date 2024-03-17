@@ -1,3 +1,4 @@
+{% if event_data %}
 <p class="lead" style="margin-bottom: 1px;">イベント一覧</p>
 <table class="table-info table-bordered border-info table-sm">
   <thead>
@@ -7,6 +8,7 @@
       <th scope="col">日時</th>
       <th scope="col">補足説明</th>
       <th scope="col">ステータス</th>
+      <th scope="col">残日数</th>
       <th scope="col">管理操作</th>
     </tr>
   </thead>
@@ -17,10 +19,8 @@
       <td>{{event_data[index].event_name}}</td>
       <td>{{event_data[index].event_date}}</td>
       <td>{{event_data[index].discription}}</td>
-      <td>{% if event_data[index].finish_flag %}
-        進行中
-        {% endif %}
-      </td>
+      <td>{{event_data[index].status}}</td>
+      <td>{{event_data[index].left_days}}</td>
       <td>
         <button class="btn btn-primary" onclick="finish_event(
           {{ event_data[index].id }},
@@ -30,6 +30,8 @@
     {% endfor %}
   </tbody>
 </table>
+{% endif %}
+{% if task_data %}
 <p class="lead" style="margin-bottom: 1px;">タスク一覧</p>
 <table class="table-info table-bordered border-info table-sm">
   <thead>
@@ -38,7 +40,7 @@
       <th scope="col">タスク名</th>
       <th scope="col">詳細内容</th>
       <th scope="col">期限日</th>
-      <th scope="col">種類</th>
+      <th scope="col">残日数</th>
       <th scope="col">ステータス</th>
       <th scope="col">管理操作</th>
     </tr>
@@ -50,17 +52,18 @@
       <td>{{task_data[index].task_name}}</td>
       <td>{{task_data[index].detail}}</td>
       <td>{{task_data[index].limit_date}}</td>
-      <td>{{task_data[index].task_kind}}</td>
+      <td>{{task_data[index].left_days}}</td>
       <td>{{task_data[index].status}}</td>
       <td>
         <button class="btn btn-primary" onclick="finish_task(
-          {{ task_data[index].task_id }},
+          {{ task_data[index].id }},
           '{{ task_data[index].task_name }}')">完了にする</button>
       </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+{% endif %}
 
 <p class="lead" style="margin-bottom: 1px;" id="location"><a href="https://www.jma.go.jp/bosai/forecast/" target="_blank"></a></p>
 <div class="weatherForecast">
@@ -85,7 +88,7 @@
       //   console.log(result);
       // }
       success: function(){
-          window.location.href = '/thanks/' + name;
+          window.location.href = '/thanks/0/' + name;
         }
     });
   }
@@ -101,7 +104,7 @@
       }),
       contentType: 'application/json;charset=UTF-8',
       success: function(){
-          window.location.href = '/thanks/' + name;
+          window.location.href = '/thanks/1/' + name;
         }
     });
   }

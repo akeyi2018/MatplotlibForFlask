@@ -11,6 +11,7 @@ class Sql_Param:
 
 class Message_list:
     finish_event = os.getenv('finish_event')
+    finish_task = os.getenv('finish_task')
     user_regist_event = os.getenv('user_regist_event')
 
 

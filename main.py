@@ -72,8 +72,8 @@ def index():
         data = ins.sharpe_data_to_graph(session['id'])
         # データ入力フラグ
         flag = ins.check_date(datetime.date.today().strftime("%Y-%m-%d"))
-        event_data = ins.get_event_data(1)
-        task_data = ins.get_task_data(1)
+        event_data = ins.get_event_view(1)
+        task_data = ins.get_task_view(1)
         user_name = session['user_name']
 
         return render_template('index.html',
@@ -191,10 +191,7 @@ def set_task():
 def finish_event():
     # 受け取り側でjsonで受け取る
     # res = 'RES:' + str(request.json['id'])
-    # print(res)
     res_id = request.json['id']
-    # res_name = Message_list.finish_event + request.json['name']
-    # print(res_name)
     ins = DB_Connector()
     ins.update_event_flag(res_id)
     return '',200
@@ -204,18 +201,18 @@ def finish_event():
 def finish_task():
     # 受け取り側でjsonで受け取る
     # res = 'RES:' + str(request.json['id'])
-    # print(res)
     res_id = request.json['id']
-    # res_name = Message_list.finish_event + request.json['name']
-    print(res_id)
+    # print(res_id)
     ins = DB_Connector()
     ins.update_task_flag(res_id)
-
     return '',200
 
-@app.get('/thanks/<content>')
-def show_thanks(content):
-    res_name = Message_list.finish_event + content
+@app.get('/thanks/<kind>/<content>')
+def show_thanks(kind, content):
+    if int(kind) == 0:
+        res_name = Message_list.finish_event + content
+    elif int(kind) == 1:
+        res_name = Message_list.finish_task + content
     return render_template('thanks.html', message = res_name)
 
 @app.get('/nav')

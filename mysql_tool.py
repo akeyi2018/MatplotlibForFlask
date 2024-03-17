@@ -113,6 +113,14 @@ class DB_Connector:
         self.curs.execute(sql, values)
         return self.curs.fetchall()
     
+    def get_event_view(self, user_id):
+        sql = 'SELECT * FROM event_view_running \
+                WHERE user_id =%s and left_days < 14\
+                ORDER BY left_days asc;'
+        values = (user_id,)
+        self.curs.execute(sql, values)
+        return self.curs.fetchall()
+    
     def get_task_data(self, user_id):
         sql = 'SELECT * \
                 FROM task_info \
@@ -122,6 +130,14 @@ class DB_Connector:
         self.curs.execute(sql, values)
         return self.curs.fetchall()
     
+    def get_task_view(self, user_id):
+        sql = 'SELECT * FROM task_view_running \
+                WHERE user_id =%s and left_days < 14\
+                ORDER BY left_days asc;'
+        values = (user_id,)
+        self.curs.execute(sql, values)
+        return self.curs.fetchall()
+
     def check_date(self, data):
         sql = 'SELECT measure_date, \
                 systolic_blood_pressure, diastolic_blood_pressure, \
