@@ -32,21 +32,6 @@
   </tbody>
 </table>
 {% endif %}
-<script>
-  function finish_event(id, name){
-    $.ajax({
-      method: 'post',
-      url: '/finish_event',
-      data: JSON.stringify({
-        "id": id,
-        "name": name
-      }),
-      contentType: 'application/json;charset=UTF-8',
-      success: function(){
-          window.location.href = '/thanks/0/' + name;
-        }
-    });
-  }
-</script>
+<script src="{{ url_for('static', filename='/js/task.js')}}"></script>
 
 {% include 'footer.html' %}
