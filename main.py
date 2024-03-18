@@ -175,6 +175,10 @@ def show_thanks(kind, content):
 def show_nav():
     return render_template('navbar.html')
 
+@app.get('/gauge')
+def show_gauge():
+    return render_template('gauge_chart.html')
+
 @app.route('/logout')
 def logout():
     session.pop('flag',None)
