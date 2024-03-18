@@ -63,7 +63,13 @@
          format: 'yyyy-mm-dd',
          autoclose: true,
          todayHighlight: true,
+         defaultDate: new Date(),
         });
+        
+      
+     
+        $('#datepicker2').val(new Date().toLocaleDateString().replace('/','-').replace('/','-'));
+       
      </script>
     {% include 'footer.html' %}
     
