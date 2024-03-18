@@ -1,3 +1,4 @@
+
 <div class="container" style="margin-top:1px;margin-right: 250px;">
     <h1 class="display-6">血圧体重管理</h1>
     <p class="lead">日々の血圧を測定し、健康管理などに役に立たせる</p>
@@ -19,24 +20,24 @@
     new Chart(ctx, {
         type: 'line',
         data: {
-        labels: {{ health_data.date |safe}},
+        labels: {{ home.health_data.date |safe}},
         datasets: [{
             label: '最高血圧',
-            data: {{ health_data.high| safe}},
+            data: {{ home.health_data.high| safe}},
             borderColor: '#FF1493',
             backgroundColor: '#FF69B4',
             lineTension:0.2,
             yAxisID: 'y',
             }, {
             label: '最低血圧',
-            data: {{　health_data.low|safe}},
+            data: {{　home.health_data.low|safe}},
             borderColor: '#EE82EE',
             backgroundColor: '#DDA0DD',
             lineTension:0.2,
             yAxisID: 'y',
             },{
             label: '心拍数',
-            data: {{ health_data.pulse | safe}},
+            data: {{ home.health_data.pulse | safe}},
             
             borderColor: '#FF7f8F',
             backgroundColor: '#FFBFCF',
@@ -44,7 +45,7 @@
             yAxisID: 'y',
             },{
             label: '体重',
-            data: {{ health_data.weight | safe}},
+            data: {{ home.health_data.weight | safe}},
             borderColor: '#7CFC00',
             backgroundColor: '#ADFF2F',
             lineTension:0.2,

@@ -68,38 +68,13 @@ def main():
 def index():
     # session check
     if not session.get('flag') is None:
-        # 日本語で曜日の表示
-        locale.setlocale(locale.LC_ALL, '')
-        dt = datetime.date.today()
-        ins = DB_Connector()
-        session['id'] = 1 # 暫定的に1にする完成時は不要
-        data = ins.sharpe_data_to_graph(session['id'])
-        
-        view_today = dt.strftime("%Y年%m月%d日（%A）")
-        view_day = dt.strftime("%m月%d日(%a)")
-        # 健康データの取得
-        health_info = ins.get_today_health(session['id'])
-        health_info_goal = ins.get_goal_health(session['id'])
-        health_info_diff = ins.get_diff_health(session['id'])
-
-        event_data = ins.get_today_event(session['id'])
-        
-        task_data = ins.get_today_task(session['id'])
-        user_name = session['user_name']
-
-        return render_template('index.html',
-                            health_data=data, 
-                            dt = view_today,
-                            dt2 = view_day,
-                            health_info = health_info,
-                            health_info_goal = health_info_goal,
-                            health_info_diff = health_info_diff,
-                            event_data = event_data,
-                            task_data = task_data, 
-                            user = user_name, 
-                            nav=Html_Param.nav_home,
-                            task=Html_Param.task_home)
-    # ログインページへ誘導
+        return render_template(
+            'index.html', 
+            home = Html_Param.func_home(session),
+            nav=Html_Param.nav_home,
+            task=Html_Param.task_home
+        )
+# ログインページへ誘導
     return redirect(url_for('main'))
     
 @app.route('/regist_user', methods=['GET','POST'])
@@ -142,41 +117,21 @@ def regist_data():
 
 @app.post('/confirm')
 def confirm_data():
-
-    # データを取得する
-    high = request.form.get('high_bld')
-    low = request.form.get('low_bld')
-    pulse = request.form.get('pulse')
-    weight = request.form.get('weight')
-    
-    userInput = request.form.get('userInput')
-    
-    if userInput == "True":
-        # データ送信(DB登録)
-        ins = DB_Connector()
-        data_list = [
-            datetime.date.today().strftime("%Y-%m-%d"),
-            int(high),
-            int(low),
-            int(pulse),
-            float(weight)
-        ]
-        ins.insert_health_data(data_list)
+    # 健康データ入力処理
+    flag, high, low, pulse, weight = Html_Param.insert_health_info(request, session)
+    if flag:
         return render_template('thanks.html')
     else:
-        return render_template('confirm.html', high=high, low=low,
-            pulse=pulse,weight=weight)
+        return render_template('confirm.html', high=high, low=low, pulse=pulse, weight=weight)
     
 @app.post('/set_event')
 @flask_login.login_required
 def set_event():
-    
     data = [
         request.form.get('event_name'),
         request.form.get('event_date'),
         request.form.get('discription')
     ]
-
     ins = DB_Connector()
     ins.insert_event_data(data)
     return render_template('thanks.html')
@@ -184,26 +139,7 @@ def set_event():
 @app.post('/set_task')
 @flask_login.login_required
 def set_task():
-    # session['id']
-    # 種類の大文字、間違いを対応
-    try:
-        kind = int(request.form.get('task_category'))
-    except:
-        kind = 1
-
-    data = {
-        "user_id": 1,
-        "task_name": request.form.get('task_name'),
-        "detail": request.form.get('discription'),
-        "limit_date": request.form.get('task_limit_date'),
-        "task_kind": kind,
-        "status": 1,
-        "regist_date": datetime.datetime.now(timezone('Asia/Tokyo')).strftime("%Y-%m-%d %H:%M:%S")
-    }
-
-    ins = DB_Connector()
-    ins.insert_data('task_info', data)
-
+    Html_Param.insert_task_info(request, session)
     return render_template('thanks.html')
 
 @app.post('/finish_event')
@@ -244,7 +180,6 @@ def logout():
     session.pop('flag',None)
     session.pop('username',None)
     return redirect(url_for('main'))
-
 
 @app.route('/favicon.ico')
 def favicon():

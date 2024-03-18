@@ -1,10 +1,10 @@
 <!-- 本日の健康チェック -->
 <p class="lead" style="margin-bottom: 1px;">健康チェック</p>
-{% if health_info %}
+{% if home.health_info %}
 <table class="table-info table-bordered border-info table-sm" border_size="2">
   <thead>
     <tr>
-      <th scope="col">{{dt2}}</th>
+      <th scope="col">{{home.dt2}}</th>
       <th scope="col">収縮期血圧</th>
       <th scope="col">拡張期血圧</th>
       <th scope="col">体重(kg)</th>
@@ -13,21 +13,21 @@
   <tbody>
     <tr class="text-success fw-bold">
       <th scope="row">本日の結果</th>
-      <td>{{health_info.high}}</td>
-      <td>{{health_info.low}}</td>
-      <td>{{health_info.weight}}</td>
+      <td>{{home.health_info.high}}</td>
+      <td>{{home.health_info.low}}</td>
+      <td>{{home.health_info.weight}}</td>
     </tr>
     <tr class="text-warning fw-bold">
       <th scope="row">目標値</th>
-      <td>{{health_info_goal.high}}</td>
-      <td>{{health_info_goal.low}}</td>
-      <td>{{health_info_goal.weight}}</td>
+      <td>{{home.health_info_goal.high}}</td>
+      <td>{{home.health_info_goal.low}}</td>
+      <td>{{home.health_info_goal.weight}}</td>
     </tr>
     <tr class="text-info fw-bold">
       <th scope="row">残差</th>
-      <td>{{health_info_diff.high}}</td>
-      <td>{{health_info_diff.low}}</td>
-      <td>{{health_info_diff.weight}}</td>
+      <td>{{home.health_info_diff.high}}</td>
+      <td>{{home.health_info_diff.low}}</td>
+      <td>{{home.health_info_diff.weight}}</td>
     </tr>
   </tbody>
 </table>
@@ -37,7 +37,7 @@
 {% endif %}
 
 <!-- 本日の予定(イベント) -->
-{% if event_data %}
+{% if home.today_event %}
 <p class="lead" style="margin-bottom: 1px;">本日の予定(イベント)</p>
 <table class="table-info table-bordered border-info table-sm">
   <thead>
@@ -49,15 +49,15 @@
     </tr>
   </thead>
   <tbody>
-    {% for index in range(event_data | length) %}
+    {% for index in range(home.today_event | length) %}
     <tr>
       <th scope="row">{{ index + 1 }}</th>
-      <td>{{event_data[index].event_name}}</td>
-      <td>{{event_data[index].discription}}</td>
+      <td>{{home.today_event[index].event_name}}</td>
+      <td>{{home.today_event[index].discription}}</td>
       <td>
         <button class="btn btn-primary" onclick="finish_event(
-          {{ event_data[index].id }},
-          '{{ event_data[index].event_name }}')">完了にする</button>
+          {{ home.today_event[index].id }},
+          '{{ home.today_event[index].event_name }}')">完了にする</button>
       </td>
     </tr>
     {% endfor %}
@@ -66,7 +66,7 @@
 {% else %}
 <p class="lead info" style="margin-bottom: 1px;">本日の予定(イベント)はありません</p>
 {% endif %}
-{% if task_data %}
+{% if home.today_task %}
 <p class="lead" style="margin-bottom: 1px;">本日の予定(タスク)</p>
 <table class="table-info table-bordered border-info table-sm">
   <thead>
@@ -78,15 +78,15 @@
     </tr>
   </thead>
   <tbody>
-    {% for index in range(task_data | length) %}
+    {% for index in range(home.today_task | length) %}
     <tr>
       <th scope="row">{{ index + 1 }}</th>
-      <td>{{task_data[index].task_name}}</td>
-      <td>{{task_data[index].detail}}</td>
+      <td>{{home.today_task[index].task_name}}</td>
+      <td>{{home.today_task[index].detail}}</td>
       <td>
         <button class="btn btn-primary" onclick="finish_task(
-          {{ task_data[index].id }},
-          '{{ task_data[index].task_name }}')">完了にする</button>
+          {{ home.today_task[index].id }},
+          '{{ home.today_task[index].task_name }}')">完了にする</button>
       </td>
     </tr>
     {% endfor %}

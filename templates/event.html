@@ -1,5 +1,5 @@
 <!-- イベント一覧 -->
-{% if event_data %}
+{% if home.running_event %}
 <p class="lead" style="margin-bottom: 1px;">イベント一覧</p>
 <table class="table-info table-bordered border-info table-sm">
   <thead>
@@ -14,18 +14,18 @@
     </tr>
   </thead>
   <tbody>
-    {% for index in range(event_data | length) %}
+    {% for index in range(home.running_event | length) %}
     <tr>
       <th scope="row">{{ index + 1 }}</th>
-      <td>{{event_data[index].event_name}}</td>
-      <td>{{event_data[index].event_date}}</td>
-      <td>{{event_data[index].discription}}</td>
-      <td>{{event_data[index].status}}</td>
-      <td>{{event_data[index].left_days}}</td>
+      <td>{{home.running_event[index].event_name}}</td>
+      <td>{{home.running_event[index].event_date}}</td>
+      <td>{{home.running_event[index].discription}}</td>
+      <td>{{home.running_event[index].status}}</td>
+      <td>{{home.running_event[index].left_days}}</td>
       <td>
         <button class="btn btn-primary" onclick="finish_event(
-          {{ event_data[index].id }},
-          '{{ event_data[index].event_name }}')">完了にする</button>
+          {{ home.running_event[index].id }},
+          '{{ home.running_event[index].event_name }}')">完了にする</button>
       </td>
     </tr>
     {% endfor %}

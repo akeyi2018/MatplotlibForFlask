@@ -115,7 +115,7 @@ class DB_Connector:
     
     def get_event_view(self, user_id):
         sql = 'SELECT * FROM event_view_running \
-                WHERE user_id =%s and left_days < 14\
+                WHERE user_id =%s \
                 ORDER BY left_days asc;'
         values = (user_id,)
         self.curs.execute(sql, values)
@@ -132,7 +132,7 @@ class DB_Connector:
     
     def get_task_view(self, user_id):
         sql = 'SELECT * FROM task_view_running \
-                WHERE user_id =%s and left_days < 14\
+                WHERE user_id =%s \
                 ORDER BY left_days asc;'
         values = (user_id,)
         self.curs.execute(sql, values)
