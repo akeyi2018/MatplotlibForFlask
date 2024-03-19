@@ -49,13 +49,6 @@ class Html_Param:
             "active": False
         },
         {
-            "text": "タスク登録",
-            "id": "v-pills-task",
-            "label": "v-pills-task-tab",
-            "url": "regist_task.html",
-            "active": False
-        },
-        {
             "text": "タスク一覧表示",
             "id": "v-pills-task-view",
             "label": "v-pills-task-view-tab",
@@ -63,15 +56,6 @@ class Html_Param:
             "active": False
         }
     ]
-
-    task_home = {
-        "title": "タスク登録",
-        "name": "タスク名：",
-        "content": "詳細：",
-        "limit": "期限日：",
-        "category": "種類：",
-        "button": "タスクを登録する"
-    }
     
     @staticmethod
     def func_home(session):
@@ -121,22 +105,32 @@ class Html_Param:
         session['id'] = 1 # 後で変更
         # 種類の大文字、間違いを対応
         try:
-            kind = int(request.form.get('task_category'))
+            kind = int(request.form.get('kind'))
         except:
             kind = 1
 
+        # 種別によって、処理分かれる
         data = {
             "user_id": session['id'],
             "task_name": request.form.get('task_name'),
             "detail": request.form.get('discription'),
-            "limit_date": request.form.get('task_limit_date'),
+            "limit_date": request.form.get('entry_date'),
             "task_kind": kind,
             "status": 1,
             "regist_date": datetime.datetime.now(timezone('Asia/Tokyo')).strftime("%Y-%m-%d %H:%M:%S")
         }
 
         ins = DB_Connector()
-        ins.insert_data('task_info', data)
+        # 種別によって、処理分かれる
+        if request.form.get('choice') == '新規':
+            ins.insert_data('task_info', data)
+        else:
+            # 更新条件
+            condition = {
+                "user_id": int(session['id']),
+                "task_id": int(request.form.get('task_id'))
+            }
+            ins.update_data('task_info', data, condition)
 
     @staticmethod
     def insert_health_info(request,session):

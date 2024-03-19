@@ -77,6 +77,29 @@ class DB_Connector:
         self.curs.execute(sql, values)
         self.connector.commit()
 
+    def update_data(self, table_name, json_data, condition_json_data):
+        # JSONデータをパースしてカラム名とデータを取得する
+        data_dict = json.loads(json.dumps(json_data))
+        set_clause = ', '.join([f"{key} = %s" for key in data_dict.keys()])
+        values = list(data_dict.values())
+
+        # 条件JSONデータをパースして条件値を取得する
+        condition_dict = json.loads(json.dumps(condition_json_data))
+
+        # 条件値を追加する
+        values.extend(list(condition_dict.values()))
+
+        # 条件カラムを取得する
+        condition_columns = list(condition_dict.keys())
+
+        # SQLクエリを構築する
+        condition_str = " AND ".join([f"{column} = %s" for column in condition_columns])
+        sql = f"UPDATE {table_name} SET {set_clause} WHERE {condition_str}"
+
+        # クエリを実行してコミットする
+        self.curs.execute(sql, values)
+        self.connector.commit()
+
     def update_event_flag(self, event_id):
         sql = 'UPDATE event_info \
             SET finish_flag = False \
@@ -137,6 +160,13 @@ class DB_Connector:
         values = (user_id,)
         self.curs.execute(sql, values)
         return self.curs.fetchall()
+    
+    def get_task_view_by_id(self, user_id, id):
+        sql = 'SELECT * FROM task_view_running \
+                WHERE user_id =%s AND id=%s;'
+        values = (user_id, id,)
+        self.curs.execute(sql, values)
+        return self.curs.fetchone()
     
     def get_today_health(self, user_id):
         sql = 'SELECT * FROM view_today_health WHERE user_id =%s;'
@@ -223,6 +253,8 @@ if __name__ == '__main__':
     print(cls.get_today_task(1))
     
     print(cls.get_today_event(1))
+    re = cls.get_task_view_by_id(1,29)
+    print(re)
 
     # print(re)
     # cls.insert_public_user()

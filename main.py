@@ -19,7 +19,7 @@ import flask_login
 # 自作クラス
 from mysql_tool import DB_Connector
 from settings import Message_list, Sql_Param, Html_Param
-from form_list import LoginForm, RegistUserForm
+from form_list import LoginForm, RegistUserForm, RegistTaskForm
 from admin_user import AdminUser
 
 login_manager = flask_login.LoginManager()
@@ -35,48 +35,11 @@ bootstrap = Bootstrap(app)
 def load_user(user_id):
     return AdminUser(user_id)
 
-# ログインフォーム
-@app.route('/login', methods=['GET','POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        # 登録ユーザかどうかの認証
-        username = form.username.data
-        ins = DB_Connector()
-        user_id = ins.get_user_id(username)
-
-        # sessionは自由に登録できる
-        session['user_name'] = user_id['name']
-        session['id'] = user_id['id']
-        session['flag'] = True
-
-        # AdminUserに登録しておく
-        user_id = AdminUser(user_id=user_id)
-        # flask_loinで認識できる形で登録する
-        flask_login.login_user(user_id)
-       
-        return redirect(url_for('index'))
-    else:
-        return render_template('login.html', form=form)
-
 @app.route('/')
 def main():
     return render_template('main.html')
 
-@app.route('/home')
-@flask_login.login_required
-def index():
-    # session check
-    if not session.get('flag') is None:
-        return render_template(
-            'index.html', 
-            home = Html_Param.func_home(session),
-            nav=Html_Param.nav_home,
-            task=Html_Param.task_home
-        )
-# ログインページへ誘導
-    return redirect(url_for('main'))
-    
+#region -----登録------
 @app.route('/regist_user', methods=['GET','POST'])
 def regist_public_user():
     form = RegistUserForm()
@@ -94,16 +57,6 @@ def regist_public_user():
 
     # ユーザ登録フォームの表示
     return render_template('admin_regist.html', form=form) 
-
-@app.get('/profile')
-@flask_login.login_required
-def show_profile():
-    return render_template('profile.html')
-
-@app.get('/regist_health')
-@flask_login.login_required
-def regist_health_info():
-    return render_template('regist_health.html')
 
 @app.route('/regist_data', methods=['GET','POST'])
 def regist_data():
@@ -124,6 +77,69 @@ def confirm_data():
     else:
         return render_template('confirm.html', high=high, low=low, pulse=pulse, weight=weight)
     
+#endregion
+
+#region ------GET----------
+@app.get('/profile')
+@flask_login.login_required
+def show_profile():
+    return render_template('profile.html')
+
+@app.get('/regist_health')
+@flask_login.login_required
+def regist_health_info():
+    return render_template('regist_health.html')
+
+@app.get('/show_task/<id>')
+@flask_login.login_required
+def show_task(id):
+    id = int(id)
+    if id ==0:
+        form = RegistTaskForm(task_id=id)
+    else:
+        # idがゼロでない場合は、既存の情報を取得する
+        ins = DB_Connector()
+        task_info = ins.get_task_view_by_id(int(session['id']), int(id))
+        print(task_info)
+        form = RegistTaskForm(task_id=id,
+                            task_name = task_info['task_name'],
+                            discription=task_info['detail'],
+                            entry_date=task_info['limit_date'],
+                            kind=99,
+                            choice = "更新"
+                            )
+    return render_template('regist_task.html', tform=form)
+
+@app.get('/thanks/<kind>/<content>')
+def show_thanks(kind, content):
+    if int(kind) == 0:
+        res_name = Message_list.finish_event + content
+    elif int(kind) == 1:
+        res_name = Message_list.finish_task + content
+    return render_template('thanks.html', message = res_name)
+
+@app.get('/nav')
+def show_nav():
+    return render_template('navbar.html')
+
+@app.get('/gauge')
+def show_gauge():
+    return render_template('gauge_chart.html')
+
+@app.get('/logout')
+def logout():
+    session.pop('flag',None)
+    session.pop('username',None)
+    return redirect(url_for('main'))
+
+@app.get('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+#endregion
+
+#region ------POST----------
 @app.post('/set_event')
 @flask_login.login_required
 def set_event():
@@ -162,34 +178,45 @@ def finish_task():
     ins = DB_Connector()
     ins.update_task_flag(res_id)
     return '',200
+#endregion
 
-@app.get('/thanks/<kind>/<content>')
-def show_thanks(kind, content):
-    if int(kind) == 0:
-        res_name = Message_list.finish_event + content
-    elif int(kind) == 1:
-        res_name = Message_list.finish_task + content
-    return render_template('thanks.html', message = res_name)
+# ログインフォーム
+@app.route('/login', methods=['GET','POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        # 登録ユーザかどうかの認証
+        username = form.username.data
+        ins = DB_Connector()
+        user_id = ins.get_user_id(username)
 
-@app.get('/nav')
-def show_nav():
-    return render_template('navbar.html')
+        # sessionは自由に登録できる
+        session['user_name'] = user_id['name']
+        session['id'] = user_id['id']
+        session['flag'] = True
 
-@app.get('/gauge')
-def show_gauge():
-    return render_template('gauge_chart.html')
+        # AdminUserに登録しておく
+        user_id = AdminUser(user_id=user_id)
+        # flask_loinで認識できる形で登録する
+        flask_login.login_user(user_id)
+       
+        return redirect(url_for('index'))
+    else:
+        return render_template('login.html', form=form)
 
-@app.route('/logout')
-def logout():
-    session.pop('flag',None)
-    session.pop('username',None)
+# ホーム
+@app.route('/home')
+@flask_login.login_required
+def index():
+    # session check
+    if not session.get('flag') is None:
+        return render_template(
+            'index.html',
+            home = Html_Param.func_home(session),
+            nav=Html_Param.nav_home
+        )
+# ログインページへ誘導
     return redirect(url_for('main'))
-
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port='8000', debug=True)
