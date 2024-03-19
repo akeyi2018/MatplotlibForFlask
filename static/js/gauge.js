@@ -1,34 +1,14 @@
-var randomScalingFactor = function() {
-    return Math.round(Math.random() * 100);
-  };
-  
-//   var randomData = function () {
-//     return [
-//       randomScalingFactor(),
-//       randomScalingFactor(),
-//       randomScalingFactor(),
-//       randomScalingFactor()
-//     ];
-//   };
-  
-//   var randomValue = function (data) {
-//     return Math.max.apply(null, data) * Math.random();
-//   };
-  
-//   var data = randomData(); //デフォルト
-//   console.log(data);
-  // R/1 Y/2 G/3 B/4
 //   var data = [10, 20, 30, 40];
-     var data = [8, 22, 33, 40];
+var data = [8, 22, 33, 40];
 
 //   var value = randomValue(data);
 //   console.log(value);
-  var value = 28.4
+var value = 28.4
   
   var config = {
     type: 'gauge',
     data: {
-      //labels: ['Success', 'Warning', 'Warning', 'Error'],
+      labels: ['1', '2', '3', '4'],
       datasets: [{
         data: data,
         value: value,
@@ -42,6 +22,12 @@ var randomScalingFactor = function() {
       title: {
         display: true,
         text: '体重'
+      },
+      y:{
+        title:{
+            text: 'test',
+            display: true,
+        }
       },
       layout: {
         padding: {
@@ -75,9 +61,9 @@ var randomScalingFactor = function() {
   document.getElementById('randomizeData').addEventListener('click', function() {
     config.data.datasets.forEach(function(dataset) {
     //   dataset.data = randomData();
-        dataset.data = [50, 50, 50, 50];
+        dataset.data = [10, 20, 30, 40];
     //   dataset.value = randomValue(dataset.data);
-        dataset.value = 50;
+        dataset.value = 20;
     });
   
     window.myGauge.update();
