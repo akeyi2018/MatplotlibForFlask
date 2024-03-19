@@ -15,8 +15,7 @@
                 <div class="card-header">
                     タスク登録
                 </div>
-                <div class="card-body" >
-                    
+                <div class="card-body">
                     <form method="post" action="/set_task">
                         {{ tform.hidden_tag() }}
                         <div>{{ tform.task_id()}}</div>
@@ -41,19 +40,7 @@
             </div>
         </div> 
     </div>
-    <script>
-        $('#datepicker2').datepicker({
-         language:'ja',
-         format: 'yyyy-mm-dd',
-         autoclose: true,
-         todayHighlight: true,
-        });
-        
-        $('#datepicker2').val(new Date().toLocaleDateString().replace('/','-').replace('/','-'));
-       
-     </script>
     {% include 'footer.html' %}
-    
 </div>
 
 </body>
