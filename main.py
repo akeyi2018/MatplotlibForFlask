@@ -23,7 +23,8 @@ from form_list import (LoginForm,
                        RegistUserForm, 
                        RegistTaskForm, 
                        RegistEventForm,
-                       RegistTVForm
+                       RegistTVForm,
+                       RegistHealthForm,
 )
 from admin_user import AdminUser
 
@@ -63,25 +64,12 @@ def regist_public_user():
     # ユーザ登録フォームの表示
     return render_template('admin_regist.html', form=form) 
 
-@app.route('/regist_data', methods=['GET','POST'])
-def regist_data():
-    if request.method =='POST':
-        high = request.form.get('high_bld')
-        low = request.form.get('low_bld')
-        pulse = request.form.get('pulse')
-        weight = request.form.get('weight')
-        return render_template('confirm.html', high=high, low=low,
-            pulse=pulse,weight=weight)
-
 @app.post('/confirm')
 def confirm_data():
     # 健康データ入力処理
-    flag, high, low, pulse, weight = Html_Param.insert_health_info(request, session)
-    if flag:
-        return render_template('thanks.html')
-    else:
-        return render_template('confirm.html', high=high, low=low, pulse=pulse, weight=weight)
-    
+    Html_Param.insert_health_info(request, session)
+    return render_template('thanks.html')
+
 #endregion
 
 #region ------GET----------
@@ -103,7 +91,8 @@ def show_profile():
 @app.get('/regist_health')
 @flask_login.login_required
 def regist_health_info():
-    return render_template('regist_health.html')
+    form = RegistHealthForm()
+    return render_template('regist_health.html', form=form)
 
 @app.get('/show_task/<id>')
 @flask_login.login_required
@@ -248,7 +237,7 @@ def index():
             home = Html_Param.func_home(session),
             nav=Html_Param.nav_home
         )
-# ログインページへ誘導
+    # ログインページへ誘導
     return redirect(url_for('main'))
 
 if __name__ == "__main__":

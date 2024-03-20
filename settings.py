@@ -206,27 +206,22 @@ class Html_Param:
     def insert_health_info(request,session):
         from mysql_tool import DB_Connector
         # データを取得する
-        high = request.form.get('high_bld')
-        low = request.form.get('low_bld')
+        high = request.form.get('h_bld')
+        low = request.form.get('l_bld')
         pulse = request.form.get('pulse')
         weight = request.form.get('weight')
         
-        userInput = request.form.get('userInput')
+        # データ送信(DB登録)
+        ins = DB_Connector()
+        data_list = [
+            datetime.date.today().strftime("%Y-%m-%d"),
+            int(high),
+            int(low),
+            int(pulse),
+            float(weight)
+        ]
+        ins.insert_health_data(data_list)
         
-        if userInput == "True":
-            # データ送信(DB登録)
-            ins = DB_Connector()
-            data_list = [
-                datetime.date.today().strftime("%Y-%m-%d"),
-                int(high),
-                int(low),
-                int(pulse),
-                float(weight)
-            ]
-            ins.insert_health_data(data_list)
-            return True, high, low, pulse, weight
-        else:
-            return False, high, low, pulse, weight
 
            
         

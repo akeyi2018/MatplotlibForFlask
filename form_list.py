@@ -9,6 +9,7 @@ from wtforms import (
     SelectField,
     HiddenField,
     IntegerField,
+    DecimalRangeField,
     )
 from wtforms.validators import InputRequired, length
 from mysql_tool import DB_Connector
@@ -106,8 +107,6 @@ class RegistTVForm(FlaskForm):
     
     style3={'style': 'width:85%; margin-top:1em;margin-right:-12px;'}
     
-    # discription = StringField('内容：',
-    #     [InputRequired(), length(min=3, max=1000)], widget=TextArea, render_kw=style3)
     discription = StringField('内容：',
         widget=TextArea(), render_kw=style3)
     rating = [(1, "★"),(2, "★★"),(3, "★★★"),(4,"★★★★"), (5,"★★★★★")]
@@ -118,4 +117,18 @@ class RegistTVForm(FlaskForm):
     style5={'style': 'margin-top:1em;'}
     submit = SubmitField('登録する', render_kw=style5)
 
+class RegistHealthForm(FlaskForm):
+    id = HiddenField('ID:')
+    style1={'style': 'margin-top:1em;margin-right:100px;'}
+    h_bld = DecimalRangeField('収縮期血圧：', 
+                              default=140, render_kw=style1)
+    l_bld = DecimalRangeField('拡張期血圧：', 
+                              default=100, render_kw=style1)
     
+    style2={'style': 'margin-top:1em;margin-right:70px;'}
+    pulse = DecimalRangeField('脈拍数：', 
+                              default=75, render_kw=style2)
+    weight = DecimalRangeField('体重：', 
+                               default= 77.0, render_kw=style1)
+    style5={'style': 'margin-top:1em;'}
+    submit = SubmitField('登録する', render_kw=style5)

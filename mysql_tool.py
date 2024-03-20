@@ -270,29 +270,3 @@ if __name__ == '__main__':
     # print(cls.get_today_event(1))
     re = cls.get_tv_view(1)
     print(re)
-
-    # print(re)
-    # cls.insert_public_user()
-    # data = ['2024-03-13', 140, 100, 70, 76.8]
-
-    # cls2 = MatGrapics()
-    # data = cls2.get_json_data()
-    # print(data)
-    # for dt, high, low, pl, wt in zip(data['date'], data['high'], data['low'], data['pulse'], data['weight']):
-    #     cls.insert_health_data([dt,high,low,pl,wt])
-
-    # cls.insert_health_data(data)
-    # data_list = cls.get_health_data(1)
-    
-    # measure_dates = [d['measure_date'].strftime('%Y-%m-%d') for d in data_list]
-    # systolic_blood_pressures = [d['systolic_blood_pressure'] for d in data_list]
-    # diastolic_blood_pressures = [d['diastolic_blood_pressure'] for d in data_list]
-    # pulses = [d['pulse'] for d in data_list]
-    # weights = [float(d['weight']) for d in data_list]
-
-    # print(measure_dates, weights, systolic_blood_pressures)
-
-
-  
-
-   
