@@ -80,6 +80,11 @@ def confirm_data():
 #endregion
 
 #region ------GET----------
+@app.get('/drop')
+@flask_login.login_required
+def drop_test():
+    return render_template('dropdown_test.html')
+
 @app.get('/profile')
 @flask_login.login_required
 def show_profile():
