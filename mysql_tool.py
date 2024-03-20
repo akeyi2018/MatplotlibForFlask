@@ -42,18 +42,6 @@ class DB_Connector:
             values = value1 + data + value2
             self.curs.execute(sql, values)
             self.connector.commit()
-    
-    def insert_event_data(self, data):
-        sql = "INSERT INTO event_info \
-                (user_id, event_name, event_date, \
-                discription, finish_flag, \
-                create_time) VALUES \
-                (%s, %s, %s, %s, %s, %s) "
-        value1= [1]
-        value2 = [True, datetime.now(timezone('Asia/Tokyo'))]
-        values = value1 + data + value2
-        self.curs.execute(sql, values)
-        self.connector.commit()
 
     def insert_data(self, table_name, json_data):
         # JSONデータをパースしてカラム名とデータを取得する
@@ -122,16 +110,6 @@ class DB_Connector:
                 pulse, weight \
                 FROM health_info \
                 WHERE user_id =%s;'
-        values = (user_id,)
-        self.curs.execute(sql, values)
-        return self.curs.fetchall()
-
-    def get_event_data(self, user_id):
-        sql = 'SELECT id, event_name, \
-                event_date, discription, finish_flag \
-                FROM event_info \
-                WHERE user_id =%s and finish_flag = True \
-                ORDER BY event_date asc;'
         values = (user_id,)
         self.curs.execute(sql, values)
         return self.curs.fetchall()
