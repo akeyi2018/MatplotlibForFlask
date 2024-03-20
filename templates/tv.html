@@ -1,0 +1,47 @@
+<!-- タスク一覧 -->
+{% if home.tv_info %}
+<p class="lead" style="margin-bottom: 1px;">タスク一覧</p>
+<table class="table-info table-bordered border-info table-sm">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">タイトル</th>
+      <th scope="col">ジャンル</th>
+      <th scope="col">製作国</th>
+      <th scope="col">鑑賞状況</th>
+      <th scope="col">製作年</th>
+      <th scope="col">管理操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for index in range(home.tv_info | length) %}
+    <tr>
+      <th scope="row">{{ index + 1 }}</th>
+      <td>{{home.tv_info[index].title}}</td>
+      <td>{{home.tv_info[index].genre}}</td>
+      <td>{{home.tv_info[index].country}}</td>
+      <td>{{home.tv_info[index].watched}} / {{home.tv_info[index].episodes}}</td>
+      <td>{{home.tv_info[index].years}}</td>
+      <td>
+        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight{{index + 1}}" aria-controls="offcanvasRight">詳細</button>
+        <div class="offcanvas offcanvas-end" id="offcanvasRight{{index + 1}}" aria-labelledby="id{{ index + 1 }}">
+          <div class="offcanvas-header">
+            <h5 id="id{{ index + 1 }}">詳細</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+          </div>
+          <div class="offcanvas-body" id="id{{index+1}}">
+            <p class="lead">{{home.tv_info[index].title}}</p>
+            <p>{{home.tv_info[index].discription}}</p>
+          </div>
+        </div>
+      </td>
+      </tr>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="lead">現在視聴中のドラマはありません</p>
+{% endif %}
+
+{% include 'footer.html' %}

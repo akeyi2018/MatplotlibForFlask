@@ -144,6 +144,14 @@ class DB_Connector:
         self.curs.execute(sql, values)
         return self.curs.fetchall()
     
+    def get_tv_view(self, user_id):
+        sql = 'SELECT * FROM tv_view_watching \
+                WHERE user_id =%s \
+                ORDER BY id asc;'
+        values = (user_id,)
+        self.curs.execute(sql, values)
+        return self.curs.fetchall()
+    
     def get_event_view_by_id(self, user_id, id):
         sql = 'SELECT * FROM event_view_running \
                 WHERE user_id =%s AND id=%s;'
@@ -257,10 +265,10 @@ if __name__ == '__main__':
     # cls.insert_data('task_info', data)
     # cls.update_task_flag(1)
 
-    print(cls.get_today_task(1))
+    # print(cls.get_today_task(1))
     
-    print(cls.get_today_event(1))
-    re = cls.get_task_view_by_id(1,29)
+    # print(cls.get_today_event(1))
+    re = cls.get_tv_view(1)
     print(re)
 
     # print(re)

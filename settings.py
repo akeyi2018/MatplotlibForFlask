@@ -35,17 +35,24 @@ class Html_Param:
             "active": False
         },
         {
-            "text": "イベント一覧表示",
+            "text": "イベント一覧",
             "id": "v-pills-schedule-view",
             "label": "v-pills-schedule-view-tab",
             "url": "event.html",
             "active": False
         },
         {
-            "text": "タスク一覧表示",
+            "text": "タスク一覧",
             "id": "v-pills-task-view",
             "label": "v-pills-task-view-tab",
             "url": "task.html",
+            "active": False
+        },
+        {
+            "text": "TVドラマ一覧",
+            "id": "v-pills-tv-view",
+            "label": "v-pills-tv-view-tab",
+            "url": "tv.html",
             "active": False
         }
     ]
@@ -74,6 +81,10 @@ class Html_Param:
         
         today_task = ins.get_today_task(session['id'])
         running_task = ins.get_task_view(session['id'])
+
+        # tv情報取得
+        tv_info = ins.get_tv_view(session['id'])
+
         user_name = session['user_name']
 
         return {
@@ -87,7 +98,8 @@ class Html_Param:
             "health_info_goal" : health_info_goal,
             "health_info_diff" : health_info_diff,
             "running_event" : running_event,
-            "running_task" : running_task
+            "running_task" : running_task,
+            "tv_info": tv_info
         }
 
     @staticmethod
@@ -153,6 +165,42 @@ class Html_Param:
                 "id": int(request.form.get('event_id'))
             }
             ins.update_data('event_info', data, condition)
+
+    @staticmethod
+    def insert_tv_info(request,session):
+        from pytz import timezone
+        from mysql_tool import DB_Connector
+
+        session['id'] = 1 # 後で変更
+
+        # 種別によって、処理分かれる
+        data = {
+            "user_id": session['id'],
+            "title": request.form.get('title'),
+            "episodes": request.form.get('episodes'),
+            "watched": request.form.get('watched'),
+            "pub_date": request.form.get('pub_date'),
+            "genre": request.form.get('genre'),
+            "tag": request.form.get('tag'),
+            "country": request.form.get('country'),
+            "discription": request.form.get('discription'),
+            "point": request.form.get('point'),
+            "status": 1,
+            "regist_time": datetime.datetime.now(timezone('Asia/Tokyo')).strftime("%Y-%m-%d %H:%M:%S")
+        }
+
+        ins = DB_Connector()
+        # 種別によって、処理分かれる
+        if request.form.get('choice') == '0':
+            ins.insert_data('watch_tv_info', data)
+        else:
+            pass
+            # 更新条件
+            # condition = {
+            #     "user_id": int(session['id']),
+            #     "id": int(request.form.get('event_id'))
+            # }
+            # ins.update_data('event_info', data, condition)
 
     @staticmethod
     def insert_health_info(request,session):

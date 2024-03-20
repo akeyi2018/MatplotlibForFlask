@@ -19,7 +19,12 @@ import flask_login
 # 自作クラス
 from mysql_tool import DB_Connector
 from settings import Message_list, Sql_Param, Html_Param
-from form_list import LoginForm, RegistUserForm, RegistTaskForm, RegistEventForm
+from form_list import (LoginForm, 
+                       RegistUserForm, 
+                       RegistTaskForm, 
+                       RegistEventForm,
+                       RegistTVForm
+)
 from admin_user import AdminUser
 
 login_manager = flask_login.LoginManager()
@@ -80,10 +85,15 @@ def confirm_data():
 #endregion
 
 #region ------GET----------
-@app.get('/drop')
+@app.get('/regist_tv_info/<id>')
 @flask_login.login_required
-def drop_test():
-    return render_template('dropdown_test.html')
+def show_regist_tv_info(id):
+    id = int(id)
+    if id ==0:
+        form = RegistTVForm(id=id)
+    else:
+        pass
+    return render_template('regist_tv_info.html', tform = form)
 
 @app.get('/profile')
 @flask_login.login_required
@@ -163,6 +173,12 @@ def favicon():
 #endregion
 
 #region ------POST----------
+@app.post('/set_tv_info')
+@flask_login.login_required
+def set_tv_info():
+    Html_Param.insert_tv_info(request, session)
+    return render_template('thanks.html')
+
 @app.post('/set_event')
 @flask_login.login_required
 def set_event():

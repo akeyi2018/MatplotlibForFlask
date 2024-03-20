@@ -8,10 +8,12 @@ from wtforms import (
     SubmitField,
     SelectField,
     HiddenField,
+    IntegerField,
     )
 from wtforms.validators import InputRequired, length
 from mysql_tool import DB_Connector
 from werkzeug.security import check_password_hash
+from wtforms.widgets import TextArea
 
 class LoginForm(FlaskForm):
     username = StringField('ユーザ名：',
@@ -82,5 +84,38 @@ class RegistEventForm(FlaskForm):
     choice = SelectField('種別：', choices=["新規","更新"], render_kw=style4)
     style5={'style': 'margin-top:1em;'}
     submit = SubmitField('イベントを登録する', render_kw=style5)
+
+class RegistTVForm(FlaskForm):
+    id = HiddenField('ID:')
+    style1={'style': 'width:50%;margin-top:1em;margin-right:150px;'}
+    title = StringField('タイトル：',
+        [InputRequired(), length(min=3, max=50)], render_kw=style1)
+    style_int={'style': 'width:60px;margin-right:380px;margin-top:1em;'}
+    episodes = IntegerField('回数：', [InputRequired()], default=1, render_kw=style_int)
+    watched = IntegerField('鑑賞：', default=0, render_kw=style_int)
+    style2={'style': 'margin-top:1em;margin-right:320px;'}
+    pub_date = DateField('日付：', format = '%Y-%m-%d', render_kw=style2)
+
+    style_choice={'style': 'width:120px;margin-right:310px;margin-top:1em;'}
+    genre_list =  [(1, "アニメ"),(2, "海外ドラマ"),(3, "SFドラマ"),(4,"サスペンス"),(5,"映画")]
+    genre = SelectField('ジャンル：', choices=genre_list, render_kw=style_choice)
+    tag = IntegerField('tag：',default=1, render_kw=style_int)
+
+    countries = [(1, "日本"),(2, "アメリカ"),(3, "中国"),(4,"そのた")]
+    country = SelectField('製作国：', choices=countries, render_kw=style_choice)
+    
+    style3={'style': 'width:85%; margin-top:1em;margin-right:-12px;'}
+    
+    # discription = StringField('内容：',
+    #     [InputRequired(), length(min=3, max=1000)], widget=TextArea, render_kw=style3)
+    discription = StringField('内容：',
+        widget=TextArea(), render_kw=style3)
+    rating = [(1, "★"),(2, "★★"),(3, "★★★"),(4,"★★★★"), (5,"★★★★★")]
+    point = SelectField('評価点：', choices=rating, default=3, render_kw=style_choice)
+
+    style4={'style': 'width:15%; margin-top:1em;margin-right:360px;'}
+    choice = SelectField('種別：', choices=[(0,"新規"),(1,"更新")], render_kw=style4)
+    style5={'style': 'margin-top:1em;'}
+    submit = SubmitField('登録する', render_kw=style5)
 
     
