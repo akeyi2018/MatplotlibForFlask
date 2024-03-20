@@ -124,7 +124,6 @@ def show_event(id):
         # idがゼロでない場合は、既存の情報を取得する
         ins = DB_Connector()
         event_info = ins.get_event_view_by_id(int(session['id']), int(id))
-        print(event_info)
         form = RegistEventForm(event_id=id,
                             event_name = event_info['event_name'],
                             discription=event_info['discription'],
