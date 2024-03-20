@@ -1,7 +1,7 @@
 <!-- タスク一覧 -->
 {% if home.tv_info %}
-<p class="lead" style="margin-bottom: 1px;">タスク一覧</p>
-<table class="table-info table-bordered border-info table-sm">
+<p class="lead text-light" style=" width: 150px;margin-bottom: 1px;">ドラマ一覧</p>
+<table class="table-info table-bordered border-info table-sm text-light">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -25,11 +25,11 @@
       <td>
         <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight{{index + 1}}" aria-controls="offcanvasRight">詳細</button>
         <div class="offcanvas offcanvas-end" id="offcanvasRight{{index + 1}}" aria-labelledby="id{{ index + 1 }}">
-          <div class="offcanvas-header">
+          <div class="offcanvas-header bg-dark">
             <h5 id="id{{ index + 1 }}">詳細</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+            <button type="button" class="btn-close text-reset bg-light" data-bs-dismiss="offcanvas"></button>
           </div>
-          <div class="offcanvas-body" id="id{{index+1}}">
+          <div class="offcanvas-body bg-dark" id="id{{index+1}}">
             <p class="lead">{{home.tv_info[index].title}}</p>
             <p>{{home.tv_info[index].discription}}</p>
           </div>

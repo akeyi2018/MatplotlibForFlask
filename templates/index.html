@@ -11,10 +11,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
          
 </head>
-<body>
+<body style="background-color: #A57A5F;">
   
-  <div class="container">
-   
+  <div class="container text-light">
       <nav class="navbar fixed-top navbar-light nav-justified"> 
         <div class="container-fluid">
           <a class="navbar-brand" href="#"></a>
@@ -46,14 +45,14 @@
                 <button class="nav-link active" 
                   id="{{nav[index].label}}" 
                   data-bs-toggle="pill" data-bs-target="#{{nav[index].id}}"
-                  type="button" role="tab" aria-controls="{{nav[index].id}}" aria-selected="true">
+                  type="button" role="tab" aria-controls="{{nav[index].id}}" aria-selected="true" onclick="changeBackgroundColor({{index}})">
                   {{nav[index].text}}
                 </button>
                 {% else %}
                 <button class="nav-link" 
                   id="{{nav[index].label}}" 
                   data-bs-toggle="pill" data-bs-target="#{{nav[index].id}}"
-                  type="button" role="tab" aria-controls="{{nav[index].id}}" aria-selected="false">
+                  type="button" role="tab" aria-controls="{{nav[index].id}}" aria-selected="false" onclick="changeBackgroundColor({{index}})">
                   {{nav[index].text}}
                 </button>
                 {% endif %}

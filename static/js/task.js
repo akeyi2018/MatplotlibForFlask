@@ -28,3 +28,28 @@ function finish_task(id, name) {
         "name": name
     }));
 }
+
+
+function changeBackgroundColor(num) {
+    console.log(num);
+    switch(num) {
+        case 0:
+            document.body.style.backgroundColor = '#A57A5F';
+            break;
+        case 1:
+            document.body.style.backgroundColor = '#795341';
+            break;
+        case 2:
+            document.body.style.backgroundColor = '#694337';
+            break;
+        case 3:
+            document.body.style.backgroundColor = '#54342A';
+            break;
+        case 4:
+            document.body.style.backgroundColor = '#3A2016';
+            break;
+        default:
+            document.body.style.backgroundColor = '#A57A5F';
+            break;
+    }
+}

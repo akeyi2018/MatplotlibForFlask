@@ -1,7 +1,7 @@
 <!-- タスク一覧 -->
 {% if home.running_task %}
 <p class="lead" style="margin-bottom: 1px;">タスク一覧</p>
-<table class="table-info table-bordered border-info table-sm">
+<table class="table-info table-bordered border-info table-sm text-light" border="2">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -23,11 +23,11 @@
       <td>{{home.running_task[index].left_days}}</td>
       <td>{{home.running_task[index].status}}</td>
       <td>
-        <button class="btn btn-primary" onclick="finish_task(
+        <button class="btn btn-success" onclick="finish_task(
           {{ home.running_task[index].id }},
           '{{ home.running_task[index].task_name }}')">完了にする</button>
         <!-- <button class="btn btn-light"> -->
-          <a href="{{url_for('show_task', id=home.running_task[index].id)}}" type="button" class="btn btn-outline-secondary">編集
+          <a href="{{url_for('show_task', id=home.running_task[index].id)}}" type="button" class="btn btn-outline-success text-light">編集
             <span class="visually-hidden">編集</span>
           </a>
         <!-- </button> -->

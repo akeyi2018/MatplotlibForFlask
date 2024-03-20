@@ -1,7 +1,7 @@
 <!-- 本日の健康チェック -->
 <p class="lead" style="margin-bottom: 1px;">健康チェック</p>
 {% if home.health_info %}
-<table class="table-info table-bordered border-info table-sm" border_size="2">
+<table class="table-info table-bordered border-info table-sm text-light" border="2">
   <thead>
     <tr>
       <th scope="col">{{home.dt2}}</th>
@@ -32,14 +32,24 @@
   </tbody>
 </table>
 {% else %}
-<p class="lead text-danger fw-bold" style="margin-bottom: 1px;">測定結果が未入力です。以下のボタンより入力してください。</p>
+<div>
+<p class="lead text-danger fw-bold text-light" style="margin-bottom: 1px;">測定結果が未入力です。以下のボタンより入力してください。</p>
 <button class="btn btn-danger" onclick="location.href='/regist_health'">測定結果入力</button>
+</div>
 {% endif %}
 
+<!-- イベントバッジ -->
+<button type="button" class="btn btn-primary" style="margin-top: 1em;">
+  イベント数：<span class="badge bg-dark">{{home.running_event | length}}</span>
+  <span class="visually-hidden">unread messages</span>
+</button>
+<button type="button" class="btn btn-primary" style="margin-top: 1em;">
+  本日残：<span class="badge bg-dark">{{home.today_event | length}}</span>
+  <span class="visually-hidden">unread messages</span>
+</button>
 <!-- 本日の予定(イベント) -->
 {% if home.today_event %}
-<p class="lead" style="margin-bottom: 1px;">本日の予定(イベント)</p>
-<table class="table-info table-bordered border-info table-sm">
+<table class="table-info table-bordered border-info table-sm text-light" border="2" style="margin-top: 1em;">
   <thead>
     <tr>
       <th scope="col">No.</th>
@@ -64,8 +74,16 @@
   </tbody>
 </table>
 {% else %}
-<p class="lead info" style="margin-bottom: 1px;">本日の予定(イベント)はありません</p>
+
 {% endif %}
+<button type="button" class="btn btn-success" style="margin-top: 1em;">
+  タスク数<span class="badge bg-dark">{{home.running_event | length}}</span>
+  <span class="visually-hidden">unread messages</span>
+</button>
+<button type="button" class="btn btn-success" style="margin-top: 1em;">
+  本日残<span class="badge bg-dark">{{home.today_task | length}}</span>
+  <span class="visually-hidden">unread messages</span>
+</button>
 {% if home.today_task %}
 <p class="lead" style="margin-bottom: 1px;">本日の予定(タスク)</p>
 <table class="table-info table-bordered border-info table-sm">
@@ -96,11 +114,11 @@
 
 <p class="lead" style="margin-bottom: 1px;" id="location"><a href="https://www.jma.go.jp/bosai/forecast/" target="_blank"></a></p>
 <div class="weatherForecast">
-  <div class="weather">
-    <div class="wdate">--/--(-)</div>
+  <div class="weather text-light">
+    <div class="wdate text-light">--/--(-)</div>
       <img class="weatherImg">
       <div class="weatherTelop">--</div>
-      <div><span class="tempMin">-℃</span>/<span class="tempMax">-℃</span></div>
+      <div><span class="tempMin text-light">-℃</span>/<span class="tempMax text-light">-℃</span></div>
   </div>
 </div>
 <script src="{{ url_for('static', filename='/js/weather.js')}}"></script>
