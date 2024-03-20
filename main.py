@@ -19,7 +19,7 @@ import flask_login
 # 自作クラス
 from mysql_tool import DB_Connector
 from settings import Message_list, Sql_Param, Html_Param
-from form_list import LoginForm, RegistUserForm, RegistTaskForm
+from form_list import LoginForm, RegistUserForm, RegistTaskForm, RegistEventForm
 from admin_user import AdminUser
 
 login_manager = flask_login.LoginManager()
@@ -100,7 +100,6 @@ def show_task(id):
         # idがゼロでない場合は、既存の情報を取得する
         ins = DB_Connector()
         task_info = ins.get_task_view_by_id(int(session['id']), int(id))
-        print(task_info)
         form = RegistTaskForm(task_id=id,
                             task_name = task_info['task_name'],
                             discription=task_info['detail'],
@@ -109,6 +108,26 @@ def show_task(id):
                             choice = "更新"
                             )
     return render_template('regist_task.html', tform=form)
+
+@app.get('/show_event/<id>')
+@flask_login.login_required
+def show_event(id):
+    id = int(id)
+    if id ==0:
+        form = RegistEventForm(event_id=id)
+    else:
+        # idがゼロでない場合は、既存の情報を取得する
+        ins = DB_Connector()
+        event_info = ins.get_event_view_by_id(int(session['id']), int(id))
+        print(event_info)
+        form = RegistEventForm(event_id=id,
+                            event_name = event_info['event_name'],
+                            discription=event_info['discription'],
+                            entry_date=event_info['event_date'],
+                            kind=99,
+                            choice = "更新"
+                            )
+    return render_template('regist_event.html', eform=form)
 
 @app.get('/thanks/<kind>/<content>')
 def show_thanks(kind, content):
@@ -143,13 +162,7 @@ def favicon():
 @app.post('/set_event')
 @flask_login.login_required
 def set_event():
-    data = [
-        request.form.get('event_name'),
-        request.form.get('event_date'),
-        request.form.get('discription')
-    ]
-    ins = DB_Connector()
-    ins.insert_event_data(data)
+    Html_Param.insert_event_info(request, session)
     return render_template('thanks.html')
 
 @app.post('/set_task')

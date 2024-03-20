@@ -67,4 +67,20 @@ class RegistTaskForm(FlaskForm):
     style5={'style': 'margin-top:1em;'}
     submit = SubmitField('タスクを登録する', render_kw=style5)
 
+class RegistEventForm(FlaskForm):
+    event_id = HiddenField('ID:')
+    style1={'style': 'margin-top:1em;margin-right:300px;'}
+    event_name = StringField('イベント名：',
+        [InputRequired(), length(min=3, max=30)], render_kw=style1)
+    style2={'style': 'margin-top:1em;margin-right:335px;'}
+    entry_date = DateField('日付：', format = '%Y-%m-%d', render_kw=style2)
+    style3={'style': 'width:85%; margin-top:1em;margin-right:-12px;'}
+    discription = StringField('内容：',
+        [InputRequired(), length(min=3, max=50)], render_kw=style3)
+    style4={'style': 'width:10%; margin-top:1em;margin-right:415px;'}
+    
+    choice = SelectField('種別：', choices=["新規","更新"], render_kw=style4)
+    style5={'style': 'margin-top:1em;'}
+    submit = SubmitField('イベントを登録する', render_kw=style5)
+
     

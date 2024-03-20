@@ -26,6 +26,9 @@
         <button class="btn btn-primary" onclick="finish_event(
           {{ home.running_event[index].id }},
           '{{ home.running_event[index].event_name }}')">完了にする</button>
+        <a href="{{url_for('show_event', id=home.running_event[index].id)}}" type="button" class="btn btn-outline-secondary">編集
+          <span class="visually-hidden">編集</span>
+        </a>
       </td>
     </tr>
     {% endfor %}

@@ -144,6 +144,13 @@ class DB_Connector:
         self.curs.execute(sql, values)
         return self.curs.fetchall()
     
+    def get_event_view_by_id(self, user_id, id):
+        sql = 'SELECT * FROM event_view_running \
+                WHERE user_id =%s AND id=%s;'
+        values = (user_id, id,)
+        self.curs.execute(sql, values)
+        return self.curs.fetchone()
+    
     def get_task_data(self, user_id):
         sql = 'SELECT * \
                 FROM task_info \

@@ -2,7 +2,7 @@
 <html lang="jp">
 <head>
     <meta charset="UTF-8">
-    <title>home-navigate</title>
+    <title>TASK</title>
     <link href="{{ url_for('static', filename='/css/bootstrap.min.css') }}" rel="stylesheet">
     <script src="{{ url_for('static', filename='/js/bootstrap.min.js')}}"></script>
 </head>
@@ -12,29 +12,17 @@
     <div class="card card-body" style="width: 650px;">
         <div class="container" style="margin-top:10px;">
             <div class="card text-center" style="width: 600px;">
-                <div class="card-header">
-                    タスク登録
-                </div>
+                <div class="card-header">タスク登録</div>
                 <div class="card-body">
                     <form method="post" action="/set_task">
                         {{ tform.hidden_tag() }}
                         <div>{{ tform.task_id()}}</div>
-                        <div>
-                        {{ tform.task_name.label}} {{ tform.task_name()}}
-                        </div>
-                        <div>
-                        {{ tform.entry_date.label}} {{tform.entry_date()}}
-                        </div>
-                        <div>
-                        {{ tform.discription.label}} {{tform.discription()}}
-                        </div>
-                        <div>
-                        {{ tform.kind.label}} {{tform.kind()}}
-                        </div>
+                        <div>{{ tform.task_name.label}} {{ tform.task_name()}}</div>
+                        <div>{{ tform.entry_date.label}} {{tform.entry_date()}}</div>
+                        <div>{{ tform.discription.label}} {{tform.discription()}}</div>
+                        <div>{{ tform.kind.label}} {{tform.kind()}}</div>
                         <div>{{ tform.choice.label}}{{tform.choice()}}</div>
-                        <div>
-                        {{ tform.submit() }}
-                        </div>
+                        <div>{{ tform.submit() }}</div>
                     </form>
                 </div>
             </div>

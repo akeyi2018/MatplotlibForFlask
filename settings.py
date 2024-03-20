@@ -35,13 +35,6 @@ class Html_Param:
             "active": False
         },
         {
-            "text": "イベント登録",
-            "id": "v-pills-schedule",
-            "label": "v-pills-schedule-tab",
-            "url": "regist_event.html",
-            "active": False
-        },
-        {
             "text": "イベント一覧表示",
             "id": "v-pills-schedule-view",
             "label": "v-pills-schedule-view-tab",
@@ -131,6 +124,35 @@ class Html_Param:
                 "task_id": int(request.form.get('task_id'))
             }
             ins.update_data('task_info', data, condition)
+
+    @staticmethod
+    def insert_event_info(request,session):
+        from pytz import timezone
+        from mysql_tool import DB_Connector
+
+        session['id'] = 1 # 後で変更
+
+        # 種別によって、処理分かれる
+        data = {
+            "user_id": session['id'],
+            "event_name": request.form.get('event_name'),
+            "event_date": request.form.get('entry_date'),
+            "discription": request.form.get('discription'),
+            "finish_flag": 1,
+            "create_time": datetime.datetime.now(timezone('Asia/Tokyo')).strftime("%Y-%m-%d %H:%M:%S")
+        }
+
+        ins = DB_Connector()
+        # 種別によって、処理分かれる
+        if request.form.get('choice') == '新規':
+            ins.insert_data('event_info', data)
+        else:
+            # 更新条件
+            condition = {
+                "user_id": int(session['id']),
+                "id": int(request.form.get('event_id'))
+            }
+            ins.update_data('event_info', data, condition)
 
     @staticmethod
     def insert_health_info(request,session):
