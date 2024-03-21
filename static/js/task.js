@@ -34,7 +34,7 @@ function changeBackgroundColor(num) {
     console.log(num);
     switch(num) {
         case 0:
-            document.body.style.backgroundColor = '#A57A5F';
+            document.body.style.backgroundColor = '#4a5c6d';
             break;
         case 1:
             document.body.style.backgroundColor = '#795341';
@@ -49,7 +49,20 @@ function changeBackgroundColor(num) {
             document.body.style.backgroundColor = '#3A2016';
             break;
         default:
-            document.body.style.backgroundColor = '#A57A5F';
+            document.body.style.backgroundColor = '#4a5c6d';
             break;
     }
 }
+
+// ナビゲーションリンクにマウスがホバーされたときの処理
+document.addEventListener('DOMContentLoaded', function() {
+    var navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(function(navLink) {
+      navLink.addEventListener('mouseover', function() {
+        navLink.style.color = '#ef1146'; // ホバー時のテキスト色を変更
+      });
+      navLink.addEventListener('mouseout', function() {
+        navLink.style.color = '#ffffff'; // デフォルトのテキスト色に戻す
+      });
+    });
+});

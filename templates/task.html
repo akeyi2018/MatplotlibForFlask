@@ -6,7 +6,6 @@
     <tr>
       <th scope="col">#</th>
       <th scope="col">タスク名</th>
-      <th scope="col">詳細内容</th>
       <th scope="col">期限日</th>
       <th scope="col">残日数</th>
       <th scope="col">ステータス</th>
@@ -18,7 +17,6 @@
     <tr>
       <th scope="row">{{ index + 1 }}</th>
       <td>{{home.running_task[index].task_name}}</td>
-      <td>{{home.running_task[index].detail}}</td>
       <td>{{home.running_task[index].limit_date}}</td>
       <td>{{home.running_task[index].left_days}}</td>
       <td>{{home.running_task[index].status}}</td>
@@ -26,11 +24,20 @@
         <button class="btn btn-success" onclick="finish_task(
           {{ home.running_task[index].id }},
           '{{ home.running_task[index].task_name }}')">完了にする</button>
-        <!-- <button class="btn btn-light"> -->
           <a href="{{url_for('show_task', id=home.running_task[index].id)}}" type="button" class="btn btn-outline-success text-light">編集
             <span class="visually-hidden">編集</span>
           </a>
-        <!-- </button> -->
+          <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight{{index + 1}}" aria-controls="offcanvasRight">詳細</button>
+          <div class="offcanvas offcanvas-end" id="offcanvasRight{{index + 1}}" aria-labelledby="id{{ index + 1 }}">
+            <div class="offcanvas-header bg-dark">
+              <h5 id="id{{ index + 1 }}">詳細</h5>
+              <button type="button" class="btn-close text-reset bg-light" data-bs-dismiss="offcanvas"></button>
+            </div>
+            <div class="offcanvas-body bg-dark" id="id{{index+1}}">
+              <p class="lead">{{home.running_task[index].task_name}}</p>
+              <p>{{home.running_task[index].detail}}</p>
+            </div>
+          </div>
       </td>
       </tr>
     </tr>

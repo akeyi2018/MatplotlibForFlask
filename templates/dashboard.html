@@ -11,19 +11,19 @@
     </tr>
   </thead>
   <tbody>
-    <tr class="text-success fw-bold">
+    <tr class="text-light fw-bold">
       <th scope="row">本日の結果</th>
       <td>{{home.health_info.high}}</td>
       <td>{{home.health_info.low}}</td>
       <td>{{home.health_info.weight}}</td>
     </tr>
-    <tr class="text-warning fw-bold">
+    <tr class="text-white fw-bold">
       <th scope="row">目標値</th>
       <td>{{home.health_info_goal.high}}</td>
       <td>{{home.health_info_goal.low}}</td>
       <td>{{home.health_info_goal.weight}}</td>
     </tr>
-    <tr class="text-info fw-bold">
+    <tr class="text-light fw-bold bg-dark">
       <th scope="row">残差</th>
       <td>{{home.health_info_diff.high}}</td>
       <td>{{home.health_info_diff.low}}</td>
@@ -49,7 +49,7 @@
 </button>
 <!-- 本日の予定(イベント) -->
 {% if home.today_event %}
-<table class="table-info table-bordered border-info table-sm text-light" border="2" style="margin-top: 1em;">
+<table class="table-info table-bordered border-info table-sm text-white" border="2" style="margin-top: 1em;">
   <thead>
     <tr>
       <th scope="col">No.</th>
@@ -77,7 +77,7 @@
 
 {% endif %}
 <button type="button" class="btn btn-success" style="margin-top: 1em;">
-  タスク数<span class="badge bg-dark">{{home.running_event | length}}</span>
+  タスク数<span class="badge bg-dark">{{home.running_task | length}}</span>
   <span class="visually-hidden">unread messages</span>
 </button>
 <button type="button" class="btn btn-success" style="margin-top: 1em;">
@@ -85,8 +85,7 @@
   <span class="visually-hidden">unread messages</span>
 </button>
 {% if home.today_task %}
-<p class="lead" style="margin-bottom: 1px;">本日の予定(タスク)</p>
-<table class="table-info table-bordered border-info table-sm">
+<table class="table-info table-bordered border-info table-sm text-white" border="2" style="margin-top: 1em;">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -115,7 +114,7 @@
 <p class="lead" style="margin-bottom: 1px;" id="location"><a href="https://www.jma.go.jp/bosai/forecast/" target="_blank"></a></p>
 <div class="weatherForecast">
   <div class="weather text-light">
-    <div class="wdate text-light">--/--(-)</div>
+    <div class="wdate">--/--(-)</div>
       <img class="weatherImg">
       <div class="weatherTelop">--</div>
       <div><span class="tempMin text-light">-℃</span>/<span class="tempMax text-light">-℃</span></div>

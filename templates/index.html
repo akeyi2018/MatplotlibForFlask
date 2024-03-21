@@ -9,18 +9,16 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-         
 </head>
-<body style="background-color: #A57A5F;">
-  
+<body style="background-color: #4a5c6d;">
   <div class="container text-light">
       <nav class="navbar fixed-top navbar-light nav-justified"> 
         <div class="container-fluid">
-          <a class="navbar-brand" href="#"></a>
+          <a class="navbar-brand"></a>
 
             <!-- dropdown menu修正済 -->
             <div class="dropdown fixed-top">
-              <button class="btn btn-light dropdown-toggle" aria-expanded="false">
+              <button class="btn dropdown-toggle" aria-expanded="false">
                   <img class="rounded-circle" src="../static/images/40_man.jpg" width="45" height="45"></img>
               </button>
               <ul class="dropdown-menu">
@@ -32,9 +30,10 @@
               </ul>
             </div>
 
-            <p class="lead" style="margin-left: 100px;margin-right: 300px;margin-top: 5px;">
+            <p class="lead" style="margin-left: 100px;margin-right: 400px;margin-top: 5px;">
             {{ home.user }} さん、こんにちは！
-            本日は 「{{home.dt}}」 です。
+            本日は 
+            <span class="text-white bg-dark">&spades;【 {{home.dt}}】&spades;</span>です。
             </p>
 
             <!-- dashboard -->
@@ -42,14 +41,14 @@
               <div class="nav flex-column nav-pills me-5" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="width: 150px;">
                 {% for index in range(nav | length) %}
                 {% if nav[index].active %}
-                <button class="nav-link active" 
+                <button class="nav-link link-light rounded-pill active" 
                   id="{{nav[index].label}}" 
                   data-bs-toggle="pill" data-bs-target="#{{nav[index].id}}"
                   type="button" role="tab" aria-controls="{{nav[index].id}}" aria-selected="true" onclick="changeBackgroundColor({{index}})">
                   {{nav[index].text}}
                 </button>
                 {% else %}
-                <button class="nav-link" 
+                <button class="nav-link link-light rounded-pill" 
                   id="{{nav[index].label}}" 
                   data-bs-toggle="pill" data-bs-target="#{{nav[index].id}}"
                   type="button" role="tab" aria-controls="{{nav[index].id}}" aria-selected="false" onclick="changeBackgroundColor({{index}})">
@@ -79,6 +78,5 @@
   <script src="{{ url_for('static', filename='/js/task.js')}}"></script>
   <script src="{{ url_for('static', filename='/js/dropdown.js')}}"></script>
   <script src="{{ url_for('static', filename='/js/bootstrap.bundle.min.js')}}"></script>
-  
 </body>
 </html>
