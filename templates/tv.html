@@ -23,17 +23,18 @@
       <td>{{home.tv_info[index].watched}} / {{home.tv_info[index].episodes}}</td>
       <td>{{home.tv_info[index].years}}</td>
       <td>
-        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight{{index + 1}}" aria-controls="offcanvasRight">詳細</button>
-        <div class="offcanvas offcanvas-end" id="offcanvasRight{{index + 1}}" aria-labelledby="id{{ index + 1 }}">
+        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offtv{{index + 1}}" aria-controls="offcanvasRight">詳細</button>
+        <div class="offcanvas offcanvas-end" id="offtv{{index + 1}}" aria-labelledby="id2{{ index + 1 }}">
           <div class="offcanvas-header bg-dark">
-            <h5 id="id{{ index + 1 }}">詳細</h5>
+            <h5 id="id2{{ index + 1 }}">詳細</h5>
             <button type="button" class="btn-close text-reset bg-light" data-bs-dismiss="offcanvas"></button>
           </div>
-          <div class="offcanvas-body bg-dark" id="id{{index+1}}">
+          <div class="offcanvas-body bg-dark" id="id2{{index+1}}">
             <p class="lead">{{home.tv_info[index].title}}</p>
             <p>{{home.tv_info[index].discription}}</p>
           </div>
         </div>
+
       </td>
       </tr>
     </tr>
