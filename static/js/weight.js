@@ -5,8 +5,8 @@ function drawGauge(curWeight, gWeight) {
     const gaugeContainer = document.getElementById('gauge-container');
     gaugeContainer.innerHTML = '';
 
-    const minWeight = 60;
-    const maxWeight = 90;
+    const minWeight = gWeight;
+    const maxWeight = 80;
 
     const gauge = document.createElement('div');
     gauge.style.width = gaugeWidth + 'px';
@@ -45,7 +45,7 @@ function drawGauge(curWeight, gWeight) {
 
     // メインメモリとサブメモリの描画
     for (let i = minWeight; i <= maxWeight; i++) {
-        const isMainTick = (i - minWeight) % 5 === 0;
+        const isMainTick = (i - minWeight) % 1 === 0;
         const tickHeight = isMainTick ? gaugeHeight : gaugeHeight / 2;
         const tick = document.createElement('div');
         tick.style.width = '1px';
@@ -68,13 +68,13 @@ function drawGauge(curWeight, gWeight) {
         
         if (i < maxWeight){
             //サブメモリ描画
-            for (let j = 1; j <= 4; j++) {
+            for (let j = 1; j <= 9; j++) {
                 const subTick = document.createElement('div');
                 subTick.style.width = '1px';
                 subTick.style.height = gaugeHeight / 2 + 'px';
                 subTick.style.backgroundColor = '#fff';
                 subTick.style.position = 'absolute';
-                subTick.style.left = ((i - minWeight + j * 0.2) / (maxWeight - minWeight)) * gaugeWidth + 'px';
+                subTick.style.left = ((i - minWeight + j * 0.1) / (maxWeight - minWeight)) * gaugeWidth + 'px';
                 gauge.appendChild(subTick);
             }
         }
