@@ -88,6 +88,11 @@ def show_regist_tv_info(id):
 def show_profile():
     return render_template('profile.html')
 
+@app.get('/line')
+@flask_login.login_required
+def show_linear():
+    return render_template('yoko2.html')
+
 @app.get('/regist_health')
 @flask_login.login_required
 def regist_health_info():

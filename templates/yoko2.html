@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chart with Horizontal Line</title>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+  <div style="width: 400px">
+    <canvas id="myChart"></canvas>
+  </div>
+
+  <script>
+    // データセットの定義
+    var data = {
+      labels: ["January", "February", "March", "April", "May", "June", "July"],
+      datasets: [{
+        label: "My Dataset",
+        data: [65, 59, 80, 81, 56, 55, 40],
+        fill: false,
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1
+      }]
+    };
+
+    // オプションの定義
+    var options = {
+      plugins: {
+        // 横線プラグインの設定
+        horizontalLine: {
+          // 横線の値を設定
+          value: 70,
+          // 横線のスタイルを設定
+          color: 'rgba(255, 0, 0, 0.7)',
+          lineWidth: 2,
+          // 横線を描画する場所を設定
+          borderDash: [5, 5]
+        }
+      }
+    };
+
+    // プラグインの定義
+    Chart.register({
+      // 横線プラグイン
+      id: 'horizontalLine',
+      afterDraw: function(chart, easing) {
+        var ctx = chart.ctx;
+        var xAxis = chart.scales['x'];
+        var yAxis = chart.scales['y'];
+
+        // 横線を描画
+        ctx.save();
+        ctx.beginPath();
+        ctx.strokeStyle = chart.options.plugins.horizontalLine.color;
+        ctx.lineWidth = chart.options.plugins.horizontalLine.lineWidth;
+        ctx.setLineDash(chart.options.plugins.horizontalLine.borderDash);
+        ctx.moveTo(xAxis.left, yAxis.getPixelForValue(chart.options.plugins.horizontalLine.value));
+        ctx.lineTo(xAxis.right, yAxis.getPixelForValue(chart.options.plugins.horizontalLine.value));
+        ctx.stroke();
+        ctx.restore();
+      }
+    });
+
+    // グラフを描画
+    var ctx = document.getElementById("myChart").getContext("2d");
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      data: data,
+      options: options
+    });
+  </script>
+</body>
+</html>

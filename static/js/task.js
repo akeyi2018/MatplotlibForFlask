@@ -31,7 +31,7 @@ function finish_task(id, name) {
 
 
 function changeBackgroundColor(num) {
-    console.log(num);
+    // console.log(num);
     switch(num) {
         case 0:
             document.body.style.backgroundColor = '#4a5c6d';

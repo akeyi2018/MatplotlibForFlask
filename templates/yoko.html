@@ -1,0 +1,60 @@
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.bundle.min.js" integrity="sha256-eA+ych7t31OjiXs3fYU0iWjn9HvXMiCLmunP2Gpghok=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@0.5.7/chartjs-plugin-annotation.min.js" integrity="sha256-Olnajf3o9kfkFGloISwP1TslJiWUDd7IYmfC+GdCKd4=" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script> -->
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+
+
+ <script>
+    //window.onload = function () {
+        var ctx = document.getElementById('canvas').getContext('2d');
+        var myChart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'My First dataset',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    fill: false,
+                    data: [0, 10, 5, 2, 20, 30, 45]
+                }]
+            },
+
+            // Configuration options go here
+            options: {
+                annotation: {
+                    drawTime: 'afterDatasetsDraw',
+                    annotations: [
+                        {
+                            id: 'hline',
+                            type: 'line',
+                            mode: 'horizontal',
+                            scaleID: 'y-axis-0',
+                            value: 15,
+                            borderColor: 'black',
+                            borderWidth: 2,
+                            label: {
+                                backgroundColor: "red",
+                                content: "Test Label",
+                                enabled: true
+                            },
+                        },
+                    ]
+                }
+            }
+        });
+
+    //}
+
+</script> 
+</body>
+</html>
+

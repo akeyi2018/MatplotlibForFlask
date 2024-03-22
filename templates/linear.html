@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Bar Chart</title>
+	<!-- <script src="node_modules/chart.js/dist/Chart.bundle.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/chart.js@2.8.0/dist/Chart.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+	<script src="static/js/chart.scale.lineargauge.js"></script>
+	<script src="static/js/chart.element.gaugerect.js"></script>
+    <script src="static/js/chart.lineargauge.js"></script>
+   
+</head>
+
+<body>
+    <canvas id="canvas10" height="80" width="600" style="width: 600px; height: 80px;"></canvas>
+    <script src="{{ url_for('static', filename='js/linear_gauge.js')}}"></script>
+</body>
+
+</html>
