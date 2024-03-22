@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>体重管理</title>
+</head>
+<body>
+<label for="gauge-width">ゲージの幅:</label>
+<input type="number" id="gauge-width" value="600">
+<label for="gauge-height">ゲージの高さ:</label>
+<input type="number" id="gauge-height" value="150">
+<button onclick="drawGauge()">ゲージを描画</button>
+<div id="gauge-container" style="position: relative; margin-top: 20px; overflow: hidden;"></div>
+
+<script>
+function drawGauge() {
+  const gaugeWidth = parseInt(document.getElementById('gauge-width').value);
+  const gaugeHeight = parseInt(document.getElementById('gauge-height').value);
+
+  const gaugeContainer = document.getElementById('gauge-container');
+  gaugeContainer.innerHTML = '';
+
+  const minWeight = 60;
+  const maxWeight = 90;
+
+  const gauge = document.createElement('div');
+  gauge.style.width = gaugeWidth + 'px';
+  gauge.style.height = gaugeHeight + 'px';
+  gauge.style.backgroundColor = '#f0f0f0';
+  gauge.style.position = 'relative'; // 相対位置に変更
+//   gauge.style.position = 'absolute';
+  gaugeContainer.appendChild(gauge);
+
+  const labelsContainer = document.createElement('div');
+  labelsContainer.style.width = '100%';
+  labelsContainer.style.textAlign = 'center';
+  labelsContainer.style.position = 'absolute';
+  labelsContainer.style.bottom = '-35px';
+  labelsContainer.style.left = '0';
+  gaugeContainer.appendChild(labelsContainer);
+
+  // メインメモリとサブメモリの描画
+  for (let i = minWeight; i <= maxWeight; i++) {
+    const isMainTick = (i - minWeight) % 5 === 0;
+    const tickHeight = isMainTick ? gaugeHeight : gaugeHeight / 2;
+    const tick = document.createElement('div');
+    tick.style.width = '1px';
+    tick.style.height = tickHeight + 'px';
+    tick.style.backgroundColor = '#000';
+    tick.style.position = 'absolute';
+    tick.style.left = ((i - minWeight) / (maxWeight - minWeight)) * gaugeWidth + 'px';
+    gauge.appendChild(tick);
+
+    if (isMainTick) {
+      const label = document.createElement('div');
+      label.textContent = i;
+      label.style.position = 'absolute';
+      label.style.bottom = '-20px';
+      label.style.transform = 'translateX(-50%)';
+      label.style.left = ((i - minWeight) / (maxWeight - minWeight)) * gaugeWidth + 'px';
+      labelsContainer.appendChild(label);
+    }
+  }
+}
+
+// ページ読み込み時にゲージを描画
+drawGauge();
+</script>
+</body>
+</html>

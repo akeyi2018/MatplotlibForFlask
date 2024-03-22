@@ -37,15 +37,21 @@
 <p class="lead text-danger fw-bold text-light" style="margin-bottom: 1px;">測定結果が未入力です。以下のボタンより入力してください。</p>
 <button class="btn btn-danger" onclick="location.href='/regist_health'">測定結果入力</button>
 </div>
-<!-- <canvas id="canvas10" height="80" width="600" style="width: 600px; height: 80px;"></canvas> -->
 {% endif %}
+<!-- ゲージの表示 -->
+<script>
+  curWeight = {{ home.health_info.weight }}; 
+  gWeight = {{ home.health_info_goal.weight }};
+  console.log(gWeight);
+</script>
+<div id="gauge-container" style="position: relative; margin-top: 25px; margin-left: 30px;"></div>
 
 <!-- イベントバッジ -->
-<button type="button" class="btn btn-primary" style="margin-top: 1em;">
+<button type="button" class="btn btn-primary" style="margin-top: 2em;">
   イベント数：<span class="badge bg-dark">{{home.running_event | length}}</span>
   <span class="visually-hidden">unread messages</span>
 </button>
-<button type="button" class="btn btn-primary" style="margin-top: 1em;">
+<button type="button" class="btn btn-primary" style="margin-top: 2em;">
   本日残：<span class="badge bg-dark">{{home.today_event | length}}</span>
   <span class="visually-hidden">unread messages</span>
 </button>
@@ -78,11 +84,11 @@
 {% else %}
 
 {% endif %}
-<button type="button" class="btn btn-success" style="margin-top: 1em;">
+<button type="button" class="btn btn-success" style="margin-top: 2em;">
   タスク数<span class="badge bg-dark">{{home.running_task | length}}</span>
   <span class="visually-hidden">unread messages</span>
 </button>
-<button type="button" class="btn btn-success" style="margin-top: 1em;">
+<button type="button" class="btn btn-success" style="margin-top: 2em;">
   本日残<span class="badge bg-dark">{{home.today_task | length}}</span>
   <span class="visually-hidden">unread messages</span>
 </button>
@@ -124,5 +130,6 @@
 </div>
 <script src="{{ url_for('static', filename='/js/weather.js')}}"></script>
 <script src="{{ url_for('static', filename='/js/task.js')}}"></script>
+<script src="{{ url_for('static', filename='/js/weight.js')}}"></script>
 {% include 'footer.html' %}
 

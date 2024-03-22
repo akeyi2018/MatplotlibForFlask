@@ -91,7 +91,7 @@ def show_profile():
 @app.get('/line')
 @flask_login.login_required
 def show_linear():
-    return render_template('yoko2.html')
+    return render_template('weight.html')
 
 @app.get('/regist_health')
 @flask_login.login_required
