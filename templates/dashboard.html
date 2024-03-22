@@ -1,33 +1,28 @@
 <!-- 本日の健康チェック -->
 <p class="lead" style="margin-bottom: 1px;">健康チェック</p>
 {% if home.health_info %}
+<script>
+  curWeight = {{ home.health_info.weight }}; 
+  gWeight = {{ home.health_info_goal.weight }};
+  curHigh = {{ home.health_info.high}};
+  curLow = {{ home.health_info.low}};
+</script>
 <table class="table-info table-bordered border-info table-sm text-light" border="2">
   <thead>
     <tr>
+      <th scope="col">日付</th>
       <th scope="col">{{home.dt2}}</th>
-      <th scope="col">収縮期血圧</th>
-      <th scope="col">拡張期血圧</th>
-      <th scope="col">体重(kg)</th>
     </tr>
   </thead>
   <tbody>
     <tr class="text-light fw-bold">
-      <th scope="row">本日の結果</th>
-      <td>{{home.health_info.high}}</td>
-      <td>{{home.health_info.low}}</td>
-      <td>{{home.health_info.weight}}</td>
+      <th scope="row">血圧</th>
+      <td><div id="gauge-blood" style="position: relative; margin-top: 2px; margin-left: 10px; margin-bottom: 20px; margin-right: 10px;"></div></td>
+     
     </tr>
     <tr class="text-white fw-bold">
-      <th scope="row">目標値</th>
-      <td>{{home.health_info_goal.high}}</td>
-      <td>{{home.health_info_goal.low}}</td>
-      <td>{{home.health_info_goal.weight}}</td>
-    </tr>
-    <tr class="text-light fw-bold bg-dark">
-      <th scope="row">残差</th>
-      <td>{{home.health_info_diff.high}}</td>
-      <td>{{home.health_info_diff.low}}</td>
-      <td>{{home.health_info_diff.weight}}</td>
+      <th scope="row">体重</th>
+      <td><div id="gauge-container" style="position: relative; margin-top: 2px; margin-bottom: 20px; margin-left: 10px; margin-right: 10px;"></div></td>
     </tr>
   </tbody>
 </table>
@@ -38,13 +33,7 @@
 <button class="btn btn-danger" onclick="location.href='/regist_health'">測定結果入力</button>
 </div>
 {% endif %}
-<!-- ゲージの表示 -->
-<script>
-  curWeight = {{ home.health_info.weight }}; 
-  gWeight = {{ home.health_info_goal.weight }};
-  console.log(gWeight);
-</script>
-<div id="gauge-container" style="position: relative; margin-top: 25px; margin-left: 30px;"></div>
+
 
 <!-- イベントバッジ -->
 <button type="button" class="btn btn-primary" style="margin-top: 2em;">
@@ -131,5 +120,6 @@
 <script src="{{ url_for('static', filename='/js/weather.js')}}"></script>
 <script src="{{ url_for('static', filename='/js/task.js')}}"></script>
 <script src="{{ url_for('static', filename='/js/weight.js')}}"></script>
+<script src="{{ url_for('static', filename='/js/blood_gauge.js')}}"></script>
 {% include 'footer.html' %}
 

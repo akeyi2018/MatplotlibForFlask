@@ -62,7 +62,7 @@ class RegistTaskForm(FlaskForm):
     entry_date = DateField('日付：', format = '%Y-%m-%d', render_kw=style2)
     style3={'style': 'width:85%; margin-top:1em;margin-right:-12px;'}
     discription = StringField('詳細：',
-        [InputRequired(), length(min=3, max=50)], render_kw=style3)
+        widget=TextArea(), render_kw=style3)
     style4={'style': 'width:10%; margin-top:1em;margin-right:415px;'}
     kind = StringField('種類：',
         [InputRequired(), length(min=1, max=3)], render_kw=style4)
@@ -79,7 +79,7 @@ class RegistEventForm(FlaskForm):
     entry_date = DateField('日付：', format = '%Y-%m-%d', render_kw=style2)
     style3={'style': 'width:85%; margin-top:1em;margin-right:-12px;'}
     discription = StringField('内容：',
-        [InputRequired(), length(min=3, max=50)], render_kw=style3)
+        widget=TextArea(), render_kw=style3)
     style4={'style': 'width:10%; margin-top:1em;margin-right:415px;'}
     
     choice = SelectField('種別：', choices=["新規","更新"], render_kw=style4)

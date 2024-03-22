@@ -66,3 +66,12 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
 });
+
+//ナビリンクの色を白に設定
+function setNaviLinkColor(){
+    var navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(function(navLink) {
+        navLink.style.color = '#ffffff';
+    });
+}
+window.onload=setNaviLinkColor();

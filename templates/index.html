@@ -12,66 +12,54 @@
 </head>
 <body style="background-color: #4a5c6d;">
   <div class="container text-light">
-      <nav class="navbar fixed-top navbar-light nav-justified"> 
-        <div class="container-fluid">
-          <a class="navbar-brand"></a>
-
-            <!-- dropdown menu修正済 -->
-            <div class="dropdown fixed-top">
-              <button class="btn dropdown-toggle" aria-expanded="false">
-                  <img class="rounded-circle" src="../static/images/40_man.jpg" width="45" height="45"></img>
-              </button>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{{url_for('regist_health_info')}}">健康情報登録</a></li>
-                <li><a class="dropdown-item" href="{{url_for('show_event',id=0)}}">イベント登録</a></li>
-                <li><a class="dropdown-item" href="{{url_for('show_task',id=0)}}">タスク登録</a></li>
-                <li><a class="dropdown-item" href="{{url_for('show_regist_tv_info',id=0)}}">ドラマ映画登録</a></li>
-                <li><a class="dropdown-item" href="{{url_for('logout')}}" >ログアウト</a></li>
-              </ul>
-            </div>
-            <p class="lead" style="margin-left: 100px;margin-right: 400px;margin-top: 5px;">
-            {{ home.user }} さん、こんにちは！
-            本日は 
-            <span class="text-white bg-dark">&spades;【 {{home.dt}}】&spades;</span>です。
-            </p>
-
-            <!-- dashboard -->
-            <div class="d-flex align-items-start" style="margin-top: 50px;">
-              <div class="nav flex-column nav-pills me-5" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="width: 150px;">
-                {% for index in range(nav | length) %}
-                {% if nav[index].active %}
-                <button class="nav-link link-light rounded-pill active" 
-                  id="{{nav[index].label}}" 
-                  data-bs-toggle="pill" data-bs-target="#{{nav[index].id}}"
-                  type="button" role="tab" aria-controls="{{nav[index].id}}" aria-selected="true" onclick="changeBackgroundColor({{index}})">
-                  {{nav[index].text}}
-                </button>
-                {% else %}
-                <button class="nav-link link-light rounded-pill" 
-                  id="{{nav[index].label}}" 
-                  data-bs-toggle="pill" data-bs-target="#{{nav[index].id}}"
-                  type="button" role="tab" aria-controls="{{nav[index].id}}" aria-selected="false" onclick="changeBackgroundColor({{index}})">
-                  {{nav[index].text}}
-                </button>
-                {% endif %}
-                {% endfor %}
-              </div>
-              <div class="tab-content navbar-nav-scroll" id="v-pills-tabContent" style="width: 1200px;">
-                {% for index in range(nav | length) %}
-                {% if nav[index].active %}
-                <div class="tab-pane fade show active" id="{{ nav[index].id }}" role="tabpanel" aria-labelledby="{{nav[index].label}}">
-                  {% include nav[index].url %}
-                </div>
-                {% else %}
-                <div class="tab-pane fade show" id="{{ nav[index].id }}" role="tabpanel" aria-labelledby="{{nav[index].label}}">
-                  {% include nav[index].url %}
-                </div>
-                {% endif %}
-                {% endfor %}
-              </div>
-            </div>
-        </div>
-      </nav>
+    <!-- dropdown menu修正済 -->
+    <div class="dropdown fixed-top">
+      <button class="btn dropdown-toggle" aria-expanded="false">
+          <img class="rounded-circle" src="../static/images/40_man.jpg" width="45" height="45"></img>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{{url_for('regist_health_info')}}">健康情報登録</a></li>
+        <li><a class="dropdown-item" href="{{url_for('show_event',id=0)}}">イベント登録</a></li>
+        <li><a class="dropdown-item" href="{{url_for('show_task',id=0)}}">タスク登録</a></li>
+        <li><a class="dropdown-item" href="{{url_for('show_regist_tv_info',id=0)}}">ドラマ映画登録</a></li>
+        <li><a class="dropdown-item" href="{{url_for('logout')}}" >ログアウト</a></li>
+      </ul>
+    </div>
+    <!-- lead container -->
+    <p class="lead" style="margin-left: 30px;margin-right: 400px;margin-top: 5px;">
+    {{ home.user }} さん、こんにちは！
+    本日は 
+    <span class="text-white bg-dark">&spades;【 {{home.dt}}】&spades;</span>です。
+    </p>
+    <!-- dashboard -->
+    <div class="nav">
+      {% for index in range(nav | length) %}
+      {% if nav[index].active %}
+      <a class="nav-link active" id="{{nav[index].label}}" 
+        data-bs-toggle="pill" data-bs-target="#{{nav[index].id}}"
+        role="tab" aria-controls="{{nav[index].id}}" aria-selected="true" onclick="changeBackgroundColor({{index}})">
+        {{nav[index].text}}</a>
+      {% else %}
+      <a class="nav-link" id="{{nav[index].label}}" 
+        data-bs-toggle="pill" data-bs-target="#{{nav[index].id}}"
+        role="tab" aria-controls="{{nav[index].id}}" aria-selected="false" onclick="changeBackgroundColor({{index}})">
+        {{nav[index].text}}</a>
+      {% endif %}
+      {% endfor %}
+    </div>
+    <div class="tab-content navbar-nav-scroll" id="v-pills-tabContent" style="width: 1200px;">
+      {% for index in range(nav | length) %}
+      {% if nav[index].active %}
+      <div class="tab-pane show active" id="{{ nav[index].id }}" >
+        {% include nav[index].url %}
+      </div>
+      {% else %}
+      <div class="tab-pane show" id="{{ nav[index].id }}" >
+        {% include nav[index].url %}
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
   </div>
 
 
