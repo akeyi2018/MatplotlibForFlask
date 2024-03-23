@@ -15,6 +15,7 @@ from werkzeug.security import generate_password_hash
 import os
 from pytz import timezone
 import flask_login
+from waitress import serve
 
 # 自作クラス
 from mysql_tool import DB_Connector
@@ -247,3 +248,4 @@ def index():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port='8000', debug=True)
+    # serve(app, host='0.0.0.0', port=5000)

@@ -73,8 +73,6 @@ class Html_Param:
         view_day = dt.strftime("%m月%d日(%a)")
         # 健康データの取得
         health_info = ins.get_today_health(session['id'])
-        health_info_goal = ins.get_goal_health(session['id'])
-        health_info_diff = ins.get_diff_health(session['id'])
 
         today_event = ins.get_today_event(session['id'])
         running_event = ins.get_event_view(session['id'])
@@ -95,8 +93,6 @@ class Html_Param:
             "today_task" : today_task,
             "user" : user_name,
             "health_info" : health_info,
-            "health_info_goal" : health_info_goal,
-            "health_info_diff" : health_info_diff,
             "running_event" : running_event,
             "running_task" : running_task,
             "tv_info": tv_info
