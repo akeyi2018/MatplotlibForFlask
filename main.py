@@ -233,12 +233,21 @@ def finish_tv():
 @app.post('/finish_task')
 @flask_login.login_required
 def finish_task():
+
+    from push_source_to_github import push_git
+
     # 受け取り側でjsonで受け取る
     # res = 'RES:' + str(request.json['id'])
     res_id = request.json['id']
+    res_content = request.json['name']
     # print(res_id)
     ins = DB_Connector()
     ins.update_task_flag(res_id)
+
+    # githubに自動push
+    p = push_git()
+    p.shell_cmd(res_id, res_content)
+
     return '',200
 #endregion
 

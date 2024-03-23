@@ -1,5 +1,3 @@
-import os
-from datetime import datetime
 import subprocess as cmd
 
 class push_git:
