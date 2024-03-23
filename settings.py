@@ -12,6 +12,8 @@ class Sql_Param:
     user = os.getenv('user')
     passwd = os.getenv('PASSWD')
     health_database = os.getenv('health_db')
+    alchemy_database = os.getenv('alchemy_db')
+    debug_flag = False
 
 class Message_list:
     finish_event = os.getenv('finish_event')

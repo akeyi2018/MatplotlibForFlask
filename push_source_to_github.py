@@ -6,8 +6,6 @@ class push_git:
     def shell_cmd(id, content):
         num_id = str(id).zfill(10) + ':'
         try:
-            # カレントディレクトリに移動する
-            # cp1 = cmd.run(f'cd /d/python_pgm/MatplotlibForFlask')
             cp1 = cmd.run(f'git add .', shell=True)
             # cp1 = cmd.run(f'ls -la', shell=True)
             cp2 = cmd.run(f'git status', shell=True)
@@ -23,5 +21,4 @@ class push_git:
 
 if __name__ == '__main__':
     p = push_git()
-
     p.shell_cmd(1,'自動PushテストIDを追加')
