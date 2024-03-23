@@ -29,6 +29,22 @@ function finish_task(id, name) {
     }));
 }
 
+// tv終了用
+function finish_tv(id, name) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/finish_tv');
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            window.location.href = '/thanks/2/' + name;
+        }
+    };
+    xhr.send(JSON.stringify({
+        "id": id,
+        "name": name
+    }));
+}
+
 
 function changeBackgroundColor(num) {
     // console.log(num);

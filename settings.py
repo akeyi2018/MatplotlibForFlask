@@ -16,8 +16,8 @@ class Sql_Param:
 class Message_list:
     finish_event = os.getenv('finish_event')
     finish_task = os.getenv('finish_task')
+    finish_tv = os.getenv('finish_tv')
     user_regist_event = os.getenv('user_regist_event')
-
 
 class Html_Param:
     nav_home = [{
@@ -190,13 +190,12 @@ class Html_Param:
         if request.form.get('choice') == '0':
             ins.insert_data('watch_tv_info', data)
         else:
-            pass
             # 更新条件
-            # condition = {
-            #     "user_id": int(session['id']),
-            #     "id": int(request.form.get('event_id'))
-            # }
-            # ins.update_data('event_info', data, condition)
+            condition = {
+                "user_id": int(session['id']),
+                "id": int(request.form.get('id'))
+            }
+            ins.update_data('watch_tv_info', data, condition)
 
     @staticmethod
     def insert_health_info(request,session):

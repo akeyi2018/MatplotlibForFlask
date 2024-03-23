@@ -100,16 +100,16 @@ def regist_health_info():
     form = RegistHealthForm()
     return render_template('regist_health.html', form=form)
 
+# 新規登録と編集で初期設定するパラメータが変わる為、関数で振り分けしている
 @app.get('/show_task/<id>')
 @flask_login.login_required
 def show_task(id):
     id = int(id)
-    if id ==0:
-        form = RegistTaskForm(task_id=id)
-    else:
-        # idがゼロでない場合は、既存の情報を取得する
+    if id ==0: # 新規登録
+        form = RegistTaskForm()
+    else: # 編集 既存の情報を取得する
         ins = DB_Connector()
-        task_info = ins.get_task_view_by_id(int(session['id']), int(id))
+        task_info = ins.get_task_view_by_id(int(session['id']), id)
         form = RegistTaskForm(task_id=id,
                             task_name = task_info['task_name'],
                             discription=task_info['detail'],
@@ -119,16 +119,40 @@ def show_task(id):
                             )
     return render_template('regist_task.html', tform=form)
 
+@app.get('/edit_tv_info/<id>')
+@flask_login.login_required
+def edit_tv_info(id):
+    id = int(id)
+    if id ==0: # 新規登録
+        form = RegistTVForm()
+    else: # 編集 既存の情報を取得する
+        ins = DB_Connector()
+        tv_info = ins.get_tv_info_by_id(int(session['id']), id)
+        print(tv_info)
+        form = RegistTVForm(id=id,
+                            title = tv_info['title'],
+                            episodes = tv_info['episodes'],
+                            watched = tv_info['watched'],
+                            pub_date=tv_info['pub_date'],
+                            genre = tv_info['genre'],
+                            country = tv_info['country'],
+                            discription=tv_info['discription'],
+                            tag = tv_info['tag'],
+                            point = tv_info['point'],
+                            choice = 1
+                            )
+    return render_template('regist_tv_info.html', tform=form)
+
 @app.get('/show_event/<id>')
 @flask_login.login_required
 def show_event(id):
     id = int(id)
     if id ==0:
-        form = RegistEventForm(event_id=id)
+        form = RegistEventForm()
     else:
         # idがゼロでない場合は、既存の情報を取得する
         ins = DB_Connector()
-        event_info = ins.get_event_view_by_id(int(session['id']), int(id))
+        event_info = ins.get_event_view_by_id(int(session['id']), id)
         form = RegistEventForm(event_id=id,
                             event_name = event_info['event_name'],
                             discription=event_info['discription'],
@@ -140,10 +164,13 @@ def show_event(id):
 
 @app.get('/thanks/<kind>/<content>')
 def show_thanks(kind, content):
-    if int(kind) == 0:
+    kind = int(kind)
+    if kind == 0:
         res_name = Message_list.finish_event + content
-    elif int(kind) == 1:
+    elif kind == 1:
         res_name = Message_list.finish_task + content
+    elif kind == 2:
+        res_name = Message_list.finish_tv + content
     return render_template('thanks.html', message = res_name)
 
 @app.get('/nav')
@@ -190,10 +217,17 @@ def set_task():
 @flask_login.login_required
 def finish_event():
     # 受け取り側でjsonで受け取る
-    # res = 'RES:' + str(request.json['id'])
-    res_id = request.json['id']
     ins = DB_Connector()
-    ins.update_event_flag(res_id)
+    ins.update_event_flag(request.json['id'])
+    return '',200
+
+@app.post('/finish_tv')
+@flask_login.login_required
+def finish_tv():
+    # 受け取り側でjsonで受け取る
+    ins = DB_Connector()
+    ins.update_tv_flag(request.json['id'])
+
     return '',200
 
 @app.post('/finish_task')

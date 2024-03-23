@@ -104,6 +104,14 @@ class DB_Connector:
         self.curs.execute(sql, values)
         self.connector.commit()
 
+    def update_tv_flag(self, id):
+        sql = 'UPDATE watch_tv_info \
+            SET status = 0 \
+            WHERE user_id =%s and id=%s;'
+        values = [1, id]
+        self.curs.execute(sql, values)
+        self.connector.commit()
+
     def get_health_data(self, user_id):
         sql = 'SELECT measure_date, \
                 systolic_blood_pressure, diastolic_blood_pressure, \
@@ -156,6 +164,13 @@ class DB_Connector:
     
     def get_task_view_by_id(self, user_id, id):
         sql = 'SELECT * FROM task_view_running \
+                WHERE user_id =%s AND id=%s;'
+        values = (user_id, id,)
+        self.curs.execute(sql, values)
+        return self.curs.fetchone()
+    
+    def get_tv_info_by_id(self, user_id, id):
+        sql = 'SELECT * FROM watch_tv_info \
                 WHERE user_id =%s AND id=%s;'
         values = (user_id, id,)
         self.curs.execute(sql, values)

@@ -23,6 +23,13 @@
       <td>{{home.tv_info[index].watched}} / {{home.tv_info[index].episodes}}</td>
       <td>{{home.tv_info[index].years}}</td>
       <td>
+        <!-- 完了 -->
+        <button class="btn btn-success" onclick="finish_tv({{home.tv_info[index].id }},'{{home.tv_info[index].title }}')">完了にする</button>
+        <!-- 編集 -->
+        <a href="{{url_for('edit_tv_info', id=home.tv_info[index].id)}}" type="button" class="btn btn-outline-success text-light">編集
+          <span class="visually-hidden">編集</span>
+        </a>
+        <!-- 詳細ボタン -->
         <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offtv{{index + 1}}" aria-controls="offcanvasRight">詳細</button>
         <div class="offcanvas offcanvas-end" id="offtv{{index + 1}}" aria-labelledby="id2{{ index + 1 }}">
           <div class="offcanvas-header bg-dark">
@@ -34,7 +41,6 @@
             <p>{{home.tv_info[index].discription}}</p>
           </div>
         </div>
-
       </td>
       </tr>
     </tr>
