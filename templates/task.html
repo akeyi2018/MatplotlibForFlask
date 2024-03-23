@@ -9,6 +9,7 @@
       <th scope="col">期限日</th>
       <th scope="col">残日数</th>
       <th scope="col">ステータス</th>
+      <th scope="col">種類</th>
       <th scope="col">管理操作</th>
     </tr>
   </thead>
@@ -20,6 +21,7 @@
       <td>{{home.running_task[index].limit_date}}</td>
       <td>{{home.running_task[index].left_days}}</td>
       <td>{{home.running_task[index].status}}</td>
+      <td>{{home.running_task[index].tag}}</td>
       <td>
         <!-- 完了 -->
         <button class="btn btn-success" onclick="finish_task(
@@ -38,7 +40,8 @@
           </div>
           <div class="offcanvas-body bg-dark" id="id{{index+1}}">
             <p class="lead">{{home.running_task[index].task_name}}</p>
-            <p>{{home.running_task[index].detail}}</p>
+            <p>内容：{{home.running_task[index].detail}}</p>
+            <p>種類：{{home.running_task[index].tag}}</p>
           </div>
         </div>
       </td>

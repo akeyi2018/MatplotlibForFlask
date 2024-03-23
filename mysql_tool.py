@@ -154,6 +154,11 @@ class DB_Connector:
         self.curs.execute(sql, values)
         return self.curs.fetchall()
     
+    def get_task_tag(self):
+        sql = 'SELECT * FROM m_task_tag;'
+        self.curs.execute(sql)
+        return self.curs.fetchall()
+
     def get_task_view(self, user_id):
         sql = 'SELECT * FROM task_view_running \
                 WHERE user_id =%s \
