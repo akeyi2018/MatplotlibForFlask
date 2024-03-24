@@ -13,6 +13,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from datetime import datetime
 from werkzeug.security import generate_password_hash
+import flask_login
 
 # 自作クラス
 from settings import Sql_Param
@@ -27,6 +28,10 @@ from form_list import (
     RegistTVForm,
     RegistHealthForm,
 )
+from admin_user import AdminUser
+
+# ログインマネージャーの宣言
+login_manager = flask_login.LoginManager()
 
 # 初期に読ませるフォルダを./staticにセットする
 app = Flask(__name__, static_folder="./static")
@@ -41,29 +46,36 @@ app.config["SECRET_KEY"] = Sql_Param.KEY
 # db_uri = f'mysql+pymysql://{Sql_Param.user}:{Sql_Param.passwd}@{Sql_Param.host}/{Sql_Param.alchemy_database}'
 # app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 
+# loginマネージャーとFlaskを統合
+login_manager.init_app(app)
+# 要検証
+login_manager.login_view = 'login'
+
 # user_infoテーブル初期化
 user_info_tbl.init_app(app)
 
 # bootstrapを使えるようにする
 bootstrap = Bootstrap(app)
 
+# ユーザ情報ロード
+@login_manager.user_loader
+def load_user(user_id):
+    return AdminUser(user_id)
+
 # region -----登録------
 @app.route("/regist_user", methods=["GET", "POST"])
-def regist_public_user():
+def regist_public_user(): #Adminユーザの登録
     form = RegistUserForm()
     if form.validate_on_submit():
-        # print(form.from_json(request.json))
-        print(request.json)
-
         # 登録するユーザ情報を作成する
         user = User_info(
             name=form.username.data,
             mail_address=form.mail_address.data,
             hash_key=generate_password_hash(form.password.data, salt_length=8),
         )
-        # # テーブルにデータを登録する
-        # user_info_tbl.session.add(user)
-        # user_info_tbl.session.commit()
+        # テーブルにデータを登録する
+        user_info_tbl.session.add(user)
+        user_info_tbl.session.commit()
 
         return redirect(
             url_for("show_thanks", kind=3, content=Message_list.user_regist_event)
@@ -114,26 +126,39 @@ def login():
     if form.validate_on_submit():
         # 登録ユーザかどうかの認証
         username = form.username.data
-        user_id = User_info.query.filter_by(mail_address=username)
+        user_id = User_info.query.filter_by(mail_address=username).first()
+        # print(user_id.name)
         if user_id:
-            print('OK')
-        else:
-            print('NG')
-        return 'LOGIN',200
-    return render_template('login.html', form=form)
+            # sessionは自由に登録できる
+            session['user_name'] = user_id.name
+            session['id'] = user_id.id
+            session['flag'] = True
 
+            # AdminUserに登録しておく
+            user_id = AdminUser(user_id=user_id.id)
+            # flask_loinで認識できる形で登録する
+            flask_login.login_user(user_id)
+
+            return redirect(url_for('index'))
+    return render_template('login.html', form=form)
 
 # ホーム
 @app.route("/home")
-# @flask_login.login_required
+@flask_login.login_required
 def index():
     # session check
-    # if not session.get('flag') is None:
-    #     return render_template(
-    #         'index.html',
-    #         home = Html_Param.func_home(session),
-    #         nav=Html_Param.nav_home
-    #     )
+    if not session.get('flag') is None:
+
+        # 暫定的にプロフィール
+        return render_template(
+            'profile.html'
+        )
+
+        # return render_template(
+        #     'index.html',
+        #     home = Html_Param.func_home(session),
+        #     nav=Html_Param.nav_home
+        # )
     # ログインページへ誘導
     return redirect(url_for("main"))
 
