@@ -9,16 +9,21 @@ from flask import (
     url_for,
 )
 from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
 import os
-from datetime import datetime
 from werkzeug.security import generate_password_hash
 import flask_login
 
+from sqlalchemy import case, func, cast, Integer
+from datetime import datetime
+
 # 自作クラス
 from settings import Sql_Param
-from db_controller import User_info, m_Countries, m_genre
-from db_controller import db as user_info_tbl
+from db_controller import (
+    User_info, 
+    m_Countries, m_genre, 
+    Health_info, 
+    Event_info)
+
 from settings import Message_list, Sql_Param, Html_Param
 from form_list import (
     LoginForm,
@@ -29,6 +34,10 @@ from form_list import (
     RegistHealthForm,
 )
 from admin_user import AdminUser
+
+from db_controller import db as user_info_tbl
+
+# from db_view import db as event_view
 
 # ログインマネージャーの宣言
 login_manager = flask_login.LoginManager()
@@ -49,7 +58,7 @@ app.config["SECRET_KEY"] = Sql_Param.KEY
 # loginマネージャーとFlaskを統合
 login_manager.init_app(app)
 # 要検証
-login_manager.login_view = 'login'
+login_manager.login_view = "login"
 
 # user_infoテーブル初期化
 user_info_tbl.init_app(app)
@@ -57,14 +66,16 @@ user_info_tbl.init_app(app)
 # bootstrapを使えるようにする
 bootstrap = Bootstrap(app)
 
+
 # ユーザ情報ロード
 @login_manager.user_loader
 def load_user(user_id):
     return AdminUser(user_id)
 
+
 # region -----登録------
 @app.route("/regist_user", methods=["GET", "POST"])
-def regist_public_user(): #Adminユーザの登録
+def regist_public_user():  # Adminユーザの登録
     form = RegistUserForm()
     if form.validate_on_submit():
         # 登録するユーザ情報を作成する
@@ -84,7 +95,9 @@ def regist_public_user(): #Adminユーザの登録
     # ユーザ登録フォームの表示
     return render_template("admin_regist.html", form=form)
 
+
 # endregion
+
 
 # region ------GET----------
 @app.get("/thanks/<kind>/<content>")
@@ -103,18 +116,51 @@ def show_thanks(kind, content):
 
 # endregion
 
+
 @app.route("/")
 def main():
 
     # 初期化作業
     with app.app_context():
         user_info_tbl.create_all()  # テーブル作成
+        
 
     if Sql_Param.debug_flag == True:
         m_Countries.insert_master_data()  # 国マスターデータの投入
         m_genre.insert_master_data()  # ジャンルマスターデータの投入
-
+        
         print("マスター初期化完了")
+
+    # from db_view import Event_view_running
+    # res = Html_Param.get_data_test()
+    # print(res)
+    
+    # Event_view_running.create_table()
+    # Event_view_running.refresh_data()
+    today_date = datetime.today().date()
+
+    # クエリの結果を取得
+    events = Event_info.query.with_entities(
+        Event_info.id,
+        Event_info.event_name,
+        Event_info.event_date,
+        case(
+            (Event_info.event_date >= today_date, '進行中'),
+            (Event_info.event_date < today_date, '遅延'),
+            else_='未定義'
+        ).label('status'),
+        cast(func.julianday(Event_info.event_date) - func.julianday(today_date), Integer).label('days_until_event')
+    ).filter(Event_info.finish_flag == 0).all()
+    print(events)
+  
+
+    # health_data = Health_info.get_record_by_user_id(1)
+    # print(health_data)
+
+    # Event_info.set_data()
+    
+
+    
 
     return render_template("main.html")
 
@@ -130,29 +176,28 @@ def login():
         # print(user_id.name)
         if user_id:
             # sessionは自由に登録できる
-            session['user_name'] = user_id.name
-            session['id'] = user_id.id
-            session['flag'] = True
+            session["user_name"] = user_id.name
+            session["id"] = user_id.id
+            session["flag"] = True
 
             # AdminUserに登録しておく
             user_id = AdminUser(user_id=user_id.id)
             # flask_loinで認識できる形で登録する
             flask_login.login_user(user_id)
 
-            return redirect(url_for('index'))
-    return render_template('login.html', form=form)
+            return redirect(url_for("index"))
+    return render_template("login.html", form=form)
+
 
 # ホーム
 @app.route("/home")
 @flask_login.login_required
 def index():
     # session check
-    if not session.get('flag') is None:
+    if not session.get("flag") is None:
 
         # 暫定的にプロフィール
-        return render_template(
-            'profile.html'
-        )
+        return render_template("profile.html")
 
         # return render_template(
         #     'index.html',

@@ -113,7 +113,7 @@ class DB_Connector:
         self.connector.commit()
 
     def get_health_data(self, user_id):
-        sql = 'SELECT measure_date, \
+        sql = 'SELECT id, user_id, measure_date, \
                 systolic_blood_pressure, diastolic_blood_pressure, \
                 pulse, weight \
                 FROM health_info \
@@ -126,6 +126,14 @@ class DB_Connector:
         sql = 'SELECT * FROM event_view_running \
                 WHERE user_id =%s \
                 ORDER BY left_days asc;'
+        values = (user_id,)
+        self.curs.execute(sql, values)
+        return self.curs.fetchall()
+    
+
+    def get_event_data(self, user_id):
+        sql = 'SELECT user_id, event_name, event_date, discription FROM event_info \
+                WHERE user_id =%s and finish_flag= 1;'
         values = (user_id,)
         self.curs.execute(sql, values)
         return self.curs.fetchall()
@@ -266,5 +274,5 @@ if __name__ == '__main__':
     # print(cls.get_today_task(1))
     
     # print(cls.get_today_event(1))
-    re = cls.get_tv_view(1)
+    re = cls.get_event_data(1)
     print(re)
