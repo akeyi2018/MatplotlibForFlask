@@ -16,6 +16,7 @@ from mysql_tool import DB_Connector
 from werkzeug.security import check_password_hash
 from wtforms.widgets import TextArea
 from datetime import datetime
+from db_controller import User_info
 
 class LoginForm(FlaskForm):
     username = StringField('ユーザ名：',
@@ -24,14 +25,12 @@ class LoginForm(FlaskForm):
     password = PasswordField('パスワード：',
                             validators=[InputRequired(),
                             length(min=4,max=80)])
-    remember = BooleanField('ログインしたままにする')
+    # remember = BooleanField('ログインしたままにする')
     def validate_password(self, password):
         # DBに接続して、user情報を取得
-        ins = DB_Connector()
-        user = ins.get_user_id(username=self.username.data)
-    
+        user = User_info.query.filter_by(mail_address=self.username.data).first()
         if user:
-            if not check_password_hash(user['hash_key'], password.data):
+            if not check_password_hash(user.hash_key, password.data):
                 raise ValidationError('パスワードが違います。')
         else:
             raise ValidationError('無効なユーザ名またはパスワードです。')

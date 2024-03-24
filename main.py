@@ -29,14 +29,14 @@ from form_list import (
 )
 
 # 初期に読ませるフォルダを./staticにセットする
-app = Flask(__name__, static_folder='./static')
+app = Flask(__name__, static_folder="./static")
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
     os.getcwd(), "settings", "health_db.db"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # CSRF 認証キーのセット
-app.config['SECRET_KEY'] = Sql_Param.KEY
+app.config["SECRET_KEY"] = Sql_Param.KEY
 
 # db_uri = f'mysql+pymysql://{Sql_Param.user}:{Sql_Param.passwd}@{Sql_Param.host}/{Sql_Param.alchemy_database}'
 # app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
@@ -47,43 +47,35 @@ user_info_tbl.init_app(app)
 # bootstrapを使えるようにする
 bootstrap = Bootstrap(app)
 
-
 # region -----登録------
 @app.route("/regist_user", methods=["GET", "POST"])
 def regist_public_user():
     form = RegistUserForm()
     if form.validate_on_submit():
-        # 登録するユーザ情報を作成する
-        user = User_info(name=form.username.data, 
-                         mail_address=form.mail_address.data,
-                         hash_key=generate_password_hash(form.password.data, salt_length=8)
-            )
-        # テーブルにデータを登録する
-        user_info_tbl.session.add(user)
-        user_info_tbl.session.commit()
-        
+        # print(form.from_json(request.json))
+        print(request.json)
 
-        # data = {
-        #     "regist_time": datetime.datetime.now(timezone("Asia/Tokyo")).strftime(
-        #         "%Y-%m-%d %H:%M:%S"
-        #     ),
-        #     "name": form.username.data,
-        #     "mail_address": form.mail_address.data,
-        #     "hash_key": generate_password_hash(form.password.data, salt_length=8),
-        # }
-        # # ユーザ登録
-        # ins = DB_Connector()
-        # ins.insert_data("user_info", data)
-        return redirect(url_for("show_thanks", kind=3, content=Message_list.user_regist_event))
+        # 登録するユーザ情報を作成する
+        user = User_info(
+            name=form.username.data,
+            mail_address=form.mail_address.data,
+            hash_key=generate_password_hash(form.password.data, salt_length=8),
+        )
+        # # テーブルにデータを登録する
+        # user_info_tbl.session.add(user)
+        # user_info_tbl.session.commit()
+
+        return redirect(
+            url_for("show_thanks", kind=3, content=Message_list.user_regist_event)
+        )
 
     # ユーザ登録フォームの表示
     return render_template("admin_regist.html", form=form)
 
-
 # endregion
 
-#region ------GET----------
-@app.get('/thanks/<kind>/<content>')
+# region ------GET----------
+@app.get("/thanks/<kind>/<content>")
 def show_thanks(kind, content):
     kind = int(kind)
     if kind == 0:
@@ -94,9 +86,10 @@ def show_thanks(kind, content):
         res_name = Message_list.finish_tv + content
     elif kind == 3:
         res_name = Message_list.user_regist_event
-    return render_template('thanks.html', message = res_name)
+    return render_template("thanks.html", message=res_name)
 
-#endregion
+
+# endregion
 
 @app.route("/")
 def main():
@@ -111,21 +104,27 @@ def main():
 
         print("マスター初期化完了")
 
+    return render_template("main.html")
 
-
-    # pay = Payments(user_id=2, amount=100, item='ジュース')
-    # db.session.add(pay)
-    # db.session.commit()
-    # return "Hello", 200
-    return render_template('main.html')
 
 # ログインフォーム
-@app.route('/login', methods=['GET','POST'])
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    return "Login", 200
+    form = LoginForm()
+    if form.validate_on_submit():
+        # 登録ユーザかどうかの認証
+        username = form.username.data
+        user_id = User_info.query.filter_by(mail_address=username)
+        if user_id:
+            print('OK')
+        else:
+            print('NG')
+        return 'LOGIN',200
+    return render_template('login.html', form=form)
+
 
 # ホーム
-@app.route('/home')
+@app.route("/home")
 # @flask_login.login_required
 def index():
     # session check
@@ -136,8 +135,7 @@ def index():
     #         nav=Html_Param.nav_home
     #     )
     # ログインページへ誘導
-    return redirect(url_for('main'))
-
+    return redirect(url_for("main"))
 
 
 if __name__ == "__main__":
