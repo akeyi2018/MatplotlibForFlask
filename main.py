@@ -164,10 +164,12 @@ def show_task(id):
                 task_name = task_info.task_name,
                 discription=task_info.discription,
                 entry_date=task_info.limit_date,
+                kind = task_info.task_kind,
                 choice = "更新"
             )
             form.kind.choices = [(item.id, item.tag) for item in m_task_tag.query.all()]
-            form.kind.default = task_info.task_kind
+            # task_info.task_kind
+            print('OK OK OK')
     return render_template('regist_task.html', tform=form)
 
 @app.get('/regist_tv_info/<id>')
