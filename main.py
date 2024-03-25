@@ -152,19 +152,20 @@ def show_event(id):
 @app.get('/show_task/<id>')
 @flask_login.login_required
 def show_task(id):
-    # id = int(id)
-    # if id ==0: # 新規登録
-    form = RegistTaskForm()
-    # else: # 編集 既存の情報を取得する
-    #     ins = DB_Connector()
-    #     task_info = ins.get_task_view_by_id(int(session['id']), id)
-    #     form = RegistTaskForm(task_id=id,
-    #                         task_name = task_info['task_name'],
-    #                         discription=task_info['detail'],
-    #                         entry_date=task_info['limit_date'],
-    #                         kind=99,
-    #                         choice = "更新"
-    #                         )
+    id = int(id)
+    if id ==0: # 新規登録
+        form = RegistTaskForm()
+    else: # 編集 既存の情報を取得する
+        task_info = Task_info.get_task_by_id(int(session['id']), id)
+        if task_info:
+            form = RegistTaskForm(
+                task_id=id,
+                task_name = task_info.task_name,
+                discription=task_info.discription,
+                entry_date=task_info.limit_date,
+                kind= task_info.task_kind,
+                choice = "更新"
+            )
     return render_template('regist_task.html', tform=form)
 
 @app.get('/regist_tv_info/<id>')

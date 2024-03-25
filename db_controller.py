@@ -289,6 +289,18 @@ class Task_info(db.Model):
     )
 
     @classmethod
+    def get_task_by_id(cls, user_id, id):
+        return cls.query.with_entities(
+            cls.task_name,
+            cls.limit_date,
+            cls.discription,
+            cls.task_kind
+        ).filter(
+            cls.id == id,
+            cls.user_id == user_id
+        ).first()
+
+    @classmethod
     def update_task_flag(cls, id):
         data = cls.query.filter(
             cls.id == id
@@ -340,14 +352,13 @@ class Task_info(db.Model):
         session["id"] = 1
         data = cls.query.filter(
             cls.user_id==session["id"],
-            cls.id == request.form.get("id")
+            cls.id == request.form.get("task_id")
         ).first()
         print('finish get data')
         if data:
             data.id = request.form.get("task_id")
-            data.user_id = int(session["id"])
             data.task_name = request.form.get("task_name")
-            data.limit_date = request.form.get("entry_date")
+            data.limit_date = datetime.strptime(request.form.get("entry_date"), '%Y-%m-%d').date()
             data.discription = request.form.get("discription")
             data.task_kind = request.form.get("kind")
             db.session.commit()
