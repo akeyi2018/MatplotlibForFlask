@@ -1,7 +1,8 @@
 import os
 from dotenv import load_dotenv
 import locale
-import datetime
+from datetime import date, datetime
+from sqlalchemy import case, func, cast, Integer
 
 load_dotenv()
 
@@ -105,28 +106,31 @@ class Html_Param:
         }
 
     @staticmethod
-    def get_data_test():
-        from db_controller import Health_info
+    def get_home_data(session):
+        from db_controller import(
+            Health_info, 
+            Event_info,
+            Task_info
+        )
 
         # 日本語で曜日の表示
         locale.setlocale(locale.LC_ALL, "")
-        dt = datetime.date.today()
+        dt = date.today()
         view_today = dt.strftime("%Y年%m月%d日（%A）")
         view_day = dt.strftime("%m月%d日(%a)")
 
-        # session["id"] = 1  # 暫定的に1にする完成時は不要
-        health_data = Health_info.get_record_by_user_id(1)
-
+        session["id"] = 1  # 暫定的に1にする完成時は不要
+     
         return {
             "dt": view_today,
             "dt2": view_day,
-            "health_data": health_data,
-            # "today_event": today_event,
-            # "today_task": today_task,
-            # "user": user_name,
-            # "health_info": health_info,
-            # "running_event": running_event,
-            # "running_task": running_task,
+            "health_data": Health_info.get_record_by_user_id(session["id"]),
+            "today_event": Event_info.get_today_event(),
+            "today_task": Task_info.get_today_task(),
+            "user": session["user_name"],
+            "health_info": Health_info.get_today_health_info(),
+            "running_event": Event_info.get_running_event(),
+            "running_task": Task_info.get_running_task()
             # "tv_info": tv_info,
         }
 

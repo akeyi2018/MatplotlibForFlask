@@ -2,10 +2,10 @@
 <p class="lead" style="margin-bottom: 1px;">健康チェック</p>
 {% if home.health_info %}
 <script>
-  curWeight = {{ home.health_info.weight }}; 
+  curWeight = {{ home.health_info.weight}}; 
   gWeight = 72;
-  curHigh = {{ home.health_info.high}};
-  curLow = {{ home.health_info.low}};
+  curHigh = {{ home.health_info.systolic_blood_pressure}};
+  curLow = {{ home.health_info.diastolic_blood_pressure}};
 </script>
 <table class="table-info table-bordered border-info table-sm text-light" border="2">
   <thead>
@@ -96,7 +96,7 @@
     <tr>
       <th scope="row">{{ index + 1 }}</th>
       <td>{{home.today_task[index].task_name}}</td>
-      <td>{{home.today_task[index].detail}}</td>
+      <td>{{home.today_task[index].discription}}</td>
       <td>
         <button class="btn btn-primary" onclick="finish_task(
           {{ home.today_task[index].id }},

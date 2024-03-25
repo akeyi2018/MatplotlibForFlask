@@ -20,9 +20,12 @@ from datetime import datetime
 from settings import Sql_Param
 from db_controller import (
     User_info, 
-    m_Countries, m_genre, 
+    m_Countries, 
+    m_genre,
+    m_task_tag, 
     Health_info, 
-    Event_info)
+    Event_info,
+    Task_info)
 
 from settings import Message_list, Sql_Param, Html_Param
 from form_list import (
@@ -96,10 +99,23 @@ def regist_public_user():  # Adminユーザの登録
     return render_template("admin_regist.html", form=form)
 
 
+@app.post('/confirm')
+def confirm_data():
+    # 健康データ入力処理
+    Health_info.insert_data(request, session)
+    return render_template('thanks.html')
+
 # endregion
 
 
 # region ------GET----------
+@app.get('/regist_health')
+@flask_login.login_required
+def regist_health_info():
+    form = RegistHealthForm()
+    return render_template('regist_health.html', form=form)
+
+
 @app.get("/thanks/<kind>/<content>")
 def show_thanks(kind, content):
     kind = int(kind)
@@ -113,10 +129,69 @@ def show_thanks(kind, content):
         res_name = Message_list.user_regist_event
     return render_template("thanks.html", message=res_name)
 
+@app.get('/show_event/<id>')
+@flask_login.login_required
+def show_event(id):
+    id = int(id)
+    if id ==0:
+        form = RegistEventForm()
+    else:
+        # idがゼロでない場合は、既存の情報を取得する
+        # event_info = ins.get_event_view_by_id(int(session['id']), id)
+        # form = RegistEventForm(event_id=id,
+        #                     event_name = event_info['event_name'],
+        #                     discription=event_info['discription'],
+        #                     entry_date=event_info['event_date'],
+        #                     kind=99,
+        #                     choice = "更新"
+        #                     )
+        pass
+    return render_template('regist_event.html', eform=form)
+
+@app.get('/show_task/<id>')
+@flask_login.login_required
+def show_task(id):
+    # id = int(id)
+    # if id ==0: # 新規登録
+    form = RegistTaskForm()
+    # else: # 編集 既存の情報を取得する
+    #     ins = DB_Connector()
+    #     task_info = ins.get_task_view_by_id(int(session['id']), id)
+    #     form = RegistTaskForm(task_id=id,
+    #                         task_name = task_info['task_name'],
+    #                         discription=task_info['detail'],
+    #                         entry_date=task_info['limit_date'],
+    #                         kind=99,
+    #                         choice = "更新"
+    #                         )
+    return render_template('regist_task.html', tform=form)
+
+@app.get('/regist_tv_info/<id>')
+@flask_login.login_required
+def show_regist_tv_info(id):
+    id = int(id)
+    if id ==0:
+        form = RegistTVForm(id=id)
+    else:
+        pass
+    return render_template('regist_tv_info.html', tform = form)
 
 # endregion
 
+#region ------POST----------
+@app.post('/set_task')
+@flask_login.login_required
+def set_task():
+    Task_info.insert_data(request,session)
+    return render_template('thanks.html')
 
+@app.post('/set_event')
+@flask_login.login_required
+def set_event():
+    Event_info.insert_data(request,session)
+    return render_template('thanks.html')
+
+# endregion
 @app.route("/")
 def main():
 
@@ -128,39 +203,9 @@ def main():
     if Sql_Param.debug_flag == True:
         m_Countries.insert_master_data()  # 国マスターデータの投入
         m_genre.insert_master_data()  # ジャンルマスターデータの投入
+        m_task_tag.insert_master_data()
         
         print("マスター初期化完了")
-
-    # from db_view import Event_view_running
-    # res = Html_Param.get_data_test()
-    # print(res)
-    
-    # Event_view_running.create_table()
-    # Event_view_running.refresh_data()
-    today_date = datetime.today().date()
-
-    # クエリの結果を取得
-    events = Event_info.query.with_entities(
-        Event_info.id,
-        Event_info.event_name,
-        Event_info.event_date,
-        case(
-            (Event_info.event_date >= today_date, '進行中'),
-            (Event_info.event_date < today_date, '遅延'),
-            else_='未定義'
-        ).label('status'),
-        cast(func.julianday(Event_info.event_date) - func.julianday(today_date), Integer).label('days_until_event')
-    ).filter(Event_info.finish_flag == 0).all()
-    print(events)
-  
-
-    # health_data = Health_info.get_record_by_user_id(1)
-    # print(health_data)
-
-    # Event_info.set_data()
-    
-
-    
 
     return render_template("main.html")
 
@@ -197,16 +242,21 @@ def index():
     if not session.get("flag") is None:
 
         # 暫定的にプロフィール
-        return render_template("profile.html")
+        # return render_template("profile.html")
 
-        # return render_template(
-        #     'index.html',
-        #     home = Html_Param.func_home(session),
-        #     nav=Html_Param.nav_home
-        # )
+        return render_template(
+            'index.html',
+            home = Html_Param.get_home_data(session),
+            nav=Html_Param.nav_home
+        )
     # ログインページへ誘導
     return redirect(url_for("main"))
 
+@app.get('/logout')
+def logout():
+    session.pop('flag',None)
+    session.pop('username',None)
+    return redirect(url_for('main'))
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000", debug=True)

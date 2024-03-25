@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
 from decimal import Decimal
 from pytz import timezone
-from sqlalchemy import text
+from sqlalchemy import case, func, cast, Integer
 
 db = SQLAlchemy()
 
@@ -55,6 +55,23 @@ class m_genre(db.Model):
             db.session.add(data)
         db.session.commit()
 
+class m_task_tag(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tag = db.Column(db.String(50), unique=True, nullable=False)
+    regist_time = db.Column(
+        db.DateTime,
+        default=datetime.now(timezone("Asia/Tokyo")),
+    )
+
+    @classmethod
+    def insert_master_data(cls):
+        # マスターデータを導入
+        tags = ["新機能追加", "機能改修", "バグ修正", "プログラム整理", "プロトタイプ開発", "メンテナンス作業"]
+        for tag_name in tags:
+            data = cls(tag=tag_name)
+            db.session.add(data)
+        db.session.commit()
+
 
 class Health_info(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -69,7 +86,7 @@ class Health_info(db.Model):
     @classmethod
     def get_record_by_user_id(cls, user_id):
         data_list = cls.query.filter_by(user_id=user_id).all()
-        measure_dates = [d.measure_date for d in data_list]
+        measure_dates = [d.measure_date.strftime('%Y-%m-%d') for d in data_list]
         systolic_blood_pressures = [d.systolic_blood_pressure for d in data_list]
         diastolic_blood_pressures = [d.diastolic_blood_pressure for d in data_list]
         pulses = [d.pulse for d in data_list]
@@ -82,6 +99,44 @@ class Health_info(db.Model):
             "weight": weights,
         }
     
+    @classmethod
+    def get_today_health_info(cls):
+        return cls.query.with_entities(
+            cls.user_id,
+            cls.systolic_blood_pressure,
+            cls.diastolic_blood_pressure,
+            cls.weight
+        ).filter(cls.measure_date == date.today()).first()
+    
+    @classmethod
+    def insert_data(cls, request, session):
+        session["id"] = 1
+        user_id = 1
+        data = cls.query.filter(cls.user_id==user_id, 
+                                cls.measure_date == date.today()).first()
+        # すでに登録済の場合
+        if data:
+            data.user_id = int(session["id"])
+            data.measure_date = date.today()
+            data.systolic_blood_pressure=int(request.form.get("h_bld"))
+            data.diastolic_blood_pressure=int(request.form.get("l_bld"))
+            data.pulse=int(request.form.get("pulse"))
+            data.weight=float(request.form.get("weight"))
+            db.session.commit()
+            print('finish update')
+        else:
+            entry = cls( 
+                    user_id=session["id"],
+                    measure_date = date.today(),
+                    systolic_blood_pressure=request.form.get("h_bld"),
+                    diastolic_blood_pressure=request.form.get("l_bld"),
+                    pulse=request.form.get("pulse"),
+                    weight=request.form.get("weight")
+                )
+            db.session.add(entry)
+            db.session.commit()
+            print('finish insert')
+
     # データ移行
     @classmethod
     def set_data(cls):
@@ -132,6 +187,69 @@ class Event_info(db.Model):
             db.session.add(event_info)
         db.session.commit()
 
+    @classmethod
+    def get_running_event(cls):
+        return cls.query.with_entities(
+            cls.id,
+            cls.event_name,
+            cls.event_date,
+            cls.discription,
+            case(
+                (cls.event_date >= date.today(), '進行中'),
+                (cls.event_date < date.today(), '遅延'),
+                else_='未定義'
+            ).label('status'),
+            cast(func.julianday(cls.event_date) - func.julianday(date.today()), Integer
+            ).label('days_until_event')
+        ).filter(
+            cls.finish_flag == 0
+        ).order_by(
+            cls.event_date
+        ).all()
+    
+    @classmethod
+    def get_today_event(cls):
+        return cls.query.with_entities(
+            cls.id,
+            cls.event_name,
+            cls.event_date,
+            cls.discription,
+            case(
+                (cls.event_date >= date.today(), '進行中'),
+                (cls.event_date < date.today(), '遅延'),
+                else_='未定義'
+            ).label('status'),
+            cast(func.julianday(cls.event_date) - func.julianday(date.today()), Integer
+            ).label('days_until_event')
+        ).filter(
+            cls.finish_flag == 0, 
+            cls.event_date<=date.today()
+        ).order_by(
+            cls.event_date
+        ).all()
+
+    @classmethod
+    def insert_data(cls, request, session):
+        session["id"] = 1
+        data = cls.query.filter(
+            cls.user_id==session["id"],
+            cls.id == request.form.get("id")
+        ).first()
+        print('finish get data')
+        if data:
+            data.event_name = request.form.get("event_name")
+            data.event_date = request.form.get("entry_date")
+            data.discription = request.form.get("discription")
+            db.session.commit()
+        else:
+            entry = cls(
+                user_id = session["id"],
+                event_name = request.form.get("event_name"),
+                event_date = datetime.strptime(request.form.get("entry_date"), '%Y-%m-%d').date(),
+                discription = request.form.get("discription")
+            )
+            db.session.add(entry)
+            db.session.commit()
 
 class Task_info(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -140,12 +258,76 @@ class Task_info(db.Model):
     limit_date = db.Column(db.Date, nullable=False)
     discription = db.Column(db.String(800), nullable=False)
     task_kind = db.Column(db.Integer, nullable=False)
-    status = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.Integer, nullable=False, default=1)
     regist_time = db.Column(
         db.DateTime,
         default=datetime.now(timezone("Asia/Tokyo")),
     )
 
+    @classmethod
+    def get_today_task(cls):
+        return cls.query.with_entities(
+            cls.id,
+            cls.task_name,
+            cls.discription
+        ).filter(
+            cls.status ==1, 
+            cls.limit_date <= date.today()
+        ).order_by(
+            cls.limit_date
+        ).all()
+
+    @classmethod
+    def get_running_task(cls):
+        return cls.query.with_entities(
+            cls.id,
+            cls.task_name,
+            cls.limit_date,
+            cls.discription,
+            m_task_tag.tag.label('tag'),
+            cast(func.julianday(cls.limit_date) - func.julianday(date.today()), Integer
+            ).label('days_until_event'),
+            case(
+                (cls.limit_date >= date.today(), '進行中'),
+                (cls.limit_date < date.today(), '遅延'),
+                else_='未定義'
+            ).label('status')
+        ).join(
+            m_task_tag, m_task_tag.id == cls.task_kind
+        ).filter(
+            cls.status ==1
+        ).order_by(
+            cls.limit_date
+        ).all()
+
+    @classmethod
+    def insert_data(cls, request, session):
+        session["id"] = 1
+        data = cls.query.filter(
+            cls.user_id==session["id"],
+            cls.id == request.form.get("id")
+        ).first()
+        print('finish get data')
+        if data:
+            data.id = request.form.get("task_id")
+            data.user_id = int(session["id"])
+            data.task_name = request.form.get("task_name")
+            data.limit_date = request.form.get("entry_date")
+            data.discription = request.form.get("discription")
+            data.task_kind = request.form.get("kind")
+            db.session.commit()
+            print('finish update')
+        else:
+            entry = cls(
+                user_id=session["id"],
+                task_name = request.form.get("task_name"),
+                limit_date = datetime.strptime(request.form.get("entry_date"), '%Y-%m-%d').date(),
+                discription = request.form.get("discription"),
+                task_kind = request.form.get("kind")
+            )
+            db.session.add(entry)
+            db.session.commit()
+            print('finish insert')
 
 
 # class Payments(db.Model):

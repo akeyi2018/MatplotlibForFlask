@@ -15,8 +15,8 @@ from wtforms.validators import InputRequired, length
 from mysql_tool import DB_Connector
 from werkzeug.security import check_password_hash
 from wtforms.widgets import TextArea
-from datetime import datetime
-from db_controller import User_info
+from datetime import datetime, date
+from db_controller import User_info, Health_info
 
 class LoginForm(FlaskForm):
     username = StringField('ユーザ名：',
