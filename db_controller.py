@@ -18,6 +18,23 @@ class User_info(db.Model):
     hash_key = db.Column(db.String(255), unique=True, nullable=False)
     is_admin = db.Column(db.Boolean, default=True)
 
+class Movie_info(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    title = db.Column(db.String(80), nullable=False)
+    episodes = db.Column(db.Integer, nullable=False, default=1)
+    watched = db.Column(db.Integer, nullable=False, default=0)
+    pub_date = db.Column(db.Date, nullable=False)
+    genre = db.Column(db.Integer, nullable=False)
+    tag = db.Column(db.Integer, nullable=False, default=0)
+    country = db.Column(db.Integer, nullable=False)
+    discription = db.Column(db.String(1000), nullable=False)
+    rating = db.Column(db.Integer, nullable=False, default = 1)
+    status = db.Column(db.Integer, nullable=False, default = 1)
+    regist_time = db.Column(
+        db.DateTime,
+        default=datetime.now(timezone("Asia/Tokyo")),
+    )
 
 # 国マスター
 class m_Countries(db.Model):

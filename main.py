@@ -25,7 +25,8 @@ from db_controller import (
     m_task_tag, 
     Health_info, 
     Event_info,
-    Task_info)
+    Task_info,
+)
 
 from settings import Message_list, Sql_Param, Html_Param
 from form_list import (
@@ -69,12 +70,10 @@ user_info_tbl.init_app(app)
 # bootstrapを使えるようにする
 bootstrap = Bootstrap(app)
 
-
 # ユーザ情報ロード
 @login_manager.user_loader
 def load_user(user_id):
     return AdminUser(user_id)
-
 
 # region -----登録------
 @app.route("/regist_user", methods=["GET", "POST"])
@@ -106,7 +105,6 @@ def confirm_data():
     return render_template('thanks.html')
 
 # endregion
-
 
 # region ------GET----------
 @app.get('/regist_health')
@@ -168,8 +166,6 @@ def show_task(id):
                 choice = "更新"
             )
             form.kind.choices = [(item.id, item.tag) for item in m_task_tag.query.all()]
-            # task_info.task_kind
-            print('OK OK OK')
     return render_template('regist_task.html', tform=form)
 
 @app.get('/regist_tv_info/<id>')
@@ -214,7 +210,7 @@ def finish_task():
     # res = 'RES:' + str(request.json['id'])
     res_id = request.json['id']
     res_content = request.json['name']
-   
+
     Task_info.update_task_flag(res_id)
 
     # githubに自動push
@@ -225,6 +221,8 @@ def finish_task():
 
 
 # endregion
+
+#region --------MAIN----------
 @app.route("/")
 def main():
 
@@ -241,7 +239,6 @@ def main():
         print("マスター初期化完了")
 
     return render_template("main.html")
-
 
 # ログインフォーム
 @app.route("/login", methods=["GET", "POST"])
@@ -266,21 +263,16 @@ def login():
             return redirect(url_for("index"))
     return render_template("login.html", form=form)
 
-
 # ホーム
 @app.route("/home")
 @flask_login.login_required
 def index():
     # session check
     if not session.get("flag") is None:
-
-        # 暫定的にプロフィール
-        # return render_template("profile.html")
-
         return render_template(
             'index.html',
             home = Html_Param.get_home_data(session),
-            nav=Html_Param.nav_home
+            nav = Html_Param.nav_home
         )
     # ログインページへ誘導
     return redirect(url_for("main"))
@@ -290,6 +282,7 @@ def logout():
     session.pop('flag',None)
     session.pop('username',None)
     return redirect(url_for('main'))
+#endregion
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000", debug=True)
