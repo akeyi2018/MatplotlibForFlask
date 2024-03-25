@@ -26,6 +26,7 @@ from db_controller import (
     Health_info, 
     Event_info,
     Task_info,
+    Movie_info,
 )
 
 from settings import Message_list, Sql_Param, Html_Param
@@ -96,7 +97,6 @@ def regist_public_user():  # Adminユーザの登録
 
     # ユーザ登録フォームの表示
     return render_template("admin_regist.html", form=form)
-
 
 @app.post('/confirm')
 def confirm_data():
@@ -172,8 +172,11 @@ def show_task(id):
 @flask_login.login_required
 def show_regist_tv_info(id):
     id = int(id)
-    if id ==0:
-        form = RegistTVForm(id=id)
+    if id == 0:
+        form = RegistTVForm()
+        # ジャンルと製作国のカテゴリをロードする
+        form.genre.choices = [(item.id, item.genre) for item in m_genre.query.all()]
+        form.country.choices = [(item.id, item.name) for item in m_Countries.query.all()]
     else:
         pass
     return render_template('regist_tv_info.html', tform = form)
@@ -181,6 +184,12 @@ def show_regist_tv_info(id):
 # endregion
 
 #region ------POST----------
+@app.post('/set_tv_info')
+@flask_login.login_required
+def set_tv_info():
+    Movie_info.insert_data(request, session)
+    return render_template('thanks.html')
+
 @app.post('/set_task')
 @flask_login.login_required
 def set_task():

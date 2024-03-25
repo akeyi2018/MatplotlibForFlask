@@ -36,6 +36,33 @@ class Movie_info(db.Model):
         default=datetime.now(timezone("Asia/Tokyo")),
     )
 
+    @classmethod
+    def insert_data(cls, request, session):
+        session["id"] = 1
+        data = cls.query.filter(
+            cls.user_id==session["id"],
+            cls.id == request.form.get("id")
+        ).first()
+        print('finish get data')
+        if data:
+            pass
+        else:
+            entry = cls(
+                user_id = session["id"],
+                title = request.form.get('title'),
+                episodes = request.form.get('episodes'),
+                watched = request.form.get('watched'),
+                pub_date = datetime.strptime(request.form.get("pub_date"), '%Y-%m-%d').date(),
+                genre = request.form.get('genre'),
+                tag = request.form.get('tag'),
+                country = request.form.get('country'),
+                discription = request.form.get('discription'),
+                rating = request.form.get('point')
+            )
+            db.session.add(entry)
+            db.session.commit()
+            print('finish insert')
+
 # 国マスター
 class m_Countries(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -88,7 +115,6 @@ class m_task_tag(db.Model):
             data = cls(tag=tag_name)
             db.session.add(data)
         db.session.commit()
-
 
 class Health_info(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -175,7 +201,6 @@ class Health_info(db.Model):
 
         # 変更を確定
         db.session.commit()
-
 
 class Event_info(db.Model):
     id = db.Column(db.Integer, primary_key=True)

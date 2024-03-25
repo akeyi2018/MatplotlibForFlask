@@ -96,7 +96,7 @@ class RegistTVForm(FlaskForm):
     id = HiddenField('ID:')
     style1={'style': 'width:50%;margin-top:1em;margin-right:150px;'}
     title = StringField('タイトル：',
-        [InputRequired(), length(min=3, max=50)], render_kw=style1)
+        [InputRequired(), length(min=1, max=50)], render_kw=style1)
     style_int={'style': 'width:60px;margin-right:380px;margin-top:1em;'}
     episodes = IntegerField('回数：', [InputRequired()], default=1, render_kw=style_int)
     watched = IntegerField('鑑賞：', default=0, render_kw=style_int)
@@ -104,12 +104,10 @@ class RegistTVForm(FlaskForm):
     pub_date = DateField('日付：', format = '%Y-%m-%d', render_kw=style2)
 
     style_choice={'style': 'width:120px;margin-right:310px;margin-top:1em;'}
-    genre_list =  [(1, "アニメ"),(2, "海外ドラマ"),(3, "SFドラマ"),(4,"サスペンス"),(5,"映画")]
-    genre = SelectField('ジャンル：', choices=genre_list, render_kw=style_choice)
+    genre = SelectField('ジャンル：', render_kw=style_choice)
     tag = IntegerField('tag：',default=1, render_kw=style_int)
 
-    countries = [(1, "日本"),(2, "アメリカ"),(3, "中国"),(4,"そのた")]
-    country = SelectField('製作国：', choices=countries, render_kw=style_choice)
+    country = SelectField('製作国：', render_kw=style_choice)
     
     style3={'style': 'width:85%; margin-top:1em;margin-right:-12px;'}
     
