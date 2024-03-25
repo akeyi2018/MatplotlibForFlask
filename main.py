@@ -191,6 +191,33 @@ def set_event():
     Event_info.insert_data(request,session)
     return render_template('thanks.html')
 
+@app.post('/finish_event')
+@flask_login.login_required
+def finish_event():
+    # 受け取り側でjsonで受け取る
+    Event_info.update_event_flag(request.json['id'])
+    return '',200
+
+@app.post('/finish_task')
+@flask_login.login_required
+def finish_task():
+
+    from push_source_to_github import push_git
+
+    # 受け取り側でjsonで受け取る
+    # res = 'RES:' + str(request.json['id'])
+    res_id = request.json['id']
+    res_content = request.json['name']
+   
+    Task_info.update_task_flag(res_id)
+
+    # githubに自動push
+    p = push_git()
+    p.shell_cmd(res_id, res_content)
+
+    return '',200
+
+
 # endregion
 @app.route("/")
 def main():

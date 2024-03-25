@@ -251,6 +251,18 @@ class Event_info(db.Model):
             db.session.add(entry)
             db.session.commit()
 
+    @classmethod
+    def update_event_flag(cls, id):
+        data = cls.query.filter(
+            cls.id == id
+        ).first()
+        if data:
+            data.finish_flag = True
+            db.session.commit()
+        else:
+            print('IDがみつかりませんでした')
+    
+
 class Task_info(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
@@ -263,6 +275,17 @@ class Task_info(db.Model):
         db.DateTime,
         default=datetime.now(timezone("Asia/Tokyo")),
     )
+
+    @classmethod
+    def update_task_flag(cls, id):
+        data = cls.query.filter(
+            cls.id == id
+        ).first()
+        if data:
+            data.status = False
+            db.session.commit()
+        else:
+            print('IDがみつかりませんでした')
 
     @classmethod
     def get_today_task(cls):
