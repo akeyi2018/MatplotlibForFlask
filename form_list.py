@@ -16,9 +16,10 @@ from mysql_tool import DB_Connector
 from werkzeug.security import check_password_hash
 from wtforms.widgets import TextArea
 from datetime import datetime, date
-from db_controller import User_info, Health_info
+from db_controller import User_info
 
 class LoginForm(FlaskForm):
+    from db_controller import User_info
     username = StringField('ユーザ名：',
                             validators=[InputRequired(),
                             length(min=4, max=50)])
@@ -67,13 +68,10 @@ class RegistTaskForm(FlaskForm):
         widget=TextArea(), render_kw=style3)
     style4={'style': 'width:30%; margin-top:1em;margin-right:300px;'}
 
-    # タスクの種類を取得する
-    ins = DB_Connector()
-    tag_data = ins.get_task_tag()
-    tag = [(item['id'], item['name']) for item in tag_data]
-    tag_tpl = tuple(tag)
-    kind = SelectField('種類：',
-        choices=tag_tpl, render_kw=style4)
+    # tag = [(item.id, item.tag) for item in tag_data]
+    # tag_tpl = tuple(tag)
+    # tag_tpl = [(1,'aaa')]
+    kind = SelectField('種類：', render_kw=style4)
     choice = SelectField('種別：', choices=["新規","更新"], render_kw=style4)
     style5={'style': 'margin-top:1em;'}
     submit = SubmitField('タスクを登録する', render_kw=style5)
@@ -90,9 +88,6 @@ class RegistEventForm(FlaskForm):
         widget=TextArea(), render_kw=style3)
     style4={'style': 'width:10%; margin-top:1em;margin-right:415px;'}
     
-  
-    
-
     choice = SelectField('種別：', choices=["新規","更新"], render_kw=style4)
     style5={'style': 'margin-top:1em;'}
     submit = SubmitField('イベントを登録する', render_kw=style5)
