@@ -137,15 +137,16 @@ def show_event(id):
         form = RegistEventForm()
     else:
         # idがゼロでない場合は、既存の情報を取得する
-        # event_info = ins.get_event_view_by_id(int(session['id']), id)
-        # form = RegistEventForm(event_id=id,
-        #                     event_name = event_info['event_name'],
-        #                     discription=event_info['discription'],
-        #                     entry_date=event_info['event_date'],
-        #                     kind=99,
-        #                     choice = "更新"
-        #                     )
-        pass
+        event_info = Event_info.get_event_by_id(int(session['id']), id)
+        if event_info:
+            form = RegistEventForm(
+                event_id=id,
+                event_name = event_info.event_name,
+                discription = event_info.discription,
+                entry_date=event_info.event_date,
+                kind=99,
+                choice = "更新"
+            )
     return render_template('regist_event.html', eform=form)
 
 @app.get('/show_task/<id>')

@@ -187,6 +187,18 @@ class Event_info(db.Model):
             db.session.add(event_info)
         db.session.commit()
 
+
+    @classmethod
+    def get_event_by_id(cls, user_id, id):
+        return cls.query.with_entities(
+            cls.event_name,
+            cls.discription,
+            cls.event_date
+        ).filter(
+            cls.id == id, 
+            cls.user_id == user_id
+        ).first()
+
     @classmethod
     def get_running_event(cls):
         return cls.query.with_entities(
@@ -233,12 +245,12 @@ class Event_info(db.Model):
         session["id"] = 1
         data = cls.query.filter(
             cls.user_id==session["id"],
-            cls.id == request.form.get("id")
+            cls.id == request.form.get("event_id")
         ).first()
         print('finish get data')
         if data:
             data.event_name = request.form.get("event_name")
-            data.event_date = request.form.get("entry_date")
+            data.event_date = datetime.strptime(request.form.get("entry_date"), '%Y-%m-%d').date()
             data.discription = request.form.get("discription")
             db.session.commit()
         else:
