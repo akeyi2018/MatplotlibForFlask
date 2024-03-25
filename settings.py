@@ -110,7 +110,8 @@ class Html_Param:
         from db_controller import(
             Health_info, 
             Event_info,
-            Task_info
+            Task_info,
+            Movie_info
         )
 
         # 日本語で曜日の表示
@@ -130,8 +131,11 @@ class Html_Param:
             "user": session["user_name"],
             "health_info": Health_info.get_today_health_info(),
             "running_event": Event_info.get_running_event(),
-            "running_task": Task_info.get_running_task()
-            # "tv_info": tv_info,
+            "running_task": Task_info.get_running_task(),
+            "tv_info": Movie_info.query.filter(
+                Movie_info.user_id == session['id'],
+                Movie_info.status == 1
+            ).all()
         }
 
     @staticmethod

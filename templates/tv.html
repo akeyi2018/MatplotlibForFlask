@@ -9,7 +9,7 @@
       <th scope="col">ジャンル</th>
       <th scope="col">製作国</th>
       <th scope="col">鑑賞状況</th>
-      <th scope="col">製作年</th>
+      <th scope="col">登録日</th>
       <th scope="col">管理操作</th>
     </tr>
   </thead>
@@ -21,12 +21,12 @@
       <td>{{home.tv_info[index].genre}}</td>
       <td>{{home.tv_info[index].country}}</td>
       <td>{{home.tv_info[index].watched}} / {{home.tv_info[index].episodes}}</td>
-      <td>{{home.tv_info[index].years}}</td>
+      <td>{{home.tv_info[index].pub_date}}</td>
       <td>
         <!-- 完了 -->
         <button class="btn btn-success" onclick="finish_tv({{home.tv_info[index].id }},'{{home.tv_info[index].title }}')">完了にする</button>
         <!-- 編集 -->
-        <a href="{{url_for('edit_tv_info', id=home.tv_info[index].id)}}" type="button" class="btn btn-outline-success text-light">編集
+        <a href="{{url_for('set_tv_info', id=home.tv_info[index].id)}}" type="button" class="btn btn-outline-success text-light">編集
           <span class="visually-hidden">編集</span>
         </a>
         <!-- 詳細ボタン -->
