@@ -34,24 +34,17 @@
 </div>
 {% endif %}
 
-
 <!-- イベントバッジ -->
 <a type="button" class="btn btn-primary" style="margin-top: 2em;" onclick="showTab('{{nav[2].id}}')">
   イベント数：<span class="badge bg-dark">{{home.running_event | length}}</span>
   <span class="visually-hidden">unread messages</span>
 </a>
-{% if home.today_event|length > 0 %}
-<button type="button" class="btn btn-primary" style="margin-top: 2em;" >
-  本日残：<span class="badge bg-dark">{{home.today_event | length}}</span>
-  <span class="visually-hidden">unread messages</span>
-</button>
-{% endif %}
 <!-- 本日の予定(イベント) -->
 {% if home.today_event %}
 <table class="table-info table-bordered border-info table-sm text-white" border="2" style="margin-top: 1em;">
   <thead>
     <tr>
-      <th scope="col">No.</th>
+      <th scope="col">#</th>
       <th scope="col">名称</th>
       <th scope="col">内容</th>
       <th scope="col">管理操作</th>
@@ -73,17 +66,14 @@
   </tbody>
 </table>
 {% else %}
-
+<p class="lead">本日のイベント予定はありません。</p>
 {% endif %}
-<button type="button" class="btn btn-success" style="margin-top: 2em;" onclick="showTab('{{nav[3].id}}')">
+<button type="button" class="btn btn-success" onclick="showTab('{{nav[3].id}}')">
   タスク数<span class="badge bg-dark">{{home.running_task | length}}</span>
   <span class="visually-hidden">unread messages</span>
 </button>
-{% if home.today_task|length > 0 %}
-<button type="button" class="btn btn-success" style="margin-top: 2em;">
-  本日残<span class="badge bg-dark">{{home.today_task | length}}</span>
-  <span class="visually-hidden">unread messages</span>
-</button>
+{% if home.today_task|length == 0 %}
+<p class="lead">本日のタスクはありません。</p>
 {% endif %}
 {% if home.today_task %}
 <table class="table-info table-bordered border-info table-sm text-white" border="2" style="margin-top: 1em;">
