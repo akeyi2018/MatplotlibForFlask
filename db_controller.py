@@ -49,6 +49,7 @@ class Movie_info(db.Model):
                 cls.episodes,
                 cls.watched,
                 cls.pub_date,
+                cls.discription
             )
             .join(m_genre, m_genre.id == cls.genre)
             .join(m_Countries, m_Countries.id == cls.country)
