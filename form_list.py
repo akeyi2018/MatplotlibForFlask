@@ -123,15 +123,13 @@ class RegistTVForm(FlaskForm):
 
 class RegistHealthForm(FlaskForm):
     id = HiddenField('ID:')
-    style1={'style': 'margin-top:1em;margin-right:100px;'}
+    style1={'style': 'margin-top:1em;margin-right:10px; width:100%;margin-bottom:1em;'}
     h_bld = DecimalRangeField('収縮期血圧：', 
                               default=140, render_kw=style1)
     l_bld = DecimalRangeField('拡張期血圧：', 
                               default=100, render_kw=style1)
-    
-    style2={'style': 'margin-top:1em;margin-right:70px;'}
     pulse = DecimalRangeField('脈拍数：', 
-                              default=75, render_kw=style2)
+                              default=75, render_kw=style1)
     weight = DecimalRangeField('体重：', 
                                default= 77.0, render_kw=style1)
     style5={'style': 'margin-top:1em;'}
