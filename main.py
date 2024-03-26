@@ -233,7 +233,6 @@ def set_event():
     Event_info.insert_data(request, session)
     return render_template("thanks.html")
 
-
 @app.post("/finish_tv")
 @flask_login.login_required
 def finish_tv():

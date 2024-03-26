@@ -39,6 +39,23 @@ class Movie_info(db.Model):
     )
 
     @classmethod
+    def get_movie_info(cls, id):
+        return (
+            cls.query.with_entities(
+                cls.title,
+                m_genre.genre.label("genre"),
+                m_Countries.name.label("country"),
+                cls.episodes,
+                cls.watched,
+                cls.pub_date,
+            )
+            .join(m_genre, m_genre.id == cls.genre)
+            .join(m_Countries, m_Countries.id == cls.country)
+            .filter(cls.user_id == id, cls.status == 1)
+            .all()
+        )
+
+    @classmethod
     def update_movie_flag(cls, id):
         data = cls.query.filter(cls.id == id).first()
         if data:
