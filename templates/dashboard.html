@@ -40,10 +40,12 @@
   イベント数：<span class="badge bg-dark">{{home.running_event | length}}</span>
   <span class="visually-hidden">unread messages</span>
 </a>
+{% if home.today_event|length > 0 %}
 <button type="button" class="btn btn-primary" style="margin-top: 2em;" >
   本日残：<span class="badge bg-dark">{{home.today_event | length}}</span>
   <span class="visually-hidden">unread messages</span>
 </button>
+{% endif %}
 <!-- 本日の予定(イベント) -->
 {% if home.today_event %}
 <table class="table-info table-bordered border-info table-sm text-white" border="2" style="margin-top: 1em;">
@@ -77,11 +79,12 @@
   タスク数<span class="badge bg-dark">{{home.running_task | length}}</span>
   <span class="visually-hidden">unread messages</span>
 </button>
-
+{% if home.today_task|length > 0 %}
 <button type="button" class="btn btn-success" style="margin-top: 2em;">
   本日残<span class="badge bg-dark">{{home.today_task | length}}</span>
   <span class="visually-hidden">unread messages</span>
 </button>
+{% endif %}
 {% if home.today_task %}
 <table class="table-info table-bordered border-info table-sm text-white" border="2" style="margin-top: 1em;">
   <thead>
