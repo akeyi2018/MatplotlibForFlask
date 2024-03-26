@@ -42,6 +42,7 @@ class Movie_info(db.Model):
     def get_movie_info(cls, id):
         return (
             cls.query.with_entities(
+                cls.id,
                 cls.title,
                 m_genre.genre.label("genre"),
                 m_Countries.name.label("country"),
