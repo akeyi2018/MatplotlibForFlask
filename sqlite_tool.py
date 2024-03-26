@@ -13,9 +13,6 @@ class SQLiteConnector:
             print(self.curs)
         except Exception as e:
             print(f'Error Occurred: {e}')
-        
-        
-
     
     def insert_public_user(self, data):
         sql = "INSERT INTO user_info (regist_time, name, mail_address, hash_key) VALUES \
@@ -243,28 +240,4 @@ class SQLiteConnector:
 if __name__ == '__main__':
     
     cls = SQLiteConnector()
-    # cls.check_date()
-    # data = ['横浜現場訪問','2024-03-14','交通費請請求するのを忘れずに']
-    # # cls.insert_event_data(data)
-    # # re = cls.get_event_data(1)
-    # # print(re)
-    # # re = cls.get_user_id('akeyi2016@gmail.com')
-    # # cls.update_event_flag(7)
-
-    # data = {
-    #         "user_id": 1,
-    #         "task_name": "aaaa task",
-    #         "detail": "detail info of task",
-    #         "limit_date": "2024-04-01",
-    #         "task_kind": 1,
-    #         "status": 1,
-    #         "regist_date": "2024-03-14 00:00:00"
-    #     }
-    # # cls.insert_data('task_info', data)
-    # # cls.update_task_flag(1)
-
-    # # print(cls.get_today_task(1))
-    
-    # # print(cls.get_today_event(1))
-    # re = cls.get_tv_view(1)
-    # print(re)
+  

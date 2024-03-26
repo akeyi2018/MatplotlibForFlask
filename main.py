@@ -43,7 +43,7 @@ from admin_user import AdminUser
 from db_controller import db as user_info_tbl
 
 
-#region ----------------- INIT ---------------------
+# region ----------------- INIT ---------------------
 # ログインマネージャーの宣言
 login_manager = flask_login.LoginManager()
 
@@ -76,7 +76,9 @@ bootstrap = Bootstrap(app)
 @login_manager.user_loader
 def load_user(user_id):
     return AdminUser(user_id)
-#endregion
+
+
+# endregion
 
 
 # region -----登録------
@@ -209,6 +211,7 @@ def edit_tv_info(id):
             ]
     return render_template("regist_tv_info.html", tform=form)
 
+
 # endregion
 
 
@@ -232,6 +235,7 @@ def set_task():
 def set_event():
     Event_info.insert_data(request, session)
     return render_template("thanks.html")
+
 
 @app.post("/finish_tv")
 @flask_login.login_required

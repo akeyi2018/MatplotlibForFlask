@@ -11,7 +11,7 @@
   <thead>
     <tr>
       <th scope="col">日付</th>
-      <th scope="col">{{home.dt2}}</th>
+      <th scope="col">{{home.dt2[0]}}</th>
     </tr>
   </thead>
   <tbody>
@@ -34,41 +34,48 @@
 </div>
 {% endif %}
 
+<!-- 今週の予定(イベント) -->
+{% if home.today_event %}
+<p class="lead" style="margin-top: 1em ;margin-bottom: 1px;">今週の予定</p>
+<table class="table-info table-bordered border-info table-sm text-white" border="2">
+  <tbody>
+    {% for key, items in home.today_event.items() %}
+      {% if items %}
+      {% for item in items %}
+        <tr>
+        <th>{{ key }}</th>
+        <td>{{ item[1] }}</td>
+        <td>{{ item[3] }}</td>
+        <td><button class="btn btn-primary" onclick="finish_event(
+            {{ item[0] }},
+            '{{ item[1] }}')">完了にする</button>
+        </td>
+        </tr>
+        {% endfor %}
+      {% else %}
+      <th>{{ key }}</th>
+      <td><a type="button" class="btn btn-outline-primary text-light" href="{{url_for('edit_task',id=0)}}">予定を入れる
+        <span class="visually-hidden">予定を入れる</span>
+      </a></td>
+      <td></td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+
+<!-- old -->
+
+{% else %}
+<p class="lead">今週のイベント予定はありません。</p>
+{% endif %}
 <!-- イベントバッジ -->
-<a type="button" class="btn btn-primary" style="margin-top: 2em;" onclick="showTab('{{nav[2].id}}')">
+<a type="button" class="btn btn-primary" style="margin-top: 1em;" onclick="showTab('{{nav[2].id}}')">
   イベント数：<span class="badge bg-dark">{{home.running_event | length}}</span>
   <span class="visually-hidden">unread messages</span>
 </a>
-<!-- 本日の予定(イベント) -->
-{% if home.today_event %}
-<table class="table-info table-bordered border-info table-sm text-white" border="2" style="margin-top: 1em;">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">名称</th>
-      <th scope="col">内容</th>
-      <th scope="col">管理操作</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for index in range(home.today_event | length) %}
-    <tr>
-      <th scope="row">{{ index + 1 }}</th>
-      <td>{{home.today_event[index].event_name}}</td>
-      <td>{{home.today_event[index].discription}}</td>
-      <td>
-        <button class="btn btn-primary" onclick="finish_event(
-          {{ home.today_event[index].id }},
-          '{{ home.today_event[index].event_name }}')">完了にする</button>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% else %}
-<p class="lead">本日のイベント予定はありません。</p>
-{% endif %}
-<button type="button" class="btn btn-success" onclick="showTab('{{nav[3].id}}')">
+<button type="button" class="btn btn-success" style="margin-top: 1em;" onclick="showTab('{{nav[3].id}}')">
   タスク数<span class="badge bg-dark">{{home.running_task | length}}</span>
   <span class="visually-hidden">unread messages</span>
 </button>
@@ -92,7 +99,7 @@
       <td>{{home.today_task[index].task_name}}</td>
       <td>{{home.today_task[index].discription}}</td>
       <td>
-        <button class="btn btn-primary" onclick="finish_task(
+        <button class="btn btn-success" onclick="finish_task(
           {{ home.today_task[index].id }},
           '{{ home.today_task[index].task_name }}')">完了にする</button>
       </td>

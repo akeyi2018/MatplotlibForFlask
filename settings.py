@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 import locale
-from datetime import date
+from datetime import date, timedelta
 
 load_dotenv()
 
@@ -24,6 +24,7 @@ class Message_list:
 
 
 class Html_Param:
+
     nav_home = [
         {
             "text": "Dashboard",
@@ -62,23 +63,42 @@ class Html_Param:
         },
     ]
 
-    @staticmethod
-    def get_home_data(session):
+    def __init__(self) -> None:
+        pass
+
+    @classmethod
+    def mapping_data(cls, dates, data):
+        # 日付をキーとしてデータをマッピング
+        dict_01 = {}
+        for d in dates:
+            dd_01 = d.strftime("%Y-%m-%d")
+            kk = d.strftime("%m月%d日（%a）")
+            dict_01[kk] = []
+            for item in data:
+                dd2 = item[2].strftime("%Y-%m-%d")
+                if dd2 in dd_01:
+                    dict_01[kk].append(item)
+        return dict_01
+
+    @classmethod
+    def get_home_data(cls, session):
         from db_controller import Health_info, Event_info, Task_info, Movie_info
 
         # 日本語で曜日の表示
         locale.setlocale(locale.LC_ALL, "")
         dt = date.today()
         view_today = dt.strftime("%Y年%m月%d日（%A）")
-        view_day = dt.strftime("%m月%d日(%a)")
+        view_day = [(dt + timedelta(x)) for x in range(0, 7)]
 
         session["id"] = 1  # 暫定的に1にする完成時は不要
+
+        map_data = cls.mapping_data(view_day, Event_info.get_today_event())
 
         return {
             "dt": view_today,
             "dt2": view_day,
             "health_data": Health_info.get_record_by_user_id(session["id"]),
-            "today_event": Event_info.get_today_event(),
+            "today_event": map_data,
             "today_task": Task_info.get_today_task(),
             "user": session["user_name"],
             "health_info": Health_info.get_today_health_info(),

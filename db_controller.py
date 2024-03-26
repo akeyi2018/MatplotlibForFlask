@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from decimal import Decimal
 from pytz import timezone
 from sqlalchemy import case, func, cast, Integer
@@ -284,6 +284,8 @@ class Event_info(db.Model):
 
     @classmethod
     def get_today_event(cls):
+        # 一週間の計算
+        a_week = date.today() + timedelta(7)
         return (
             cls.query.with_entities(
                 cls.id,
@@ -300,7 +302,7 @@ class Event_info(db.Model):
                     Integer,
                 ).label("days_until_event"),
             )
-            .filter(cls.finish_flag == 0, cls.event_date <= date.today())
+            .filter(cls.finish_flag == 0, cls.event_date <= a_week)
             .order_by(cls.event_date)
             .all()
         )
