@@ -133,9 +133,9 @@ def show_thanks(kind, content):
     return render_template("thanks.html", message=res_name)
 
 
-@app.get("/show_event/<id>")
+@app.get("/edit_event/<id>")
 @flask_login.login_required
-def show_event(id):
+def edit_event(id):
     id = int(id)
     if id == 0:
         form = RegistEventForm()
@@ -154,9 +154,9 @@ def show_event(id):
     return render_template("regist_event.html", eform=form)
 
 
-@app.get("/show_task/<id>")
+@app.get("/edit_task/<id>")
 @flask_login.login_required
-def show_task(id):
+def edit_task(id):
     id = int(id)
     if id == 0:  # 新規登録
         form = RegistTaskForm()
@@ -178,7 +178,7 @@ def show_task(id):
 
 @app.get("/regist_tv_info/<id>")
 @flask_login.login_required
-def show_regist_tv_info(id):
+def edit_tv_info(id):
     id = int(id)
     if id == 0:
         form = RegistTVForm()
@@ -188,7 +188,24 @@ def show_regist_tv_info(id):
             (item.id, item.name) for item in m_Countries.query.all()
         ]
     else:
-        pass
+        movie_info = Movie_info.query.filter(Movie_info.id == id).first()
+        if movie_info:
+            form = RegistTVForm(
+                id=movie_info.id,
+                title=movie_info.title,
+                episodes=movie_info.episodes,
+                watched=movie_info.watched,
+                pub_date=movie_info.pub_date,
+                genre=movie_info.genre,
+                country=movie_info.country,
+                discription=movie_info.discription,
+                tag=movie_info.tag,
+                point=movie_info.rating,
+            )
+            form.genre.choices = [(item.id, item.genre) for item in m_genre.query.all()]
+            form.country.choices = [
+                (item.id, item.name) for item in m_Countries.query.all()
+            ]
     return render_template("regist_tv_info.html", tform=form)
 
 
@@ -216,12 +233,14 @@ def set_event():
     Event_info.insert_data(request, session)
     return render_template("thanks.html")
 
-@app.post('/finish_tv')
+
+@app.post("/finish_tv")
 @flask_login.login_required
 def finish_tv():
     # 受け取り側でjsonで受け取る
-    Movie_info.update_movie_flag(request.json['id'])
-    return '',200
+    Movie_info.update_movie_flag(request.json["id"])
+    return "", 200
+
 
 @app.post("/finish_event")
 @flask_login.login_required

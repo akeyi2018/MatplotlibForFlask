@@ -39,7 +39,7 @@ class Movie_info(db.Model):
     )
 
     @classmethod
-    def update_movie_flag(cls,id):
+    def update_movie_flag(cls, id):
         data = cls.query.filter(cls.id == id).first()
         if data:
             data.status = 0
@@ -55,7 +55,20 @@ class Movie_info(db.Model):
         ).first()
         print("finish get data")
         if data:
-            pass
+            data.user_id = session["id"]
+            data.title = request.form.get("title")
+            data.episodes = request.form.get("episodes")
+            data.watched = request.form.get("watched")
+            data.pub_date = datetime.strptime(
+                request.form.get("pub_date"), "%Y-%m-%d"
+            ).date()
+            data.genre = request.form.get("genre")
+            data.tag = request.form.get("tag")
+            data.country = request.form.get("country")
+            data.discription = request.form.get("discription")
+            data.rating = request.form.get("point")
+            db.session.commit()
+            print("finish update")
         else:
             entry = cls(
                 user_id=session["id"],
