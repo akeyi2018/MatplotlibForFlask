@@ -36,11 +36,11 @@
 
 
 <!-- イベントバッジ -->
-<button type="button" class="btn btn-primary" style="margin-top: 2em;">
+<a type="button" class="btn btn-primary" style="margin-top: 2em;" onclick="showTab('{{nav[2].id}}')">
   イベント数：<span class="badge bg-dark">{{home.running_event | length}}</span>
   <span class="visually-hidden">unread messages</span>
-</button>
-<button type="button" class="btn btn-primary" style="margin-top: 2em;">
+</a>
+<button type="button" class="btn btn-primary" style="margin-top: 2em;" >
   本日残：<span class="badge bg-dark">{{home.today_event | length}}</span>
   <span class="visually-hidden">unread messages</span>
 </button>
@@ -73,10 +73,11 @@
 {% else %}
 
 {% endif %}
-<button type="button" class="btn btn-success" style="margin-top: 2em;">
+<button type="button" class="btn btn-success" style="margin-top: 2em;" onclick="showTab('{{nav[3].id}}')">
   タスク数<span class="badge bg-dark">{{home.running_task | length}}</span>
   <span class="visually-hidden">unread messages</span>
 </button>
+
 <button type="button" class="btn btn-success" style="margin-top: 2em;">
   本日残<span class="badge bg-dark">{{home.today_task | length}}</span>
   <span class="visually-hidden">unread messages</span>

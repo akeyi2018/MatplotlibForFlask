@@ -70,6 +70,21 @@ function changeBackgroundColor(num) {
     }
 }
 
+function showTab(tabId) {
+    // クリックされたリンクのhrefで指定されたIDのタブをアクティブにする
+    var tabContent = document.querySelectorAll('.tab-content .tab-pane');
+    for (var i = 0; i < tabContent.length; i++) {
+        tabContent[i].classList.remove('active');
+    }
+    // Activeなリンクのクラスを削除する
+    var activeLink = document.querySelector('.nav-link.active');
+    if (activeLink) {
+        activeLink.classList.remove('active');
+    }
+    var tabToActivate = document.getElementById(tabId);
+    tabToActivate.classList.add('active');
+}
+
 // ナビゲーションリンクにマウスがホバーされたときの処理
 document.addEventListener('DOMContentLoaded', function() {
     var navLinks = document.querySelectorAll('.nav-link');
