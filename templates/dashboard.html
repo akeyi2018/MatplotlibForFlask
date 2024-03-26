@@ -1,5 +1,5 @@
 <!-- 本日の健康チェック -->
-<p class="lead" style="margin-bottom: 1px;">健康チェック</p>
+<p class="fs-6" style="margin-bottom: 1px;">健康チェック</p>
 {% if home.health_info %}
 <script>
   curWeight = {{ home.health_info.weight}}; 
@@ -36,7 +36,7 @@
 
 <!-- 今週の予定(イベント) -->
 {% if home.today_event %}
-<p class="lead" style="margin-top: 1em ;margin-bottom: 1px;">今週の予定</p>
+<p class="fs-6" style="margin-top: 1em ;margin-bottom: 1px;">今週の予定</p>
 <table class="table-info table-bordered border-info table-sm text-white" border="2">
   <tbody>
     {% for key, items in home.today_event.items() %}
@@ -46,7 +46,7 @@
         <th>{{ key }}</th>
         <td>{{ item[1] }}</td>
         <td>{{ item[3] }}</td>
-        <td><button class="btn btn-primary" onclick="finish_event(
+        <td><button class="btn btn-primary btn-sm" onclick="finish_event(
             {{ item[0] }},
             '{{ item[1] }}')">完了にする</button>
         </td>
@@ -54,7 +54,7 @@
         {% endfor %}
       {% else %}
       <th>{{ key }}</th>
-      <td><a type="button" class="btn btn-outline-primary text-light" href="{{url_for('edit_task',id=0)}}">予定を入れる
+      <td><a type="button" class="btn btn-outline-primary text-light btn-sm" href="{{url_for('edit_task',id=0)}}">予定を入れる
         <span class="visually-hidden">予定を入れる</span>
       </a></td>
       <td></td>
@@ -64,9 +64,6 @@
 
   </tbody>
 </table>
-
-<!-- old -->
-
 {% else %}
 <p class="lead">今週のイベント予定はありません。</p>
 {% endif %}
@@ -80,7 +77,7 @@
   <span class="visually-hidden">unread messages</span>
 </button>
 {% if home.today_task|length == 0 %}
-<p class="lead">本日のタスクはありません。</p>
+<p class="fs-6">本日のタスクはありません。</p>
 {% endif %}
 {% if home.today_task %}
 <table class="table-info table-bordered border-info table-sm text-white" border="2" style="margin-top: 1em;">
@@ -99,7 +96,7 @@
       <td>{{home.today_task[index].task_name}}</td>
       <td>{{home.today_task[index].discription}}</td>
       <td>
-        <button class="btn btn-success" onclick="finish_task(
+        <button class="btn btn-success btn-sm" onclick="finish_task(
           {{ home.today_task[index].id }},
           '{{ home.today_task[index].task_name }}')">完了にする</button>
       </td>
@@ -109,7 +106,7 @@
 </table>
 {% endif %}
 
-<p class="lead" style="margin-bottom: 1px;" id="location"><a href="https://www.jma.go.jp/bosai/forecast/" target="_blank"></a></p>
+<p class="fs-6" style="margin-bottom: 1px;" id="location"><a href="https://www.jma.go.jp/bosai/forecast/" target="_blank"></a></p>
 <div class="weatherForecast">
   <div class="weather text-light">
     <div class="wdate">--/--(-)</div>
