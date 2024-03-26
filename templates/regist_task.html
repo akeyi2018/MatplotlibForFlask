@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <title>TASK</title>
     <link href="{{ url_for('static', filename='/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='/css/regist.css') }}" rel="stylesheet">
     <script src="{{ url_for('static', filename='/js/bootstrap.min.js')}}"></script>
 </head>
 <body>
 
-<div class="container" style="margin-top:1em;">
+<div class="container" style="margin-top:1em; ">
     <a href="{{ url_for('index') }}"  type="button" class="btn btn-primary">ホーム
         <span class="visually-hidden">ホーム</span>
     </a>
-    <div class="card card-body" style="margin-top: 1em;  width: 650px;">
+    <div class="card card-body text-white custum-card">
         <div class="container" style="margin-top:10px;">
-            <div class="card text-center" style="width: 600px;">
+            <div class="card text-center custum-card2" >
                 <div class="card-header">タスク登録</div>
-                <div class="card-body">
+                <div class="card-body custum-card-body">
                     <form method="post" action="/set_task">
                         {{ tform.hidden_tag() }}
                         <div>{{ tform.task_id()}}</div>

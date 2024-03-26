@@ -1,0 +1,43 @@
+body {
+    background-color: #4a5c6d;
+}
+
+.custum-card {
+    margin-top: 1em;
+    width: 650px;
+    background-color: #382d4c;
+}
+
+.custum-card2 {
+    margin-top: 1em;
+    width: 600px;
+    background-color: #4a5c6d;
+}
+
+.custum-card-body {
+    background-color: #4a5c6d;
+}
+
+.custum-card-tv {
+    margin-top: 1em;
+    width: 700px;
+    background-color: #382d4c;
+}
+
+.custum-card2-tv {
+    margin-top: 1em;
+    width: 650px;
+    background-color: #4a5c6d;
+}
+
+.custum-card-health {
+    margin-top: 1em;
+    width: 450px;
+    background-color: #382d4c;
+}
+
+.custum-card2-health {
+    margin-top: 1em;
+    width: 400px;
+    background-color: #4a5c6d;
+}
