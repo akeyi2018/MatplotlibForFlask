@@ -45,8 +45,8 @@
             plugins: {
                 // 横線プラグインの設定
                 horizontalLines: [
-                    { id: 'line1', value: 120, color: '#FF1493', lineWidth: 2, borderDash: [5, 5], yAxis: 'y' },
-                    { id: 'line2', value: 80, color: '#EE82EE', lineWidth: 2, borderDash: [5, 5], yAxis: 'y' },
+                    { id: 'line1', value: 125, color: '#FF1493', lineWidth: 2, borderDash: [5, 5], yAxis: 'y' },
+                    { id: 'line2', value: 75, color: '#EE82EE', lineWidth: 2, borderDash: [5, 5], yAxis: 'y' },
                     { id: 'line3', value: 72, color: '#7CFC00', lineWidth: 2, borderDash: [5, 5], yAxis: 'y2' },
                 ],
                 title: {

@@ -33,9 +33,9 @@ function drawBloodGauge(curHigh, curLow) {
     }
 
     // 背景色を設定する
-    drawBackground(60, 80, '#47fe12');
-    drawBackground(80, 120, '#FF69B4');
-    drawBackground(120, 180, '#fe1229');
+    drawBackground(60, 75, '#47fe12');
+    drawBackground(75, 125, '#FF69B4');
+    drawBackground(125, 180, '#fe1229');
 
     const labelsContainer = document.createElement('div');
     labelsContainer.style.width = '100%';

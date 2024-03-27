@@ -237,7 +237,7 @@ def set_event():
     return render_template("thanks.html")
 
 
-@app.post("/finish_tv")
+@app.put("/finish_tv")
 @flask_login.login_required
 def finish_tv():
     # 受け取り側でjsonで受け取る
