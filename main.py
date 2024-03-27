@@ -77,7 +77,6 @@ bootstrap = Bootstrap(app)
 def load_user(user_id):
     return AdminUser(user_id)
 
-
 # endregion
 
 
@@ -109,7 +108,6 @@ def confirm_data():
     # 健康データ入力処理
     Health_info.insert_data(request, session)
     return render_template("thanks.html")
-
 
 # endregion
 
@@ -211,7 +209,6 @@ def edit_tv_info(id):
             ]
     return render_template("regist_tv_info.html", tform=form)
 
-
 # endregion
 
 
@@ -236,6 +233,9 @@ def set_event():
     Event_info.insert_data(request, session)
     return render_template("thanks.html")
 
+# endregion
+
+#region ==========PUT==============
 
 @app.put("/finish_tv")
 @flask_login.login_required
@@ -245,15 +245,14 @@ def finish_tv():
     return "", 200
 
 
-@app.post("/finish_event")
+@app.put("/finish_event")
 @flask_login.login_required
 def finish_event():
     # 受け取り側でjsonで受け取る
     Event_info.update_event_flag(request.json["id"])
     return "", 200
 
-
-@app.post("/finish_task")
+@app.put("/finish_task")
 @flask_login.login_required
 def finish_task():
 
@@ -272,9 +271,7 @@ def finish_task():
 
     return "", 200
 
-
-# endregion
-
+#endregion
 
 # region --------MAIN----------
 @app.route("/")
