@@ -9,12 +9,14 @@ from flask import (
     url_for,
 )
 from flask_bootstrap import Bootstrap
+import os
 from werkzeug.security import generate_password_hash
 import flask_login
 
+from sqlalchemy import case, func, cast, Integer
+from datetime import datetime
+
 # 自作クラス
-import form_settings 
-from db_controller import db as user_info_tbl
 from settings import Sql_Param
 from db_controller import (
     User_info,
@@ -26,6 +28,7 @@ from db_controller import (
     Task_info,
     Movie_info,
 )
+
 from settings import Message_list, Sql_Param, Html_Param
 from form_list import (
     LoginForm,
@@ -37,7 +40,8 @@ from form_list import (
 )
 from admin_user import AdminUser
 
-from initialization import initialize_app
+from db_controller import db as user_info_tbl
+
 
 # region ----------------- INIT ---------------------
 # ログインマネージャーの宣言
@@ -46,8 +50,15 @@ login_manager = flask_login.LoginManager()
 # 初期に読ませるフォルダを./staticにセットする
 app = Flask(__name__, static_folder="./static")
 
-# 初期化
-app = initialize_app(app)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
+    os.getcwd(), "settings", "health_db.db"
+)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+# CSRF 認証キーのセット
+app.config["SECRET_KEY"] = Sql_Param.KEY
+
+# db_uri = f'mysql+pymysql://{Sql_Param.user}:{Sql_Param.passwd}@{Sql_Param.host}/{Sql_Param.alchemy_database}'
+# app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 
 # loginマネージャーとFlaskを統合
 login_manager.init_app(app)
@@ -59,6 +70,7 @@ user_info_tbl.init_app(app)
 
 # bootstrapを使えるようにする
 bootstrap = Bootstrap(app)
+
 
 # ユーザ情報ロード
 @login_manager.user_loader
@@ -89,6 +101,7 @@ def regist_public_user():  # Adminユーザの登録
 
     # ユーザ登録フォームの表示
     return render_template("admin_regist.html", form=form)
+
 
 @app.post("/confirm")
 def confirm_data():
@@ -124,22 +137,21 @@ def show_thanks(kind, content):
 @app.get("/edit_event/<id>")
 @flask_login.login_required
 def edit_event(id):
-    form = form_settings.set_event_form(id,session)
-    # id = int(id)
-    # if id == 0:
-    #     form = RegistEventForm()
-    # else:
-    #     # idがゼロでない場合は、既存の情報を取得する
-    #     event_info = Event_info.get_event_by_id(int(session["id"]), id)
-    #     if event_info:
-    #         form = RegistEventForm(
-    #             event_id=id,
-    #             event_name=event_info.event_name,
-    #             discription=event_info.discription,
-    #             entry_date=event_info.event_date,
-    #             kind=99,
-    #             choice="更新",
-    #         )
+    id = int(id)
+    if id == 0:
+        form = RegistEventForm()
+    else:
+        # idがゼロでない場合は、既存の情報を取得する
+        event_info = Event_info.get_event_by_id(int(session["id"]), id)
+        if event_info:
+            form = RegistEventForm(
+                event_id=id,
+                event_name=event_info.event_name,
+                discription=event_info.discription,
+                entry_date=event_info.event_date,
+                kind=99,
+                choice="更新",
+            )
     return render_template("regist_event.html", eform=form)
 
 
@@ -224,6 +236,7 @@ def set_event():
 # endregion
 
 #region ==========PUT==============
+
 @app.put("/finish_tv")
 @flask_login.login_required
 def finish_tv():
@@ -322,6 +335,7 @@ def logout():
     session.pop("flag", None)
     session.pop("username", None)
     return redirect(url_for("main"))
+
 
 # endregion
 
