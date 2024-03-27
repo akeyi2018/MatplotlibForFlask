@@ -34,7 +34,6 @@ def job1():
 @scheduler.task('cron', id='do_job_2', hour='*', minute='*', second=10)
 def job2():
     print('Job 2 executed' + datetime.today().strftime("%Y-%m-%d %H:%M:%S"))
-    os.startfile('D:\python_pgm\music_downloader\music_data\《掌心之中》.mp3')
 
 
 @app.route('/remove_job')
@@ -43,7 +42,6 @@ def delete_job():
 
 @app.route('/')
 def index():
-    os.startfile('D:\python_pgm\music_downloader\music_data\《掌心之中》.mp3')
 
     test_str = job1()
 
