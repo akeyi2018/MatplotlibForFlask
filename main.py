@@ -3,19 +3,17 @@ from flask import (
     Flask,  # Flask本体
     render_template,  # HTMLレンダリングエンジン
     request,  # POSTの戻り値の受け取り用
-    send_from_directory,  # Front側に参照フォルダを送信する
     session,  # ログイン用セッション
     redirect,  # リダイレクト
     url_for,
 )
 from flask_bootstrap import Bootstrap
-from werkzeug.security import generate_password_hash
 import flask_login
 
 # 自作クラス
-import form_settings 
+import form_settings
 from db_controller import db as user_info_tbl
-from settings import Sql_Param
+
 from db_controller import (
     User_info,
     m_Countries,
@@ -30,9 +28,6 @@ from settings import Message_list, Sql_Param, Html_Param
 from form_list import (
     LoginForm,
     RegistUserForm,
-    RegistTaskForm,
-    RegistEventForm,
-    RegistTVForm,
     RegistHealthForm,
 )
 from admin_user import AdminUser
@@ -60,10 +55,12 @@ user_info_tbl.init_app(app)
 # bootstrapを使えるようにする
 bootstrap = Bootstrap(app)
 
+
 # ユーザ情報ロード
 @login_manager.user_loader
 def load_user(user_id):
     return AdminUser(user_id)
+
 
 # endregion
 
@@ -74,14 +71,7 @@ def regist_public_user():  # Adminユーザの登録
     form = RegistUserForm()
     if form.validate_on_submit():
         # 登録するユーザ情報を作成する
-        user = User_info(
-            name=form.username.data,
-            mail_address=form.mail_address.data,
-            hash_key=generate_password_hash(form.password.data, salt_length=8),
-        )
-        # テーブルにデータを登録する
-        user_info_tbl.session.add(user)
-        user_info_tbl.session.commit()
+        User_info.insert_data(request)
 
         return redirect(
             url_for("show_thanks", kind=3, content=Message_list.user_regist_event)
@@ -90,11 +80,13 @@ def regist_public_user():  # Adminユーザの登録
     # ユーザ登録フォームの表示
     return render_template("admin_regist.html", form=form)
 
+
 @app.post("/confirm")
 def confirm_data():
     # 健康データ入力処理
     Health_info.insert_data(request, session)
     return render_template("thanks.html")
+
 
 # endregion
 
@@ -124,78 +116,26 @@ def show_thanks(kind, content):
 @app.get("/edit_event/<id>")
 @flask_login.login_required
 def edit_event(id):
-    form = form_settings.set_event_form(id,session)
-    # id = int(id)
-    # if id == 0:
-    #     form = RegistEventForm()
-    # else:
-    #     # idがゼロでない場合は、既存の情報を取得する
-    #     event_info = Event_info.get_event_by_id(int(session["id"]), id)
-    #     if event_info:
-    #         form = RegistEventForm(
-    #             event_id=id,
-    #             event_name=event_info.event_name,
-    #             discription=event_info.discription,
-    #             entry_date=event_info.event_date,
-    #             kind=99,
-    #             choice="更新",
-    #         )
-    return render_template("regist_event.html", eform=form)
+    return render_template(
+        "regist_event.html", eform=form_settings.set_event_form(id, session)
+    )
 
 
 @app.get("/edit_task/<id>")
 @flask_login.login_required
 def edit_task(id):
-    id = int(id)
-    if id == 0:  # 新規登録
-        form = RegistTaskForm()
-        form.kind.choices = [(item.id, item.tag) for item in m_task_tag.query.all()]
-    else:  # 編集 既存の情報を取得する
-        task_info = Task_info.get_task_by_id(int(session["id"]), id)
-        if task_info:
-            form = RegistTaskForm(
-                task_id=id,
-                task_name=task_info.task_name,
-                discription=task_info.discription,
-                entry_date=task_info.limit_date,
-                kind=task_info.task_kind,
-                choice="更新",
-            )
-            form.kind.choices = [(item.id, item.tag) for item in m_task_tag.query.all()]
-    return render_template("regist_task.html", tform=form)
+    return render_template(
+        "regist_task.html", tform=form_settings.set_task_form(id, session)
+    )
 
 
 @app.get("/edit_tv_info/<id>")
 @flask_login.login_required
 def edit_tv_info(id):
-    id = int(id)
-    if id == 0:
-        form = RegistTVForm()
-        # ジャンルと製作国のカテゴリをロードする
-        form.genre.choices = [(item.id, item.genre) for item in m_genre.query.all()]
-        form.country.choices = [
-            (item.id, item.name) for item in m_Countries.query.all()
-        ]
-    else:
-        movie_info = Movie_info.query.filter(Movie_info.id == id).first()
-        if movie_info:
-            form = RegistTVForm(
-                id=movie_info.id,
-                title=movie_info.title,
-                episodes=movie_info.episodes,
-                watched=movie_info.watched,
-                pub_date=movie_info.pub_date,
-                genre=movie_info.genre,
-                country=movie_info.country,
-                discription=movie_info.discription,
-                tag=movie_info.tag,
-                point=movie_info.rating,
-            )
-            form.genre.choices = [(item.id, item.genre) for item in m_genre.query.all()]
-            form.country.choices = [
-                (item.id, item.name) for item in m_Countries.query.all()
-            ]
-    return render_template("regist_tv_info.html", tform=form)
+    return render_template(
+        "regist_tv_info.html", tform=form_settings.set_tv_form(id, session)
+    )
+
 
 # endregion
 
@@ -221,9 +161,11 @@ def set_event():
     Event_info.insert_data(request, session)
     return render_template("thanks.html")
 
+
 # endregion
 
-#region ==========PUT==============
+
+# region ==========PUT==============
 @app.put("/finish_tv")
 @flask_login.login_required
 def finish_tv():
@@ -239,26 +181,26 @@ def finish_event():
     Event_info.update_event_flag(request.json["id"])
     return "", 200
 
+
 @app.put("/finish_task")
 @flask_login.login_required
 def finish_task():
 
     from push_source_to_github import push_git
 
-    # 受け取り側でjsonで受け取る
-    # res = 'RES:' + str(request.json['id'])
     res_id = request.json["id"]
-    res_content = request.json["name"]
 
     Task_info.update_task_flag(res_id)
 
     # githubに自動push
     p = push_git()
-    p.shell_cmd(res_id, res_content)
+    p.shell_cmd(res_id, request.json["name"])
 
     return "", 200
 
-#endregion
+
+# endregion
+
 
 # region --------MAIN----------
 @app.route("/")
@@ -322,6 +264,7 @@ def logout():
     session.pop("flag", None)
     session.pop("username", None)
     return redirect(url_for("main"))
+
 
 # endregion
 

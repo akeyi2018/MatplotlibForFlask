@@ -40,7 +40,7 @@ def set_event_form(id, session):
 def set_task_form(id,session):
     id = int(id)
     if id == 0:  # 新規登録
-        form = RegistTaskForm()
+        form = RegistTaskForm(task_id=id)
         form.kind.choices = [(item.id, item.tag) for item in m_task_tag.query.all()]
     else:  # 編集 既存の情報を取得する
         task_info = Task_info.get_task_by_id(int(session["id"]), id)
@@ -54,6 +54,7 @@ def set_task_form(id,session):
                 choice="更新",
             )
             form.kind.choices = [(item.id, item.tag) for item in m_task_tag.query.all()]
+    return form 
 
 def set_tv_form(id,session):
     id = int(id)
@@ -83,3 +84,4 @@ def set_tv_form(id,session):
             form.country.choices = [
                 (item.id, item.name) for item in m_Countries.query.all()
             ]
+    return form

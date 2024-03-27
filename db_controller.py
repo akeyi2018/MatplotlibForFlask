@@ -3,6 +3,7 @@ from datetime import datetime, date, timedelta
 from decimal import Decimal
 from pytz import timezone
 from sqlalchemy import case, func, cast, Integer
+from werkzeug.security import generate_password_hash
 
 db = SQLAlchemy()
 
@@ -19,6 +20,16 @@ class User_info(db.Model):
     hash_key = db.Column(db.String(255), unique=True, nullable=False)
     is_admin = db.Column(db.Boolean, default=True)
 
+    @classmethod
+    def insert_data(cls, request):
+        entry = cls(
+            name=request.form.get('username'),
+            mail_address=request.form.get('mail_address'),
+            hash_key=generate_password_hash(request.form.get('password'), salt_length=8)
+        )
+        db.session.add(entry)
+        db.session.commit()
+        print("finish insert")
 
 class Movie_info(db.Model):
     id = db.Column(db.Integer, primary_key=True)
