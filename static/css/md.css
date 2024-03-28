@@ -1,0 +1,18 @@
+.cus-home {
+    margin-left: 1px; margin-top: 1em; position: fixed;
+}
+
+body{
+    background-color:hwb(209 85% 3%);
+}
+
+.custom {
+    margin-left: 1px;
+    position:fixed;
+}
+
+.sub-content{
+    margin-top: 2em;
+    margin-left: 300px; 
+    margin-right: 50px;
+}

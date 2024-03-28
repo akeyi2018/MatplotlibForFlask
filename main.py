@@ -95,7 +95,7 @@ def confirm_data():
 @app.get("/flask")
 @flask_login.login_required
 def show_flask():
-    return render_template("flask.html")
+    return render_template('flask.html', nav = Html_Param.nav_edu)
 
 @app.get("/sqlite")
 @flask_login.login_required

@@ -3,125 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>flask</title>
-    <link href="{{ url_for('static', filename='/css/bootstrap.min.css') }}" rel="stylesheet">
-    <script src="{{ url_for('static', filename='/js/bootstrap.min.js')}}"></script>
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/md.css" rel="stylesheet">
+    <script src="static/js/bootstrap.min.js"></script>
+
 </head>
 <body>
+  <div class="container">
+    <!-- メニュー -->
+    <div class="cus-home">
+      <a href="{{url_for('index')}}"  type="button" class="btn btn-primary custom">ホーム
+        <span class="visually-hidden">ホーム</span>
+      </a>
 
-<div class="container" style="margin-top:1px;">
-  <a href="{{ url_for('index') }}"  type="button" class="btn btn-primary">ホーム
-    <span class="visually-hidden">ホーム</span>
-  </a>
-    <h1 class="display-6">FlaskによるWeb開発</h1>
-    <p class="lead">小さな一歩が大きな成果を生み、考えるより先にやってみるほうが余程大事なはず</p>
-    <div class="accordion" id="accordionPanelsStayOpenExample">
-      <div class="accordion-item">
-        <h2 class="accordion-header">
-          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-            職業スキル
-          </button>
-        </h2>
-        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
-          <div class="accordion-body">
-              <table class="table table-bordered table-hover">
-                  <thead>
-                      <tr>
-                          <th>得意言語</th>
-                          <th>経験言語</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                      <td>Python/VBA</td>
-                      <td>Node.js/JavaScript/Go/Ruby/C#</td>
-                  </tr>
-                  </tbody>
-              </table>
-              <table class="table table-bordered table-hover">
-                  <thead>
-                  <tr>
-                      <th>技術分野</th>
-                      <th>フレームワーク</th>
-                      <th>業務</th>
-                      <th>技術要素</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                      <td>バックエンド(Web App)</td>
-                      <td>Pandas<br>
-                          Numpy<br>
-                          sqlalchemy<br>
-                          mysql.connector</td>
-                      <td>経営データ可視化</td>
-                      <td>Restful API開発<br>
-                          データ加工・整形<br>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>機械学習</td>
-                      <td>Pandas<br>
-                          Numpy<br>
-                          Sci-kit learn<br>
-                          Tensorflow<br>
-                          Lasso<br>
-                          LSTM<br>
-                          Decision Tree<br>
-                          randow forest<br>
-                          Gradinet Boosting<br>
-                          AdaBoost<br>
-                          MVN<br>
-                          </td>
-                      <td>レザー加工速度のAI化</td>
-                      <td>収集データのクレンジング、機械学習、画像処理</td>
-                  </tr>
-                  <tr>
-                      <td>Python</td>
-                      <td>IoT(RaspberryPi)</td>
-                      <td>GPIOZERO<br>
-                          Rpi.GPIO<br>
-                          PIGPIO<br>
-                          PICAMERA<br>
-                          WiringPi<br>
-                          Webiopi<br>
-                      </td>
-                      <td>〇</td>
-                  </tr>
-                  </tbody>
-              </table>
-                 
+      <br><br>
+      <!-- メニュー -->
+      
+      <ul class="list-unstyled">
+        <li class="mb-2">
+          <a class="collapsed text-dark fs-6" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#{{nav.parent.id}}" 
+            aria-expanded="false">
+            {{nav.parent.text}}
+          </a>
+          <div class="collapse" id="{{nav.parent.id}}">
+            
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+              {% for index in range(nav.nav | length) %}
+              <li><a href="#{{nav.nav[index].lind_id}}" class="text-dark fs-6">{{nav.nav[index].link_text}}</a></li>
+              {% endfor %}
+            </ul>
           </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-            日々の活動
-          </button>
-        </h2>
-        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-          </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-            趣味
-          </button>
-        </h2>
-        <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-          </div>
-        </div>
-      </div>
+        </li>
+        <li class="border-top my-3" style="width: 100px;"></li>
+      </ul>
+      
+    </div>
+    {% for index in range(nav.nav | length) %}
+    <!-- 本体 -->
+    <div class="sub-content" id="{{nav.nav[index].lind_id}}">
+      <p class="lead text-dark fs-4">{{nav.nav[index].link_text}}</p>
+      {% include nav.nav[index].url %}
+    </div>
+    <hr>
+    <p class="lead text-center fs-7"> End of content.</p>
+    <hr>
+    {% endfor %}
+
+    {% include 'footer.html' %}
   </div>
-  {% include 'footer.html' %}
-</div> 
-
-
-
 </body>
 </html>
