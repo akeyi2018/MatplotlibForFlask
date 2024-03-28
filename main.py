@@ -92,20 +92,18 @@ def confirm_data():
 
 
 # region ------GET----------
-@app.get("/flask")
+@app.get("/education/<id>")
 @flask_login.login_required
-def show_flask():
-    return render_template('flask.html', nav = Html_Param.nav_edu)
+def show_education(id):
+    id = int(id)
+    if id == 0:
+        nav = Html_Param.nav_edu
+    elif id == 1:
+        pass
+    elif id == 2:
+        pass
 
-@app.get("/sqlite")
-@flask_login.login_required
-def show_sqlite():
-    return render_template("sqlite.html")
-
-@app.get("/mysql")
-@flask_login.login_required
-def show_mysql():
-    return render_template("mysql.html")
+    return render_template('education.html', nav = nav)
 
 @app.get("/regist_health")
 @flask_login.login_required
