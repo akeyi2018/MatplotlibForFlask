@@ -193,7 +193,11 @@ class Health_info(db.Model):
 
     @classmethod
     def get_record_by_user_id(cls, user_id):
-        data_list = cls.query.filter_by(user_id=user_id).all()
+        date_span = date.today() - timedelta(30)
+        data_list = cls.query.filter(
+            cls.user_id ==user_id, 
+            cls.measure_date >= date_span
+        ).all()
         measure_dates = [d.measure_date.strftime("%Y-%m-%d") for d in data_list]
         systolic_blood_pressures = [d.systolic_blood_pressure for d in data_list]
         diastolic_blood_pressures = [d.diastolic_blood_pressure for d in data_list]
