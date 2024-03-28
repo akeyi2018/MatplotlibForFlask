@@ -92,6 +92,21 @@ def confirm_data():
 
 
 # region ------GET----------
+@app.get("/flask")
+@flask_login.login_required
+def show_flask():
+    return render_template("flask.html")
+
+@app.get("/sqlite")
+@flask_login.login_required
+def show_sqlite():
+    return render_template("sqlite.html")
+
+@app.get("/mysql")
+@flask_login.login_required
+def show_mysql():
+    return render_template("mysql.html")
+
 @app.get("/regist_health")
 @flask_login.login_required
 def regist_health_info():

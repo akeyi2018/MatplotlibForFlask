@@ -43,6 +43,15 @@
       {% endfor %}
       <!-- dropdown -->
       <div class="dropdown">
+        <a class="nav-link dropdown-toggle" aria-expanded="false">学習教材</a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="{{url_for('show_flask')}}">Flask</a></li>
+          <li><a class="dropdown-item" href="{{url_for('show_sqlite')}}">SQLite3</a></li>
+          <li><a class="dropdown-item" href="{{url_for('show_mysql')}}">MYSQL</a></li>
+        </ul>
+        </div>
+      <!-- dropdown -->
+      <div class="dropdown">
       <a class="nav-link dropdown-toggle" aria-expanded="false">情報登録</a>
       <ul class="dropdown-menu">
         <li><a class="dropdown-item" href="{{url_for('regist_health_info')}}">健康情報登録</a></li>
