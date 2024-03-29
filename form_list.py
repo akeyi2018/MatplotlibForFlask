@@ -134,6 +134,6 @@ class RegistEducationForm(FlaskForm):
     url = StringField('URL(FileName)：',
         [InputRequired(), length(min=3, max=80)], render_kw=style1)
     style4={'style': 'width:15%; margin-top:1em;margin-right:360px;'}
-    status = SelectField('公開：', choices=[(1,"公開"),(1,"非公開")], render_kw=style4)
+    status = SelectField('公開：', choices=[(1,"公開"),(1,"非公開")], default=1, render_kw=style4)
     style5={'style': 'margin-top:1em;'}
     submit = SubmitField('登録する', render_kw=style5)

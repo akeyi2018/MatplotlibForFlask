@@ -1,18 +1,16 @@
 from form_list import (
-    LoginForm,
-    RegistUserForm,
     RegistTaskForm,
     RegistEventForm,
     RegistTVForm,
-    RegistHealthForm,
+    RegistEducationForm,
 )
 
 from db_controller import (
-    User_info,
     m_Countries,
     m_genre,
     m_task_tag,
-    Health_info,
+    m_Edu_Categories,
+    Education_info,
     Event_info,
     Task_info,
     Movie_info,
@@ -84,4 +82,23 @@ def set_tv_form(id,session):
             form.country.choices = [
                 (item.id, item.name) for item in m_Countries.query.all()
             ]
+    return form
+
+def set_edu_form(id,session):
+    id = int(id)
+    if id == 0:
+        form = RegistEducationForm()
+        # カテゴリをロードする
+        form.category.choices = [(item.id, item.category) for item in m_Edu_Categories.query.all()]
+    else:
+        edu_info = Education_info.query.filter(Education_info.id == id).first()
+        if edu_info:
+            form = RegistEducationForm(
+                id=edu_info.id,
+                category = edu_info.category_id,
+                title=edu_info.title,
+                url = edu_info.url,
+                status = edu_info.status
+            )
+            form.category.choices = [(item.id, item.category) for item in m_Edu_Categories.query.all()]
     return form

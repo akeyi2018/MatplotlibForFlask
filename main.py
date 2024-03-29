@@ -151,6 +151,13 @@ def edit_tv_info(id):
         "regist_tv_info.html", tform=form_settings.set_tv_form(id, session)
     )
 
+@app.get("/edit_edu_info/<id>")
+@flask_login.login_required
+def edit_edu_info(id):
+    return render_template(
+        "regist_edu_info.html", form=form_settings.set_edu_form(id, session)
+    )
+
 
 # endregion
 
