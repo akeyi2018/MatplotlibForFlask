@@ -200,8 +200,6 @@ def finish_event():
 @flask_login.login_required
 def finish_task():
 
-    from push_source_to_github import push_git
-
     res_id = request.json["id"]
 
     Task_info.update_task_flag(res_id)

@@ -29,7 +29,7 @@ function finish_task(id, name) {
     }));
 }
 
-// タスク終了用
+// タスク終了＆PUSH実行
 function finish_task_push(id, name) {
     var xhr = new XMLHttpRequest();
     xhr.open('PUT', '/finish_task_push');
