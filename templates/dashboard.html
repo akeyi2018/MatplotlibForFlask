@@ -98,7 +98,10 @@
       <td>
         <button class="btn btn-success btn-sm" onclick="finish_task(
           {{ home.today_task[index].id }},
-          '{{ home.today_task[index].task_name }}')">完了にする</button>
+          '{{ home.today_task[index].task_name }}')">完了</button>
+        <button class="btn btn-success btn-sm" onclick="finish_task_push(
+          {{ home.today_task[index].id }},
+          '{{ home.today_task[index].task_name }}')">完了&PUSH</button>
       </td>
     </tr>
     {% endfor %}

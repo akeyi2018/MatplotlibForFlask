@@ -29,6 +29,22 @@ function finish_task(id, name) {
     }));
 }
 
+// タスク終了用
+function finish_task_push(id, name) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('PUT', '/finish_task_push');
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            window.location.href = '/thanks/1/' + name;
+        }
+    };
+    xhr.send(JSON.stringify({
+        "id": id,
+        "name": name
+    }));
+}
+
 // tv終了用
 function finish_tv(id, name) {
     var xhr = new XMLHttpRequest();

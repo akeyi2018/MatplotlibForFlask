@@ -205,6 +205,18 @@ def finish_task():
 
     Task_info.update_task_flag(res_id)
 
+    return "", 200
+
+@app.put("/finish_task_push")
+@flask_login.login_required
+def finish_task_push():
+
+    from push_source_to_github import push_git
+
+    res_id = request.json["id"]
+
+    Task_info.update_task_flag(res_id)
+
     # githubに自動push
     p = push_git()
     p.shell_cmd(res_id, request.json["name"])
