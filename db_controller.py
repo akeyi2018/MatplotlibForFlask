@@ -459,7 +459,7 @@ class Task_info(db.Model):
 class Education_info(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     category_id = db.Column(db.Integer, nullable=False)
-    link_id = db.Column(db.Integer, nullable=False)
+    link_id = db.Column(db.Integer, nullable=False, unique=True, autoincrement=True)
     title = db.Column(db.String(80), nullable=False)
     url = db.Column(db.String(80), nullable=False)
     status = db.Column(db.Integer, nullable=False, default=1)

@@ -1,8 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import (
     StringField,
-    PasswordField, 
-    BooleanField, 
+    PasswordField,
     ValidationError, 
     DateField,
     SubmitField,
@@ -60,17 +59,11 @@ class RegistTaskForm(FlaskForm):
     task_name = StringField('タスク名：',
         [InputRequired(), length(min=3, max=30)], render_kw=style1)
     style2={'style': 'margin-top:1em;margin-right:335px;'}
-    entry_date = DateField('日付：', format = '%Y-%m-%d', 
-                           default= datetime.now().date(), 
-                           render_kw=style2)
+    entry_date = DateField('日付：', format = '%Y-%m-%d', default= datetime.now().date(), render_kw=style2)
     style3={'style': 'width:85%; margin-top:1em;margin-right:-12px;'}
     discription = StringField('詳細：',
         widget=TextArea(), render_kw=style3)
     style4={'style': 'width:30%; margin-top:1em;margin-right:300px;'}
-
-    # tag = [(item.id, item.tag) for item in tag_data]
-    # tag_tpl = tuple(tag)
-    # tag_tpl = [(1,'aaa')]
     kind = SelectField('種類：', render_kw=style4)
     choice = SelectField('種別：', choices=["新規","更新"], render_kw=style4)
     style5={'style': 'margin-top:1em;'}
@@ -124,13 +117,24 @@ class RegistTVForm(FlaskForm):
 class RegistHealthForm(FlaskForm):
     id = HiddenField('ID:')
     style1={'style': 'margin-top:1em;margin-right:10px; width:100%;margin-bottom:1em;'}
-    h_bld = DecimalRangeField('収縮期血圧：', 
-                              default=140, render_kw=style1)
-    l_bld = DecimalRangeField('拡張期血圧：', 
-                              default=100, render_kw=style1)
-    pulse = DecimalRangeField('脈拍数：', 
-                              default=75, render_kw=style1)
-    weight = DecimalRangeField('体重：', 
-                               default= 77.0, render_kw=style1)
+    h_bld = DecimalRangeField('収縮期血圧：', default=140, render_kw=style1)
+    l_bld = DecimalRangeField('拡張期血圧：', default=100, render_kw=style1)
+    pulse = DecimalRangeField('脈拍数：', default=75, render_kw=style1)
+    weight = DecimalRangeField('体重：', default= 77.0, render_kw=style1)
     style5={'style': 'margin-top:1em;'}
     submit = SubmitField('登録する', render_kw=style5)
+
+class RegistEducationForm(FlaskForm):
+    id = HiddenField('ID:')
+    style1={'style': 'width:50%;margin-top:1em;margin-right:150px;'}
+    style_choice={'style': 'width:120px;margin-right:310px;margin-top:1em;'}
+    category = SelectField('カテゴリ：', render_kw=style_choice)
+    title = StringField('タイトル：',
+        [InputRequired(), length(min=3, max=80)], render_kw=style1)
+    url = StringField('URL(FileName)：',
+        [InputRequired(), length(min=3, max=80)], render_kw=style1)
+    style4={'style': 'width:15%; margin-top:1em;margin-right:360px;'}
+    status = SelectField('公開：', choices=[(1,"公開"),(1,"非公開")], render_kw=style4)
+    style5={'style': 'margin-top:1em;'}
+    submit = SubmitField('登録する', render_kw=style5)
+    
