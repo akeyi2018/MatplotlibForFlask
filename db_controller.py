@@ -456,6 +456,41 @@ class Task_info(db.Model):
             db.session.commit()
             print("finish insert")
 
+class Education_info(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    category_id = db.Column(db.Integer, nullable=False)
+    link_id = db.Column(db.Integer, nullable=False)
+    title = db.Column(db.String(80), nullable=False)
+    url = db.Column(db.String(80), nullable=False)
+    status = db.Column(db.Integer, nullable=False, default=1)
+    regist_time = db.Column(
+        db.DateTime,
+        default=datetime.now(timezone("Asia/Tokyo")),
+    )
+
+class m_Edu_Categories(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    category = db.Column(db.String(50), unique=True, nullable=False)
+    regist_time = db.Column(
+        db.DateTime,
+        default=datetime.now(timezone("Asia/Tokyo")),
+    )
+    @classmethod
+    def insert_master_data(cls):
+        # マスターデータを導入
+        categories = [
+            "Flask",
+            "Game",
+            "MySQL",
+            "RaspberryPi",
+            "Python",
+            "VBA",
+            "設計",
+        ]
+        for cate_name in categories:
+            data = cls(category=cate_name)
+            db.session.add(data)
+        db.session.commit()
 
 # class Payments(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)

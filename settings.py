@@ -63,12 +63,6 @@ class Html_Param:
         },
     ]
 
-    # nav_edu_p = [
-    #     {
-    #         "id": "flask_01",
-    #         "text": "1. Flask"
-    #     }
-    # ]
 
     nav_edu = {
         "parent":{

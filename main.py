@@ -23,6 +23,7 @@ from db_controller import (
     Event_info,
     Task_info,
     Movie_info,
+    m_Edu_Categories,
 )
 from settings import Message_list, Sql_Param, Html_Param
 from form_list import (
@@ -239,6 +240,7 @@ def main():
         m_Countries.insert_master_data()  # 国マスターデータの投入
         m_genre.insert_master_data()  # ジャンルマスターデータの投入
         m_task_tag.insert_master_data()
+        m_Edu_Categories.insert_master_data()
 
         print("マスター初期化完了")
 
