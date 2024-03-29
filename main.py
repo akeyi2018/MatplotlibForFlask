@@ -89,7 +89,6 @@ def confirm_data():
     Health_info.insert_data(request, session)
     return render_template("thanks.html")
 
-
 # endregion
 
 
@@ -98,14 +97,8 @@ def confirm_data():
 @flask_login.login_required
 def show_education(id):
     id = int(id)
-    if id == 0:
-        nav = Html_Param.nav_edu
-    elif id == 1:
-        pass
-    elif id == 2:
-        pass
-
-    return render_template('education.html', nav = nav)
+    category, nav = Html_Param.get_nav_info(id)
+    return render_template('education.html', category=category, nav = nav)
 
 @app.get("/regist_health")
 @flask_login.login_required

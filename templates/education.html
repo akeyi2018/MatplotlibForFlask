@@ -23,15 +23,15 @@
         <li class="mb-2">
           <a class="collapsed text-dark fs-6" 
             data-bs-toggle="collapse" 
-            data-bs-target="#{{nav.parent.id}}" 
+            data-bs-target="#{{category.id}}" 
             aria-expanded="false">
-            {{nav.parent.text}}
+            {{category.text}}
           </a>
-          <div class="collapse" id="{{nav.parent.id}}">
+          <div class="collapse" id="{{category.id}}">
             
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              {% for index in range(nav.nav | length) %}
-              <li><a href="#{{nav.nav[index].lind_id}}" class="text-dark fs-6">{{nav.nav[index].link_text}}</a></li>
+              {% for index in range(nav | length) %}
+              <li><a href="#{{nav[index].link_id}}" class="text-dark fs-6">{{nav[index].link_text}}</a></li>
               {% endfor %}
             </ul>
           </div>
@@ -40,11 +40,11 @@
       </ul>
       
     </div>
-    {% for index in range(nav.nav | length) %}
+    {% for index in range(nav | length) %}
     <!-- 本体 -->
-    <div class="sub-content" id="{{nav.nav[index].lind_id}}">
-      <p class="lead text-dark fs-4">{{nav.nav[index].link_text}}</p>
-      {% include nav.nav[index].url %}
+    <div class="sub-content" id="{{nav[index].link_id}}">
+      <p class="lead text-dark fs-4">{{nav[index].link_text}}</p>
+      {% include nav[index].url %}
     </div>
     <hr>
     <p class="lead text-center fs-7"> End of content.</p>

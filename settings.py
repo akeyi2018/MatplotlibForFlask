@@ -91,6 +91,30 @@ class Html_Param:
         pass
 
     @classmethod
+    def get_nav_info(cls, category_id):
+        from db_controller import Education_info, m_Edu_Categories
+        # カテゴリ情報
+        category = {
+            "id": "cate_" + str(category_id),
+            "text": m_Edu_Categories.get_category(category_id)[0]
+        }
+        # DBからデータを取得
+        edu_info = Education_info.get_edu_info(category_id)
+        # HTML側で表示するように編集する
+        # 記事情報
+        nav = []
+        for edu in edu_info:
+            dict_tmp = {}
+            dict_tmp['link_id'] = "index_" + str(edu.id)
+            dict_tmp['link_text'] = edu.title
+            dict_tmp['url'] = 'sub/' + edu.url
+            nav.append(dict_tmp)
+        print(category)
+        print(nav)
+        return category, nav
+        
+
+    @classmethod
     def mapping_data(cls, dates, data):
         # 日付をキーとしてデータをマッピング
         dict_01 = {}

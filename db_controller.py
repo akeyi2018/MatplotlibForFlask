@@ -468,6 +468,16 @@ class Education_info(db.Model):
     )
     
     @classmethod
+    def get_edu_info(cls, category_id):
+        return cls.query.with_entities(
+            cls.id,
+            cls.title,
+            cls.url
+        ).filter(
+            cls.category_id == category_id
+        ).all()
+
+    @classmethod
     def insert_data(cls, request, session):
         data = cls.query.filter(
             cls.id == request.form.get("id")
@@ -515,6 +525,14 @@ class m_Edu_Categories(db.Model):
             data = cls(category=cate_name)
             db.session.add(data)
         db.session.commit()
+
+    @classmethod
+    def get_category(cls, id):
+        return cls.query.with_entities(
+            cls.category
+        ).filter(
+            cls.id == id
+        ).first()
 
 # class Payments(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
