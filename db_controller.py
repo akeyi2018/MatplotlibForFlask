@@ -467,6 +467,31 @@ class Education_info(db.Model):
         db.DateTime,
         default=datetime.now(timezone("Asia/Tokyo")),
     )
+    
+    @classmethod
+    def insert_data(cls, request):
+        data = cls.query.filter(
+            cls.id == request.form.get("id")
+        ).first()
+        print("finish get data")
+        if data:
+            data.id = request.form.get("id")
+            data.category_id = request.form.get("category")
+            data.title = request.form.get("title")
+            data.url = request.form.get("url")
+            data.status = request.form.get("status")
+            db.session.commit()
+            print("finish update")
+        else:
+            entry = cls(
+                category_id = request.form.get("category"),
+                title = request.form.get("title"),
+                url = request.form.get("url"),
+                status = request.form.get("status")
+            )
+            db.session.add(entry)
+            db.session.commit()
+            print("finish insert")
 
 class m_Edu_Categories(db.Model):
     id = db.Column(db.Integer, primary_key=True)

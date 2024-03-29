@@ -23,6 +23,7 @@ from db_controller import (
     Event_info,
     Task_info,
     Movie_info,
+    Education_info,
     m_Edu_Categories,
 )
 from settings import Message_list, Sql_Param, Html_Param
@@ -159,6 +160,13 @@ def edit_tv_info(id):
 @flask_login.login_required
 def set_tv_info():
     Movie_info.insert_data(request, session)
+    return render_template("thanks.html")
+
+
+@app.post("/set_edu_info")
+@flask_login.login_required
+def set_edu_info():
+    Education_info.insert_data(request, session)
     return render_template("thanks.html")
 
 

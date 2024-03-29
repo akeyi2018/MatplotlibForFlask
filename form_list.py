@@ -137,4 +137,3 @@ class RegistEducationForm(FlaskForm):
     status = SelectField('公開：', choices=[(1,"公開"),(1,"非公開")], render_kw=style4)
     style5={'style': 'margin-top:1em;'}
     submit = SubmitField('登録する', render_kw=style5)
-    
