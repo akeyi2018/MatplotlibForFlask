@@ -63,30 +63,6 @@ class Html_Param:
         },
     ]
 
-
-    nav_edu = {
-        "parent":{
-             "id": "flask_01",
-            "text": "1. Flask"
-        },
-        "nav": [
-        {
-            "lind_id": "index_01",
-            "link_text": "FlaskとMYSQLとSQLite3について",
-            "url": "sub/flask_01.html"
-        },
-        {
-            "lind_id": "index_02",
-            "link_text": "Flask-SQLAlchemy操作まとめ",
-            "url": "sub/flask_02.html"
-        },
-        {
-            "lind_id": "index_03",
-            "link_text": "JavascriptとJinja2の組み合わせ",
-            "url": "sub/flask_03.html"
-        }]
-    }
-
     def __init__(self) -> None:
         pass
 
@@ -109,8 +85,6 @@ class Html_Param:
             dict_tmp['link_text'] = edu.title
             dict_tmp['url'] = 'sub/' + edu.url
             nav.append(dict_tmp)
-        print(category)
-        print(nav)
         return category, nav
         
 
