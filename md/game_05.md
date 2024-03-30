@@ -71,9 +71,9 @@ player = self.parent.player
 具体的には、EnemyクラスはRPGAppクラス（またはそのサブクラス）の子ウィジェットとして配置されており、RPGAppクラス内にplayerという名前の属性が存在します。そのため、self.parentはEnemyの親ウィジェットであるRPGAppを指し、self.parent.playerはRPGApp内のplayer属性にアクセスします。
 この行の目的は、EnemyオブジェクトがPlayerオブジェクトと衝突した場合に、RPGAppクラス内のshow_battle_popup()メソッドを呼び出すために、Playerオブジェクトにアクセスすることです。
 
-* <font color="SpringGreen"><b>EnemyクラスはRPGAppクラス内でインスタンス宣言している</font>
-* <font color="SpringGreen"><b>self.parentを使うと親クラスへのアクセスができること
-* <font color="SpringGreen"><b>親クラスのメソッドが使用できるということ
+* <font color="SpringGreen"><b>EnemyクラスはRPGAppクラス内でインスタンス宣言している</b></font>
+* <font color="SpringGreen"><b>self.parentを使うと親クラスへのアクセスができること</b></font>
+* <font color="SpringGreen"><b>親クラスのメソッドが使用できるということ</b></font>
 
 ### Kivyでinspectorを調べる
 ```terminal

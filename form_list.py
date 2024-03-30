@@ -11,10 +11,9 @@ from wtforms import (
     DecimalRangeField,
     )
 from wtforms.validators import InputRequired, length
-from mysql_tool import DB_Connector
 from werkzeug.security import check_password_hash
 from wtforms.widgets import TextArea
-from datetime import datetime, date
+from datetime import datetime
 from db_controller import User_info
 
 class LoginForm(FlaskForm):
@@ -47,9 +46,8 @@ class RegistUserForm(FlaskForm):
         [InputRequired(), length(min=4, max=20)])
     
     def validate_user(self, username):
-        ins = DB_Connector()
-        res = ins.get_user_id(self.mail_address.data)
-        if res:
+        user = User_info.query.filter_by(mail_address=self.mail_address.data).first()
+        if user:
             raise ValidationError('すでにユーザ名が登録されています')
         
 
