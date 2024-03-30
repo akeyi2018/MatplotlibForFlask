@@ -4,7 +4,7 @@
 
 ### 敵との衝突処理で必要な要件の整理
 * 衝突の判定
-PlayerとEnemyはともにWidgetで定義しているので、Widgetが衝突する場合、kivyでは、 <font color="SpringGreen"><b>collide_widget</font>が用意されている。これはwidget同士がぶつかる判定をしてくれる
+PlayerとEnemyはともにWidgetで定義しているので、Widgetが衝突する場合、kivyでは、 <font color="SpringGreen"><b>collide_widget</b></font>が用意されている。これはwidget同士がぶつかる判定をしてくれる
 * バトル画面は以下のように簡単なポップアップ画面を用意
 ![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/576081/00d68ed8-c833-3836-1bce-d3590f361655.png)
 
@@ -28,7 +28,7 @@ def check_collision(self, widget, progress, test):
 ```py
 def check_collision(self, widget, progress, test):
 ```
-アニメーション表示メソッドには、 <font color="SpringGreen"><b>衝突メソッドをbind</font>しておく
+アニメーション表示メソッドには、 <font color="SpringGreen"><b>衝突メソッドをbind</b></font>しておく
 ```py
 def randomize_animation(self):
         # 3種類の敵のGIF画像パスをリストで定義
