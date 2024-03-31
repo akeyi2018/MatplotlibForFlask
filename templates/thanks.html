@@ -18,15 +18,15 @@
   <body>
 
     <div class="container" style="margin-top:50px;">
-      <div class="header clearfix">
-        <nav>
-          <ul class="nav nav-pills float-right">
-            <li class="nav-item">
-              <a class="nav-link active" href="{{ url_for('index') }}">ホーム</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
+      {% if regist_link %}
+      <a href="{{url_for(regist_link, id='0')}}"  type="button" class="btn btn-primary">{{ link_text }}
+        <span class="visually-hidden">{{ link_text }}</span>
+      </a>
+      {% endif %}
+
+      <a href="{{url_for('index')}}"  type="button" class="btn btn-primary">ホーム
+        <span class="visually-hidden">ホーム</span>
+      </a>
 
       {% if message %}
       <div class="jumbotron">
