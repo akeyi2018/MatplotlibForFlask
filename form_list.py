@@ -142,7 +142,7 @@ class RegistLinksForm(FlaskForm):
     style_choice={'style': 'width:200px;margin-right:210px;margin-top:1em;'}
     category = SelectField('カテゴリ：', render_kw=style_choice)
     title = StringField('リンク名：',
-        [InputRequired(), length(min=3, max=25)], render_kw=style1)
+        [InputRequired(), length(min=3, max=80)], render_kw=style1)
     url = StringField('URL：',
         [InputRequired(), length(min=3, max=80)], render_kw=style1)
     style4={'style': 'width:15%; margin-top:1em;margin-right:360px;'}
