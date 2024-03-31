@@ -12,6 +12,7 @@ import flask_login
 
 # 自作クラス
 import form_settings
+from settings import Sql_Param
 from db_controller import db as user_info_tbl
 
 from db_controller import (
@@ -316,4 +317,7 @@ def logout():
 # endregion
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="5001", debug=True)
+    if Sql_Param.release_flag == 0:
+        app.run(host="0.0.0.0", port="5001", debug=True)
+    else:
+        app.run(host="0.0.0.0", port="5000", debug=False)
