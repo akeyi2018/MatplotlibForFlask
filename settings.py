@@ -14,6 +14,7 @@ class Sql_Param:
     health_database = os.getenv("health_db")
     alchemy_database = os.getenv("alchemy_db")
     debug_flag = False
+    release_flag = os.getenv('flag')
 
 
 class Message_list:
