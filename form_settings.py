@@ -3,6 +3,7 @@ from form_list import (
     RegistEventForm,
     RegistTVForm,
     RegistEducationForm,
+    RegistLinksForm,
 )
 
 from db_controller import (
@@ -14,6 +15,7 @@ from db_controller import (
     Event_info,
     Task_info,
     Movie_info,
+    Links_info,
 )
 
 # イベントフォーム設定
@@ -99,6 +101,26 @@ def set_edu_form(id,session):
                 title=edu_info.title,
                 url = edu_info.url,
                 status = edu_info.status
+            )
+            form.category.choices = [(item.id, item.category) for item in m_Edu_Categories.query.all()]
+    return form
+
+
+def set_link_form(id,session):
+    id = int(id)
+    if id == 0:
+        form = RegistLinksForm()
+        # カテゴリをロードする
+        form.category.choices = [(item.id, item.category) for item in m_Edu_Categories.query.all()]
+    else:
+        link_info = Links_info.query.filter(Links_info.id == id).first()
+        if link_info:
+            form = RegistLinksForm(
+                id=link_info.id,
+                category = link_info.category_id,
+                title=link_info.title,
+                url = link_info.url,
+                status = link_info.status
             )
             form.category.choices = [(item.id, item.category) for item in m_Edu_Categories.query.all()]
     return form

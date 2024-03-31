@@ -61,6 +61,13 @@ class Html_Param:
             "url": "tv.html",
             "active": False,
         },
+        {
+            "text": "リンク一覧",
+            "id": "v-pills-link-view",
+            "label": "v-pills-link-view-tab",
+            "url": "link.html",
+            "active": False,
+        },
     ]
 
     def __init__(self) -> None:
@@ -104,7 +111,7 @@ class Html_Param:
 
     @classmethod
     def get_home_data(cls, session):
-        from db_controller import Health_info, Event_info, Task_info, Movie_info
+        from db_controller import Health_info, Event_info, Task_info, Movie_info, Links_info
 
         # 日本語で曜日の表示
         locale.setlocale(locale.LC_ALL, "")
@@ -127,6 +134,7 @@ class Html_Param:
             "running_event": Event_info.get_running_event(),
             "running_task": Task_info.get_running_task(),
             "tv_info": Movie_info.get_movie_info(session["id"]),
+            "link_info": Links_info.get_link_info(),
         }
 
 

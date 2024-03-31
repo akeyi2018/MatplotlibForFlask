@@ -534,6 +534,52 @@ class m_Edu_Categories(db.Model):
             cls.id == id
         ).first()
 
+
+class Links_info(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    category_id = db.Column(db.Integer, nullable=False)
+    title = db.Column(db.String(80), nullable=False)
+    url = db.Column(db.String(80), nullable=False)
+    status = db.Column(db.Integer, nullable=False, default=1)
+    regist_time = db.Column(
+        db.DateTime,
+        default=datetime.now(timezone("Asia/Tokyo")),
+    )
+
+    @classmethod
+    def get_link_info(cls):
+        return cls.query.with_entities(
+            cls.id,
+            cls.title,
+            cls.url,
+            m_Edu_Categories.category.label('category')
+        ).join(m_Edu_Categories, m_Edu_Categories.id == cls.category_id).all()
+
+    @classmethod
+    def insert_data(cls, request, session):
+        data = cls.query.filter(
+            cls.id == request.form.get("id")
+        ).first()
+        print("finish get data")
+        if data:
+            data.id = request.form.get("id")
+            data.category_id = request.form.get("category")
+            data.title = request.form.get("title")
+            data.url = request.form.get("url")
+            data.status = request.form.get("status")
+            db.session.commit()
+            print("finish update")
+        else:
+            entry = cls(
+                category_id = request.form.get("category"),
+                title = request.form.get("title"),
+                url = request.form.get("url"),
+                status = request.form.get("status")
+            )
+            db.session.add(entry)
+            db.session.commit()
+            print("finish insert")
+
 # class Payments(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
 #     user_id = db.Column(db.Integer, nullable=False)
