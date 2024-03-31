@@ -1,9 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date, timedelta
-from decimal import Decimal
 from pytz import timezone
 from sqlalchemy import case, func, cast, Integer
 from werkzeug.security import generate_password_hash
+from settings import Sql_Param
 
 db = SQLAlchemy()
 
@@ -213,16 +213,27 @@ class Health_info(db.Model):
 
     @classmethod
     def get_today_health_info(cls):
-        return (
-            cls.query.with_entities(
-                cls.user_id,
-                cls.systolic_blood_pressure,
-                cls.diastolic_blood_pressure,
-                cls.weight,
+        if Sql_Param.release_flag == '0':
+            return (
+                cls.query.with_entities(
+                    cls.user_id,
+                    cls.systolic_blood_pressure,
+                    cls.diastolic_blood_pressure,
+                    cls.weight,
+                ).order_by(cls.id.desc())
+                .first()
             )
-            .filter(cls.measure_date == date.today())
-            .first()
-        )
+        else:
+            return (
+                cls.query.with_entities(
+                    cls.user_id,
+                    cls.systolic_blood_pressure,
+                    cls.diastolic_blood_pressure,
+                    cls.weight,
+                )
+                .filter(cls.measure_date == date.today())
+                .first()
+            )
 
     @classmethod
     def insert_data(cls, request, session):
