@@ -169,34 +169,44 @@ def edit_link_info(id):
 @flask_login.login_required
 def set_tv_info():
     Movie_info.insert_data(request, session)
-    return render_template("thanks.html")
+    regist_link = 'edit_tv_info'
+    link_text = '続けてテレビ映画情報を登録する'
+    return render_template("thanks.html", regist_link=regist_link, link_text=link_text)
 
 
 @app.post("/set_edu_info")
 @flask_login.login_required
 def set_edu_info():
     Education_info.insert_data(request, session)
-    return render_template("thanks.html")
+    regist_link = 'edit_edu_info'
+    link_text = '続けて教材を登録する'
+    return render_template("thanks.html", regist_link=regist_link, link_text=link_text)
 
 @app.post("/set_link_info")
 @flask_login.login_required
 def set_link_info():
     Links_info.insert_data(request, session)
-    return render_template("thanks.html")
+    regist_link = 'edit_link_info'
+    link_text = '続けてリンクを登録する'
+    return render_template("thanks.html", regist_link=regist_link, link_text=link_text)
 
 
 @app.post("/set_task")
 @flask_login.login_required
 def set_task():
     Task_info.insert_data(request, session)
-    return render_template("thanks.html")
+    regist_link = 'edit_task'
+    link_text = '続けてタスクを登録する'
+    return render_template("thanks.html", regist_link=regist_link, link_text=link_text)
 
 
 @app.post("/set_event")
 @flask_login.login_required
 def set_event():
     Event_info.insert_data(request, session)
-    return render_template("thanks.html")
+    regist_link = 'edit_event'
+    link_text = '続けてイベントを登録する'
+    return render_template("thanks.html", regist_link=regist_link, link_text=link_text)
 
 
 # endregion
