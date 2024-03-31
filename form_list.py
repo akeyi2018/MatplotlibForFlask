@@ -125,7 +125,7 @@ class RegistHealthForm(FlaskForm):
 class RegistEducationForm(FlaskForm):
     id = HiddenField('ID:')
     style1={'style': 'width:50%;margin-top:1em;margin-right:150px;'}
-    style_choice={'style': 'width:120px;margin-right:310px;margin-top:1em;'}
+    style_choice={'style': 'width:200px;margin-right:210px;margin-top:1em;'}
     category = SelectField('カテゴリ：', render_kw=style_choice)
     title = StringField('タイトル：',
         [InputRequired(), length(min=3, max=25)], render_kw=style1)
@@ -133,5 +133,19 @@ class RegistEducationForm(FlaskForm):
         [InputRequired(), length(min=3, max=80)], render_kw=style1)
     style4={'style': 'width:15%; margin-top:1em;margin-right:360px;'}
     status = SelectField('公開：', choices=[(1,"公開"),(0,"非公開")], default=1, render_kw=style4)
+    style5={'style': 'margin-top:1em;'}
+    submit = SubmitField('登録する', render_kw=style5)
+
+class RegistLinksForm(FlaskForm):
+    id = HiddenField('ID:')
+    style1={'style': 'width:50%;margin-top:1em;margin-right:150px;'}
+    style_choice={'style': 'width:200px;margin-right:210px;margin-top:1em;'}
+    category = SelectField('カテゴリ：', render_kw=style_choice)
+    title = StringField('リンク名：',
+        [InputRequired(), length(min=3, max=25)], render_kw=style1)
+    url = StringField('URL：',
+        [InputRequired(), length(min=3, max=80)], render_kw=style1)
+    style4={'style': 'width:15%; margin-top:1em;margin-right:360px;'}
+    status = SelectField('有効：', choices=[(1,"有効"),(0,"無効")], default=1, render_kw=style4)
     style5={'style': 'margin-top:1em;'}
     submit = SubmitField('登録する', render_kw=style5)

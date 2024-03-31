@@ -24,6 +24,7 @@ from db_controller import (
     Task_info,
     Movie_info,
     Education_info,
+    Links_info,
     m_Edu_Categories,
 )
 from settings import Message_list, Sql_Param, Html_Param
@@ -151,6 +152,13 @@ def edit_edu_info(id):
         "regist_edu_info.html", form=form_settings.set_edu_form(id, session)
     )
 
+@app.get("/edit_link_info/<id>")
+@flask_login.login_required
+def edit_link_info(id):
+    return render_template(
+        "regist_link_info.html", form=form_settings.set_link_form(id, session)
+    )
+
 
 # endregion
 
@@ -167,6 +175,12 @@ def set_tv_info():
 @flask_login.login_required
 def set_edu_info():
     Education_info.insert_data(request, session)
+    return render_template("thanks.html")
+
+@app.post("/set_link_info")
+@flask_login.login_required
+def set_link_info():
+    Links_info.insert_data(request, session)
     return render_template("thanks.html")
 
 
@@ -302,4 +316,4 @@ def logout():
 # endregion
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="5000", debug=True)
+    app.run(host="0.0.0.0", port="5001", debug=True)
