@@ -547,14 +547,13 @@ class Links_info(db.Model):
     )
 
     @classmethod
-    def get_edu_info(cls, category_id):
+    def get_link_info(cls):
         return cls.query.with_entities(
             cls.id,
             cls.title,
-            cls.url
-        ).filter(
-            cls.category_id == category_id
-        ).all()
+            cls.url,
+            m_Edu_Categories.category.label('category')
+        ).join(m_Edu_Categories, m_Edu_Categories.id == cls.category_id).all()
 
     @classmethod
     def insert_data(cls, request, session):
