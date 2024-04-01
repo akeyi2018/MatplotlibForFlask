@@ -21,18 +21,6 @@
         <a href="{{url_for('edit_link_info', id=home.link_info[index].id)}}" type="button" class="btn btn-outline-success text-light">編集
           <span class="visually-hidden">編集</span>
         </a>
-        <!-- 詳細ボタン -->
-        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offtv{{index + 1}}" aria-controls="offcanvasRight">詳細</button>
-        <div class="offcanvas offcanvas-end" id="offtv{{index + 1}}" aria-labelledby="id2{{ index + 1 }}">
-          <div class="offcanvas-header bg-dark">
-            <h5 id="id2{{ index + 1 }}">詳細</h5>
-            <button type="button" class="btn-close text-reset bg-light" data-bs-dismiss="offcanvas"></button>
-          </div>
-          <div class="offcanvas-body bg-dark" id="id2{{index+1}}">
-            <p class="lead">{{home.link_info[index].title}}</p>
-            <p>{{home.link_info[index].discription}}</p>
-          </div>
-        </div>
       </td>
       </tr>
     </tr>
