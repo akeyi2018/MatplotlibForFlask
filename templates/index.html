@@ -41,6 +41,10 @@
         {{nav[index].text}}</a>
       {% endif %}
       {% endfor %}
+      <!-- リンク一覧 -->
+      
+      <a class="nav-link" href="{{url_for('show_links', page='1')}}">
+        リンク一覧</a>
       <!-- 教材 dropdown -->
       <div class="dropdown">
         <a class="nav-link dropdown-toggle" aria-expanded="false">学習教材</a>
