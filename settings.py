@@ -2,6 +2,8 @@ import os
 from dotenv import load_dotenv
 import locale
 from datetime import date, timedelta
+from flask_paginate import Pagination, get_page_parameter
+from flask import request
 
 load_dotenv()
 
@@ -62,13 +64,6 @@ class Html_Param:
             "url": "tv.html",
             "active": False,
         },
-        {
-            "text": "リンク一覧",
-            "id": "v-pills-link-view",
-            "label": "v-pills-link-view-tab",
-            "url": "link.html",
-            "active": False,
-        },
     ]
 
     def __init__(self) -> None:
@@ -109,6 +104,20 @@ class Html_Param:
                 if dd2 in dd_01:
                     dict_01[kk].append(item)
         return dict_01
+    
+    @classmethod
+    def get_link_pagination(cls):
+        from db_controller import Links_info
+        link_info = Links_info.get_link_info()
+        # ページカウント：10
+        page_counts = 10
+
+        page = request.args.get(get_page_parameter(), type=int, default=1)
+        page_res = link_info[(page-1)*page_counts: page*page_counts]
+        pagination = Pagination(page=page, total=len(link_info), per_page=page_counts,
+            display_msg='表示中： <b>{start} - {end}</b> | リンク登録数:<b>{total}</b>',
+            css_framework='bootstrap5')
+        return page_res, pagination
 
     @classmethod
     def get_home_data(cls, session):
@@ -124,6 +133,10 @@ class Html_Param:
 
         map_data = cls.mapping_data(view_day, Event_info.get_today_event())
 
+        links_info, pagenation = cls.get_link_pagination()
+        # print(links_info)
+        # print(pagenation)
+
         return {
             "dt": view_today,
             "dt2": view_day,
@@ -135,7 +148,8 @@ class Html_Param:
             "running_event": Event_info.get_running_event(),
             "running_task": Task_info.get_running_task(),
             "tv_info": Movie_info.get_movie_info(session["id"]),
-            "link_info": Links_info.get_link_info(),
+            "link_info": links_info,
+            "pagenation": pagenation,
         }
 
 

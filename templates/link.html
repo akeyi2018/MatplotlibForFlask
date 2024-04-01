@@ -1,34 +1,56 @@
-<!-- タスク一覧 -->
-{% if home.link_info %}
-<p class="lead text-light" style=" width: 150px;margin-bottom: 1px;">ドラマ一覧</p>
-<table class="table-info table-bordered border-info table-sm text-light">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">タイトル</th>
-      <th scope="col">カテゴリ</th>
-      <th scope="col">管理操作</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for index in range(home.link_info | length) %}
-    <tr>
-      <th scope="row">{{ index + 1 }}</th>
-      <td><a class="text-light" href="{{home.link_info[index].url}}" target="_blank">{{home.link_info[index].title}}</a></td>
-      <td>{{home.link_info[index].category}}</td>
-      <td>
-        <!-- 編集 -->
-        <a href="{{url_for('edit_link_info', id=home.link_info[index].id)}}" type="button" class="btn btn-outline-success text-light">編集
-          <span class="visually-hidden">編集</span>
-        </a>
-      </td>
-      </tr>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% else %}
-<p class="lead">現在視聴中のドラマはありません</p>
-{% endif %}
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <title>education</title>
+    <link href="{{ url_for('static', filename='/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='/css/md.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='/js/bootstrap.min.js')}}"></script>
 
-{% include 'footer.html' %}
+</head>
+<body>
+  <div class="container">
+    <div class="cus-home">
+      <a href="{{url_for('index')}}"  type="button" class="btn btn-primary custom">ホーム
+        <span class="visually-hidden">ホーム</span>
+      </a><br><br>
+
+      <!-- タスク一覧 -->
+      <p class="lead text-light" style=" width: 150px;margin-bottom: 1px;">リンク一覧</p>
+      {{ home.pagenation.links }}
+      {{ home.pagenation.info }}
+
+      {% if home.link_info %}
+      <table class="table-info table-bordered border-info table-sm text-light">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">タイトル</th>
+            <th scope="col">カテゴリ</th>
+            <th scope="col">管理操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for index in range(home.link_info | length) %}
+          <tr>
+            <th scope="row">{{ index + 1 }}</th>
+            <td><a class="text-light" href="{{home.link_info[index].url}}" target="_blank">{{home.link_info[index].title}}</a></td>
+            <td>{{home.link_info[index].category}}</td>
+            <td>
+              <!-- 編集 -->
+              <a href="{{url_for('edit_link_info', id=home.link_info[index].id)}}" type="button" class="btn btn-outline-success text-light">編集
+                <span class="visually-hidden">編集</span>
+              </a>
+            </td>
+            </tr>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+
+      {% include 'footer.html' %}
+    </div>
+  </div>
+</body>
+</html>

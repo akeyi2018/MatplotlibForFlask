@@ -10,6 +10,7 @@ from flask import (
 from flask_bootstrap import Bootstrap
 import flask_login
 
+
 # 自作クラス
 import form_settings
 from settings import Sql_Param
@@ -108,7 +109,6 @@ def regist_health_info():
     form = RegistHealthForm()
     return render_template("regist_health.html", form=form)
 
-
 @app.get("/thanks/<kind>/<content>")
 def show_thanks(kind, content):
     kind = int(kind)
@@ -160,6 +160,17 @@ def edit_link_info(id):
         "regist_link_info.html", form=form_settings.set_link_form(id, session)
     )
 
+@app.get("/show_link")
+@flask_login.login_required
+def show_links():
+    links_info, pagenation = Html_Param.get_link_pagination()
+    home= {
+        "link_info": links_info,
+        "pagenation": pagenation,
+    }
+    return render_template(
+        "link.html", home=home
+    )
 
 # endregion
 
@@ -303,7 +314,7 @@ def login():
 
 
 # ホーム
-@app.route("/home")
+@app.route("/home", methods=['GET','POST'])
 @flask_login.login_required
 def index():
     # session check

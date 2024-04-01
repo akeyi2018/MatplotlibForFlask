@@ -3,7 +3,7 @@
 }
 
 body{
-    background-color:hwb(209 85% 3%);
+    background-color:hwb(344 15% 67%);
 }
 
 .custom {
@@ -16,3 +16,8 @@ body{
     margin-left: 300px; 
     margin-right: 50px;
 }
+
+.pagination-page-info {
+    color: #e5e9ed; /* メッセージの色を青色に設定 */
+}
+
