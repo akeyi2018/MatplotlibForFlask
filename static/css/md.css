@@ -21,3 +21,17 @@ body{
     color: #e5e9ed; /* メッセージの色を青色に設定 */
 }
 
+.page-link {
+    color: #f5f5f5;
+    background-color:#2f3434;
+}
+
+.nav {
+    color: #f5f5f5;
+    background-color:#2f3434;
+}
+
+.page-item {
+    color: #f5f5f5;
+    background-color:#2f3434;
+}

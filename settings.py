@@ -17,6 +17,9 @@ class Sql_Param:
     alchemy_database = os.getenv("alchemy_db")
     debug_flag = False
     release_flag = os.getenv('flag')
+    mail_passwd = os.getenv('mail_pass')
+    mail_from = os.getenv('mail_from')
+    mail_to = os.getenv('mail_to')
 
 
 class Message_list:
