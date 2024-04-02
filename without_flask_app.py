@@ -1,9 +1,12 @@
+#!/usr/bin/env python3
 from flask_sqlalchemy import SQLAlchemy
 from db_controller import Event_info, db
 from flask import Flask
 import os
 from send_mail import pymail
 from datetime import date
+import schedule
+import time
 
 # 仮想のFlaskアプリケーションコンテキストを作成します。
 class DummyApp(Flask):
@@ -36,11 +39,20 @@ def connect_to_database():
         db.create_all()
         # ここでデータベースを使用した操作を行います。
         res = Event_info.get_today_event()
-        r = clean_data(res)
+        if not res:
+            r = 'イベントの予定はありません。'
+        else:
+            r = clean_data(res)
         ins = pymail()
         dt = date.today().strftime("%Y-%m-%d")
         ins.send_mail(f'【{dt}】のイベント情報:', r)
 
 
+schedule.every().day.at("06:55").do(connect_to_database)
+
 # データベースに接続します。
-connect_to_database()
+# connect_to_database()
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
