@@ -22,11 +22,11 @@
                 <div class="card-body ">
                     <form method="post" action="/confirm">
                         <div class="cutom-div">{{ form.h_bld.label }}
-                        {{ form.h_bld(min=110, max=180, step=1, oninput="output_high(value)") }}</div>
+                        {{ form.h_bld(min=90, max=170, step=1, oninput="output_high(value)") }}</div>
                         <output for="h_bld" id="selected-h_bld">{{ form.h_bld.data }}</output>
 
                         <div class="cutom-div">{{ form.l_bld.label }}
-                        {{ form.l_bld(min=70, max=140, step=1, oninput="output_low(value)") }}</div>
+                        {{ form.l_bld(min=60, max=130, step=1, oninput="output_low(value)") }}</div>
                         <output for="l_bld" id="selected-l_bld">{{ form.l_bld.data }}</output>
                         
                         <div class="cutom-div">{{ form.pulse.label }}
