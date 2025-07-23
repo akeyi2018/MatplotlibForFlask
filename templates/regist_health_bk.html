@@ -28,6 +28,14 @@
                         <div class="cutom-div">{{ form.l_bld.label }}
                         {{ form.l_bld(min=60, max=130, step=1, oninput="output_low(value)") }}</div>
                         <output for="l_bld" id="selected-l_bld">{{ form.l_bld.data }}</output>
+                        
+                        <div class="cutom-div">{{ form.pulse.label }}
+                        {{ form.pulse(min=60, max=90, step=1, oninput="output_pulse(value)") }}</div>
+                        <output for="pulse" id="selected-pulse">{{ form.pulse.data }}</output>
+                        
+                        <div class="cutom-div">{{ form.weight.label }}
+                            {{ form.weight(min=65.0, max=85.0, step=0.1, oninput="output_weight(value)") }}</div>
+                            <output for="weight" id="selected-weight">{{ form.weight.data }}</output>
                         <div>{{ form.submit()}}</div>
                     </form>
                 </div>
