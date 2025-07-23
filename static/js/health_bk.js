@@ -18,6 +18,20 @@
                 backgroundColor: '#DDA0DD',
                 lineTension:0.2,
                 yAxisID: 'y',
+            }, {
+                label: '心拍数',
+                data: healthDataPulse,
+                borderColor: '#FF7f8F',
+                backgroundColor: '#FFBFCF',
+                lineTension:0.2,
+                yAxisID: 'y',
+            }, {
+                label: '体重',
+                data: healthDataWeight,
+                borderColor: '#7CFC00',
+                backgroundColor: '#ADFF2F',
+                lineTension:0.2,
+                yAxisID: 'y2',
             }]
         },
         options: {
@@ -33,10 +47,11 @@
                 horizontalLines: [
                     { id: 'line1', value: 125, color: '#FF1493', lineWidth: 2, borderDash: [5, 5], yAxis: 'y' },
                     { id: 'line2', value: 75, color: '#EE82EE', lineWidth: 2, borderDash: [5, 5], yAxis: 'y' },
+                    { id: 'line3', value: 72, color: '#7CFC00', lineWidth: 2, borderDash: [5, 5], yAxis: 'y2' },
                 ],
                 title: {
                     display: true,
-                    text: '血圧管理'
+                    text: '血圧と体重管理'
                 }
             },
             scales: {
@@ -55,6 +70,15 @@
                     max: 180,
                     title: {
                         text: '血圧(mm/Hg)',
+                        display: true,
+                    },
+                },
+                y2: {
+                    position: 'right',
+                    min: 70,
+                    max: 80,
+                    title: {
+                        text: '体重(kg)',
                         display: true,
                     },
                 },
