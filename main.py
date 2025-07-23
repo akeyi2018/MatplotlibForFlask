@@ -107,6 +107,10 @@ def show_education(id):
 @flask_login.login_required
 def regist_health_info():
     form = RegistHealthForm()
+    latest_data = Health_info.get_today_health_info()
+    if latest_data:
+        form.h_bld.data = latest_data.systolic_blood_pressure
+        form.l_bld.data = latest_data.diastolic_blood_pressure
     return render_template("regist_health.html", form=form)
 
 @app.get("/thanks/<kind>/<content>")
