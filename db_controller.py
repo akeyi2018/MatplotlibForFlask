@@ -229,6 +229,7 @@ class Health_info(db.Model):
                     cls.user_id,
                     cls.systolic_blood_pressure,
                     cls.diastolic_blood_pressure,
+                    cls.weight,
                 ).order_by(cls.measure_date.desc())
                 .first()
             )
