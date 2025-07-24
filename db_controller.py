@@ -247,7 +247,9 @@ class Health_info(db.Model):
             data.systolic_blood_pressure = int(request.form.get("h_bld"))
             data.diastolic_blood_pressure = int(request.form.get("l_bld"))
             # data.pulse = int(request.form.get("pulse"))
+            data.pulse = 70
             # data.weight = float(request.form.get("weight"))
+            data.weight = 77.0
             db.session.commit()
             print("finish update")
         else:
@@ -256,6 +258,8 @@ class Health_info(db.Model):
                 measure_date=date.today(),
                 systolic_blood_pressure=request.form.get("h_bld"),
                 diastolic_blood_pressure=request.form.get("l_bld"),
+                pulse= 70,
+                weight = 77.0,
                 # pulse=request.form.get("pulse"),
                 # weight=request.form.get("weight"),
             )
