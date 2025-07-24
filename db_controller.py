@@ -229,9 +229,7 @@ class Health_info(db.Model):
                     cls.user_id,
                     cls.systolic_blood_pressure,
                     cls.diastolic_blood_pressure,
-                    cls.weight,
-                )
-                .filter(cls.measure_date == date.today())
+                ).order_by(cls.measure_date.desc())
                 .first()
             )
 
@@ -248,8 +246,8 @@ class Health_info(db.Model):
             data.measure_date = date.today()
             data.systolic_blood_pressure = int(request.form.get("h_bld"))
             data.diastolic_blood_pressure = int(request.form.get("l_bld"))
-            data.pulse = int(request.form.get("pulse"))
-            data.weight = float(request.form.get("weight"))
+            # data.pulse = int(request.form.get("pulse"))
+            # data.weight = float(request.form.get("weight"))
             db.session.commit()
             print("finish update")
         else:
@@ -258,8 +256,8 @@ class Health_info(db.Model):
                 measure_date=date.today(),
                 systolic_blood_pressure=request.form.get("h_bld"),
                 diastolic_blood_pressure=request.form.get("l_bld"),
-                pulse=request.form.get("pulse"),
-                weight=request.form.get("weight"),
+                # pulse=request.form.get("pulse"),
+                # weight=request.form.get("weight"),
             )
             db.session.add(entry)
             db.session.commit()
