@@ -43,9 +43,9 @@ def connect_to_database():
             r = 'イベントの予定はありません。'
         else:
             r = clean_data(res)
-        ins = pymail()
-        dt = date.today().strftime("%Y-%m-%d")
-        ins.send_mail(f'【{dt}】のイベント情報:', r)
+            ins = pymail()
+            dt = date.today().strftime("%Y-%m-%d")
+            ins.send_mail(f'【{dt}】のイベント情報:', r)
 
 
 schedule.every().day.at("06:55").do(connect_to_database)
