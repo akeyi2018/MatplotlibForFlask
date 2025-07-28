@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 from flask_sqlalchemy import SQLAlchemy
-from db_controller import Event_info, db
+from db_controller import Event_info, Environment_info, db
 from flask import Flask
 import os
 from send_mail import pymail
 from datetime import date
 import schedule
+from temp_humid import TemperatureSensor
 import time
+
 
 # 仮想のFlaskアプリケーションコンテキストを作成します。
 class DummyApp(Flask):
@@ -21,6 +23,17 @@ class DummyApp(Flask):
 # Flask-SQLAlchemyを初期化します。
 def initialize_sqlalchemy(app):
     db.init_app(app)
+
+
+def save_environment_data():
+    app = DummyApp(__name__)
+    initialize_sqlalchemy(app)
+
+    with app.app_context():
+        sensor = TemperatureSensor(sensor_model='DHT11')
+        sensor.read()
+        if sensor.pre_temp is not None and sensor.pre_humid is not None:
+            Environment_info.insert_data(sensor.pre_temp, sensor.pre_humid) 
 
 def clean_data(data):
     result = ''
@@ -49,9 +62,14 @@ def connect_to_database():
 
 
 schedule.every().day.at("06:55").do(connect_to_database)
+schedule.every().hour.at(":00").do(save_environment_data)
+
+# schedule.every(1).minutes.do(save_environment_data)
+
 
 # データベースに接続します。
 # connect_to_database()
+# save_environment_data()
 
 while True:
     schedule.run_pending()

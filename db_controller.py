@@ -594,10 +594,32 @@ class Links_info(db.Model):
             db.session.commit()
             print("finish insert")
 
-# class Payments(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.Column(db.Integer, nullable=False)
-#     amount = db.Column(db.Integer)
-#     item = db.Column(db.String(255))
-#     date_column = db.Column(db.DateTime, default=utcnow)
-#     boolean_column = db.Column(db.Boolean, default=True)
+
+class Environment_info(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    temperature = db.Column(db.Numeric(4, 1), nullable=False)  # 例: 25.3℃
+    humidity = db.Column(db.Numeric(4, 1), nullable=False)     # 例: 60.5%
+    timestamp = db.Column(db.DateTime, default=datetime.now(timezone("Asia/Tokyo")))
+    
+
+    @classmethod
+    def insert_data(cls, temperature, humidity):
+        entry = cls(
+            temperature=temperature,
+            humidity=humidity
+        )
+        db.session.add(entry)
+        db.session.commit()
+        print("環境情報を保存しました")
+
+    @classmethod
+    def get_latest(cls, user_id):
+        return (
+            cls.cls.query.with_entities(
+                cls.timestamp,
+                cls.temperature,
+                cls.humidity
+            )
+            .order_by(cls.timestamp.desc())
+            .first()
+        )
