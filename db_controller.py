@@ -7,6 +7,8 @@ from settings import Sql_Param
 
 db = SQLAlchemy()
 
+def jst_now():
+    return datetime.now(timezone("Asia/Tokyo"))
 
 # ユーザテーブル定義
 class User_info(db.Model):
@@ -599,9 +601,8 @@ class Environment_info(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     temperature = db.Column(db.Numeric(4, 1), nullable=False)  # 例: 25.3℃
     humidity = db.Column(db.Numeric(4, 1), nullable=False)     # 例: 60.5%
-    timestamp = db.Column(db.DateTime, default=datetime.now(timezone("Asia/Tokyo")))
+    timestamp = db.Column(db.DateTime, default=jst_now)
     
-
     @classmethod
     def insert_data(cls, temperature, humidity):
         entry = cls(
