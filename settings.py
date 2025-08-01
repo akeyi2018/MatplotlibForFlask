@@ -7,7 +7,6 @@ from flask import request
 
 load_dotenv()
 
-
 class Sql_Param:
     KEY = os.getenv("S_KEY")
     host = os.getenv("host")
@@ -124,7 +123,7 @@ class Html_Param:
 
     @classmethod
     def get_home_data(cls, session):
-        from db_controller import Health_info, Event_info, Task_info, Movie_info, Links_info
+        from db_controller import Health_info, Event_info, Task_info, Movie_info, Links_info, Environment_info
 
         # 日本語で曜日の表示
         locale.setlocale(locale.LC_ALL, "")
@@ -137,8 +136,6 @@ class Html_Param:
         map_data = cls.mapping_data(view_day, Event_info.get_today_event())
 
         links_info, pagenation = cls.get_link_pagination()
-        # print(links_info)
-        # print(pagenation)
 
         return {
             "dt": view_today,
@@ -153,6 +150,7 @@ class Html_Param:
             "tv_info": Movie_info.get_movie_info(session["id"]),
             "link_info": links_info,
             "pagenation": pagenation,
+            "temperature": Environment_info.get_latest(),
         }
 
 

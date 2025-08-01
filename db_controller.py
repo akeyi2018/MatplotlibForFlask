@@ -614,13 +614,36 @@ class Environment_info(db.Model):
         print("環境情報を保存しました")
 
     @classmethod
-    def get_latest(cls, user_id):
-        return (
-            cls.cls.query.with_entities(
+    def get_latest(cls):
+        one_day_ago = jst_now() - timedelta(days=2)
+
+        # データ取得（最新順）
+        rows = (
+            cls.query.with_entities(
                 cls.timestamp,
                 cls.temperature,
                 cls.humidity
             )
+            .filter(cls.timestamp >= one_day_ago)
             .order_by(cls.timestamp.desc())
-            .first()
+            .all()
         )
+
+        # 時刻が3時間ごとのものだけ抽出（例: 0, 3, 6, 9, 12, 15, 18, 21）
+        filtered_rows = []
+        seen_hours = set()
+
+        for row in rows:
+            hour = row.timestamp.hour
+            if hour % 3 == 0 and hour not in seen_hours:
+                seen_hours.add(hour)
+                filtered_rows.append({
+                    "timestamp": row.timestamp.strftime("%m-%d %H:%M"),
+                    "temperature": float(row.temperature),
+                    "humidity": float(row.humidity),
+                })
+
+        # 最新順になっているので必要なら昇順に逆転
+        filtered_rows.sort(key=lambda x: x["timestamp"])
+
+        return filtered_rows

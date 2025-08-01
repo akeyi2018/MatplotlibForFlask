@@ -109,6 +109,32 @@
 </table>
 {% endif %}
 
+<p class="fs-6">過去2日間の環境情報</p>
+<table class="table-info table-bordered border-info table-sm text-white" border="2" style="margin-top: 1em;">
+     <thead>
+        <tr>
+            <th>項目＼時刻</th>
+            {% for row in home.temperature %}
+                <th>{{ row.timestamp }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>温度 (℃)</td>
+            {% for row in home.temperature %}
+                <td>{{ row.temperature }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td>湿度 (%)</td>
+            {% for row in home.temperature %}
+                <td>{{ row.humidity }}</td>
+            {% endfor %}
+        </tr>
+    </tbody>
+</table>
+
 <p class="fs-6" style="margin-bottom: 1px;" id="location"><a href="https://www.jma.go.jp/bosai/forecast/" target="_blank"></a></p>
 <div class="weatherForecast">
   <div class="weather text-light">
