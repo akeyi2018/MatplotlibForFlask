@@ -13,7 +13,7 @@ from wtforms import (
 from wtforms.validators import InputRequired, length
 from werkzeug.security import check_password_hash
 from wtforms.widgets import TextArea
-from datetime import datetime
+from datetime import datetime, date
 from db_controller import User_info
 
 class LoginForm(FlaskForm):
@@ -92,7 +92,11 @@ class RegistTVForm(FlaskForm):
     episodes = IntegerField('回数：', [InputRequired()], default=1, render_kw=style_int)
     watched = IntegerField('鑑賞：', default=0, render_kw=style_int)
     style2={'style': 'margin-top:1em;margin-right:320px;'}
-    pub_date = DateField('日付：', format = '%Y-%m-%d', render_kw=style2)
+    pub_date = DateField(
+        '日付：', 
+        format = '%Y-%m-%d',
+        default = date.today, 
+        render_kw=style2)
 
     style_choice={'style': 'width:120px;margin-right:310px;margin-top:1em;'}
     genre = SelectField('ジャンル：', render_kw=style_choice)
