@@ -229,10 +229,38 @@ class Health_info(db.Model):
             return (
                 cls.query.with_entities(
                     cls.user_id,
+                    cls.measure_date,
                     cls.systolic_blood_pressure,
                     cls.diastolic_blood_pressure,
                     cls.weight,
-                ).order_by(cls.measure_date.desc())
+                )
+                .filter(cls.measure_date == date.today())  # 本日の日付のみに限定
+                .order_by(cls.measure_date.desc())
+                .first()
+            )
+
+    @classmethod
+    def get_latest_health_info(cls):
+        if Sql_Param.release_flag == '0':
+            return (
+                cls.query.with_entities(
+                    cls.user_id,
+                    cls.systolic_blood_pressure,
+                    cls.diastolic_blood_pressure,
+                    cls.weight,
+                ).order_by(cls.id.desc())
+                .first()
+            )
+        else:
+            return (
+                cls.query.with_entities(
+                    cls.user_id,
+                    cls.measure_date,
+                    cls.systolic_blood_pressure,
+                    cls.diastolic_blood_pressure,
+                    cls.weight,
+                )
+                .order_by(cls.measure_date.desc())
                 .first()
             )
 
