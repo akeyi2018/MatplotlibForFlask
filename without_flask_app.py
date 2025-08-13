@@ -8,7 +8,7 @@ from datetime import date
 import schedule
 from temp_humid import TemperatureSensor
 import time
-
+from udp_8_band import Udp_server_led
 
 # 仮想のFlaskアプリケーションコンテキストを作成します。
 class DummyApp(Flask):
@@ -60,12 +60,16 @@ def connect_to_database():
             dt = date.today().strftime("%Y-%m-%d")
             ins.send_mail(f'【{dt}】のイベント情報:', r)
 
+def run_led():
+    udp_server = Udp_server_led()
+    udp_server.run()
 
 schedule.every().day.at("06:55").do(connect_to_database)
 schedule.every().hour.at(":00").do(save_environment_data)
 
 # schedule.every(1).minutes.do(save_environment_data)
 
+run_led()
 
 # データベースに接続します。
 # connect_to_database()
