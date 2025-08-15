@@ -69,7 +69,7 @@ schedule.every().hour.at(":00").do(save_environment_data)
 
 # schedule.every(1).minutes.do(save_environment_data)
 
-run_led()
+# run_led()
 
 # データベースに接続します。
 # connect_to_database()

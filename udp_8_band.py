@@ -1,16 +1,17 @@
 from gpiozero import PWMLED
 import socket
 from time import sleep, time
-
+import math
 
 class Udp_server_led:
     def __init__(self,
                  led_pins=[21, 20, 16, 26, 19, 13, 6, 5],
-                 status_led_pin=12,
+                 status_led_pin=14,
                  udp_ip="0.0.0.0",
                  udp_port=5005,
                  timeout_seconds=1.0,
-                 gamma=2.2):
+                 gamma=2.2,
+                 fade_speed=0.5):  # フェードスピード(Hz)
         
         # LEDセットアップ
         self.led_list = [PWMLED(pin) for pin in led_pins]
@@ -27,6 +28,8 @@ class Udp_server_led:
         self.last_received_time = time()
         self.timeout_seconds = timeout_seconds
         self.gamma = gamma
+        self.fade_speed = fade_speed  # フェードスピード
+        self.start_time = time()      # フェード用タイマー
 
         print(f"Listening for UDP packets on port {self.udp_port}...")
 
@@ -56,23 +59,27 @@ class Udp_server_led:
     def run(self):
         try:
             while True:
+                current_time = time()
                 try:
                     data, _ = self.sock.recvfrom(1024)
                     self.process_packet(data)
-                    self.last_received_time = time()
-
+                    self.last_received_time = current_time
                 except socket.timeout:
                     pass
                 except Exception as e:
                     print(f"Invalid data received — {e}")
 
-                # 通信状態でstatus_led制御
-                if time() - self.last_received_time > self.timeout_seconds:
+                # UDP通信中ならフェード処理
+                if current_time - self.last_received_time <= self.timeout_seconds:
+                    # 0～1の値をsinで作るフェードイン・アウト
+                    elapsed = current_time - self.start_time
+                    fade_value = (math.sin(2 * math.pi * self.fade_speed * elapsed) + 1) / 2
+                    self.status_led.value = fade_value
+                else:
+                    # タイムアウト中は消灯
+                    self.status_led.value = 0.0
                     for led in self.led_list:
                         led.value = 0.0
-                    self.status_led.value = 0.0
-                else:
-                    self.status_led.value = 0.2
 
                 sleep(0.05)
 

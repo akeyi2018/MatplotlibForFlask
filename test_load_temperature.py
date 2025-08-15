@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from flask_sqlalchemy import SQLAlchemy
-from db_controller import Event_info, Environment_info, db
+from db_controller import Event_info, Environment_info, Health_info, db
 from flask import Flask
 import os
 from send_mail import pymail
@@ -30,8 +30,14 @@ def get_data():
 
     with app.app_context():
         db.create_all()
-        data_list = Environment_info.get_latest()
-        for data in data_list:
+
+        data_list = Health_info.get_today_health_info()
+        # data_list = Health_info.get_latest_health_info()
+
+        # data_list = Environment_info.get_latest()
+        # for data in data_list:
+        if data_list:
+            print(data_list)
             # formatted_time = data.timestamp.strftime("%Y-%m-%d %H:%M")
             # print(data.timestamp, data.temperature, data.humidity)
 
